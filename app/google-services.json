@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "13303654686",
+    "firebase_url": "https://tlproject-84356.firebaseio.com",
+    "project_id": "tlproject-84356",
+    "storage_bucket": "tlproject-84356.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13303654686:android:88ccb47613c49087",
+        "android_client_info": {
+          "package_name": "com.tl.discountsaroundme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "13303654686-ujb2hh85uu3h8lnefbi2p52mcaugqv93.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tl.discountsaroundme",
+            "certificate_hash": "d12efe291124c5c521a5bf5bd681cbc1f0a89fb6"
+          }
+        },
+        {
+          "client_id": "13303654686-k9qnv6306gnl2t2kpi0h6045gkdgmb3p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjotB1h-6-bJGVJ0xAyrkNfs3JIHWX3nU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "13303654686-k9qnv6306gnl2t2kpi0h6045gkdgmb3p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -71,6 +71,9 @@ Give an example
 ```
 MAJOR.MINOR.PATCH
 ```
+Major = a complete package with a completed stories
+Minor = completed story
+Patch = commit/fix
 
 ## Deployment
 

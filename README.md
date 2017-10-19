@@ -11,9 +11,18 @@ This project is for our semester in Technological Educational Institute of Centr
 In Android Studio -> Checkout project from Version Control and copy the git address.
 
 Find a story/issue in Waffle,
-if none is asigned or you are asigned to the story/task create a branch named like: "StoryNumber-Feature".
-When commiting to the branch state what you fixed or made with the story number like: "Fixed that #StoryNumber".
-When commiting the last commit the message must be: "What you fixed. closes #StoryNumber".
+if none is asigned or you are asigned to the story/task create a branch named like:
+```
+StoryNumber-Feature
+```
+When commiting to the branch state what you fixed or made with the story number like:
+```
+Fixed that #StoryNumber
+```
+When commiting the last commit the message must be:
+```
+What you fixed. closes #StoryNumber
+```
 
 ### Prerequisites
 
@@ -55,6 +64,12 @@ Explain what these tests test and why
 
 ```
 Give an example
+```
+
+## Versioning
+
+```
+MAJOR.MINOR.PATCH
 ```
 
 ## Deployment

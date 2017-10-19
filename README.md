@@ -68,7 +68,7 @@ Note: Must enable the option for unknown sources.
 * [Gradle](https://gradle.org/) - Dependency Management
 * [Jenkins](https://jenkins.io/) - Build and Deployment
 * [Slack](https://ateamtl.slack.com) - RSS and chat
-* [Waffle](https://waffle.io/stefos96/TLProject) - Project management
+* [Waffle](https://waffle.io/pavlidisnick/DiscountsAroundMe) - Project management
 
 ## Authors
 

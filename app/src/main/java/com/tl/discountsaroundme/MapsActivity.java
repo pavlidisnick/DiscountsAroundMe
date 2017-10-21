@@ -21,9 +21,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, LocationListener {
 
 
@@ -34,7 +31,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationRequest mLocationRequest;
     LatLng LatLng = new LatLng(40.69742916,22.90765285);
     //LatLng LatLng = new LatLng(40.65961061,22.95176983);
-    List<LatLng> points=new ArrayList<LatLng>();
+//    List<LatLng> points=new ArrayList<LatLng>();
 
     Button button;
 

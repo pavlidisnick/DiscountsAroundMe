@@ -114,7 +114,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
-
+//// TODO: 22/10/2017 for check List of nearby markets 
     private boolean ThereIsStore(double Greater100) {
 
             if (Greater100 <= 100)
@@ -182,8 +182,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double a =  (Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2));
         double c =  (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
         double d = R * c;
-        System.out.print("\n\n\n\n\n\n\n"
-                +d+ "SKATAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n\n\n");
         return d * 100; // meters
     }
 }

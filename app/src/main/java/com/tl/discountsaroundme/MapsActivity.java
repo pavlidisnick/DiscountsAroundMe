@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -25,12 +26,16 @@ import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, LocationListener {
 
+
     GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
     Marker mLocationMarker;
     Location mLastLocation;
     LocationRequest mLocationRequest;
+    LatLng LatLng = new LatLng(40.69742916,22.90765285);
+    //LatLng LatLng = new LatLng(40.65961061,22.95176983);
     List<LatLng> points=new ArrayList<LatLng>();
+
     Button button;
 
 
@@ -70,7 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * installed Google Play services and returned to the app.
      */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         mMap = googleMap;
         buildGoogleApiClient();
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -85,25 +90,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         mMap.setMyLocationEnabled(true);
 
-        final double pointY[]={22.687454223632812,22.92469024658203};
-        final double pointX[]={40.701463603604594,40.727486422997785};
+
+        //final double pointY[]={22.687454223632812,22.92469024658203};
+        //final double pointX[]={40.701463603604594,40.727486422997785};
 
 
-        for(int i=0;i<pointX.length;i++){
-            points.add(new LatLng(pointX[i],pointY[i]));
-        }
 
         button = (Button)findViewById(R.id.btNearby);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for(int i=0;i<pointX.length;i++){
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(pointX[i],pointY[i])));
+
+                if(measure(LatLng.latitude,LatLng.longitude,mLastLocation.getLatitude(),mLastLocation.getLongitude())<=100){
+                    for (int i = 0; i < LatLng.toString().length(); i++) {
+                        mMap.addMarker(new MarkerOptions().position(LatLng));
+                    }
                 }
+                else
+                    Toast.makeText(getApplicationContext(),
+                            "there is no nothing", Toast.LENGTH_LONG).show();
+
+
             }
         });
 
+
+    }
+
+    private boolean ThereIsStore(double Greater100) {
+
+            if (Greater100 <= 100)
+                return true;
+            else
+                return false;
 
     }
 
@@ -157,5 +177,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
+    }
+    private double measure(double lat1, double lon1, double lat2, double lon2) {
+        final double R =  6378.137; // Radius of earth in KM
+        double dLat = (lat2 * Math.PI / 180 - lat1 * Math.PI / 180);
+        double dLon =  (lon2 * Math.PI / 180 - lon1 * Math.PI / 180);
+        double a =  (Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2));
+        double c =  (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+        double d = R * c;
+        System.out.print("\n\n\n\n\n\n\n"
+                +d+ "SKATAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n\n\n");
+        return d * 100; // meters
     }
 }

@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -22,16 +20,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, LocationListener {
     GoogleMap mMap;
@@ -139,20 +127,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      * Measures the distance between 2 locations in meters
      * @param lat1 first location latitude
-     * @param lon1 first location longitude
+     * @param lng1 first location longitude
      * @param lat2 second location latitude
-     * @param lon2 second location longitude
+     * @param lng2 second location longitude
      * @return the distance in meters
      */
-    private double measure(double lat1, double lon1, double lat2, double lon2) {
-        final double R =  6378.137; // Radius of earth in KM
-        double dLat = (lat2 * Math.PI / 180 - lat1 * Math.PI / 180);
-        double dLon =  (lon2 * Math.PI / 180 - lon1 * Math.PI / 180);
-        double a =  (Math.sin(dLat / 2) * Math.sin(dLat / 2)
-                + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180)
-                * Math.sin(dLon / 2) * Math.sin(dLon / 2));
-        double c =  (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-        double d = R * c;
-        return d * 100; // meters
+    public double measure(double lat1, double lng1, double lat2, double lng2) {
+        double earthRadius = 6371000; //meters
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLng = Math.toRadians(lng2 - lng1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return (float) (earthRadius * c);
     }
 }

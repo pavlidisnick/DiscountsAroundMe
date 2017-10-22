@@ -1,15 +1,17 @@
 package com.tl.discountsaroundme;
 
+
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -20,21 +22,27 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, LocationListener {
-
-
     GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
     Marker mLocationMarker;
     Location mLastLocation;
     LocationRequest mLocationRequest;
-    LatLng LatLng = new LatLng(40.69742916,22.90765285);
-    //LatLng LatLng = new LatLng(40.65961061,22.95176983);
-//    List<LatLng> points=new ArrayList<LatLng>();
 
-    Button button;
+    LatLng bershkaSerres = new LatLng(41.090099,23.5485317);
 
+    Button nearbyButton;
 
 
     @Override
@@ -45,36 +53,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Issue 16
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
-
-
-
-
-
-
-
-
-
     }
 
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         mMap = googleMap;
         buildGoogleApiClient();
+
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -85,43 +73,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
         mMap.setMyLocationEnabled(true);
 
+        nearbyButton = findViewById(R.id.btNearby);
 
-        //final double pointY[]={22.687454223632812,22.92469024658203};
-        //final double pointX[]={40.701463603604594,40.727486422997785};
-
-
-
-        button = (Button)findViewById(R.id.btNearby);
-
-        button.setOnClickListener(new View.OnClickListener() {
+        nearbyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                double distance = measure(bershkaSerres.latitude, bershkaSerres.longitude, mLastLocation.getLatitude(), mLastLocation.getLongitude());
 
-                if(measure(LatLng.latitude,LatLng.longitude,mLastLocation.getLatitude(),mLastLocation.getLongitude())<=100){
-                    for (int i = 0; i < LatLng.toString().length(); i++) {
-                        mMap.addMarker(new MarkerOptions().position(LatLng));
-                    }
-                }
+                if (distance <= 100)
+                      mMap.addMarker(new MarkerOptions().position(bershkaSerres).title("Bershka"));
                 else
-                    Toast.makeText(getApplicationContext(),
-                            "there is no nothing", Toast.LENGTH_LONG).show();
-
-
+                    Toast.makeText(getApplicationContext(),"There are no shops nearby", Toast.LENGTH_LONG).show();
             }
         });
-
-
-    }
-//// TODO: 22/10/2017 for check List of nearby markets 
-    private boolean ThereIsStore(double Greater100) {
-
-            if (Greater100 <= 100)
-                return true;
-            else
-                return false;
-
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -130,7 +97,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addApi(LocationServices.API)
                 .build();
         mGoogleApiClient.connect();
-
     }
 
     @Override
@@ -147,14 +113,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(2000);
+
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return;
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
@@ -162,7 +123,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onConnectionSuspended(int i) {
-
     }
 
     @Override
@@ -175,11 +135,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
     }
+
+    /**
+     * Measures the distance between 2 locations in meters
+     * @param lat1 first location latitude
+     * @param lon1 first location longitude
+     * @param lat2 second location latitude
+     * @param lon2 second location longitude
+     * @return the distance in meters
+     */
     private double measure(double lat1, double lon1, double lat2, double lon2) {
         final double R =  6378.137; // Radius of earth in KM
         double dLat = (lat2 * Math.PI / 180 - lat1 * Math.PI / 180);
         double dLon =  (lon2 * Math.PI / 180 - lon1 * Math.PI / 180);
-        double a =  (Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2));
+        double a =  (Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180)
+                * Math.sin(dLon / 2) * Math.sin(dLon / 2));
         double c =  (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
         double d = R * c;
         return d * 100; // meters

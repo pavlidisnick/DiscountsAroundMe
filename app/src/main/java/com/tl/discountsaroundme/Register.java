@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -53,10 +54,17 @@ public class Register extends Activity implements View.OnClickListener {
         if (view.equals(register)) {
             if (isFormFilled())
                 signUp(email, password);
+            else {
+                Context context = getApplicationContext();
+                CharSequence text = "Please fill the form";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context,text,duration);
+                toast.show();
+            }
         }
         else if (view.equals(login)) {
-//            Intent LoginActivity = new Intent(this, Login.class);
-//            startActivity(LoginActivity);
+            Intent LoginActivity = new Intent(this, Login.class);
+            startActivity(LoginActivity);
         }
     }
 
@@ -64,13 +72,24 @@ public class Register extends Activity implements View.OnClickListener {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                Context context = getApplicationContext();
+                CharSequence text= "";
+                int duration = Toast.LENGTH_SHORT;
+
+
                 if (task.isSuccessful()) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success");
+                    text = "Register successful! Welcome";
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
                 else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                    text = "Register Failed";
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
             }
         });

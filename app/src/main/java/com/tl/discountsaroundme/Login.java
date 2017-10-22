@@ -2,6 +2,7 @@ package com.tl.discountsaroundme;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -39,8 +42,13 @@ public class Login extends Activity implements View.OnClickListener {
         if (view.equals(login)) {
             if (isFormFilled()) {
                 signIn(email, password);
-                Intent mapActivity = new Intent(this, MapActivity.class);
-                startActivity(mapActivity);
+            }
+            else{
+                Context context = getApplicationContext();
+                CharSequence text = "Please fill the form";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context,text,duration);
+                toast.show();
             }
         }
     }
@@ -53,10 +61,23 @@ public class Login extends Activity implements View.OnClickListener {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success");
                     user = mAuth.getCurrentUser();
+
+                    Context context = getApplicationContext();
+                    CharSequence text = "Login successful";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context,text,duration);
+                    toast.show();
+                    LoginSuccessful();
+
                 }
                 else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.getException());
+                    Context context = getApplicationContext();
+                    CharSequence text = "Login fail.";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context,text,duration);
+                    toast.show();
                 }
             }
         });
@@ -72,5 +93,10 @@ public class Login extends Activity implements View.OnClickListener {
         this.password = password.getText().toString();
 
         return !this.email.isEmpty() && !this.password.isEmpty();
+    }
+    private void LoginSuccessful (){
+        Intent mapActivity = new Intent(this, MapActivity.class);
+        startActivity(mapActivity);
+
     }
 }

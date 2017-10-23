@@ -19,15 +19,24 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
+    static ArrayList<Store> stores = new ArrayList<>();
     LocationManager locationManager;
     Button nearbyButton;
     Button shopsButton;
     GPSTracker gps;
     GoogleMap gm;
 
-    LatLng bershkaSerres = new LatLng(41.090099,23.5485317);
+    DatabaseReference databaseStores = FirebaseDatabase.getInstance().getReference("Stores");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +55,27 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         gm = googleMap;
         nearbyButton = findViewById(R.id.nearbyButton);
         shopsButton = findViewById(R.id.shopsButton);
+
+        databaseStores.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot storesSnapshot: dataSnapshot.getChildren()) {
+                    try {
+                        Store store = storesSnapshot.getValue(Store.class);
+                        stores.add(store);
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         try {
             googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.dark_style));
@@ -83,7 +113,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         shopsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Marker(gm);
+                gm.clear();
+                for (Store store: stores) {
+                    gm.addMarker(new MarkerOptions().position(store.getLatLng()).title(store.getName()));
+                }
             }
         });
 
@@ -91,11 +124,18 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         nearbyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                double distance = measure(bershkaSerres.latitude, bershkaSerres.longitude, gps.getLatitude(), gps.getLongitude());
+                gm.clear();
+                boolean noStores = true;
 
-                if (distance <= 100)
-                    gm.addMarker(new MarkerOptions().position(bershkaSerres).title("Bershka"));
-                else
+                for (Store store: stores) {
+                    LatLng latLng = store.getLatLng();
+                    double distance = measure(latLng.latitude, latLng.longitude, gps.getLatitude(), gps.getLongitude());
+                    if (distance <= 100) {
+                        gm.addMarker(new MarkerOptions().position(latLng).title(store.getName()));
+                        noStores = false;
+                    }
+                }
+                if (noStores)
                     Toast.makeText(getApplicationContext(), "There are no shops nearby", Toast.LENGTH_LONG).show();
             }
         });

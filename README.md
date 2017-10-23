@@ -6,6 +6,10 @@ Android Application for checking product discounts and notifying you whenever a 
 
 This project is for our semester in Technological Educational Institute of Central Macedonia.
 
+### APK
+
+You can download the apk file of the current version from app/src/release/apk.
+
 ## Getting Started
 
 In Android Studio -> Checkout project from Version Control and copy the git address.

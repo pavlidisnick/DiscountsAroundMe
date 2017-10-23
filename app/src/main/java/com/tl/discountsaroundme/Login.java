@@ -42,6 +42,7 @@ public class Login extends Activity implements View.OnClickListener {
         if (view.equals(login)) {
             if (isFormFilled()) {
                 signIn(email, password);
+
             }
             else{
                 Context context = getApplicationContext();
@@ -62,12 +63,14 @@ public class Login extends Activity implements View.OnClickListener {
                     Log.d(TAG, "signInWithEmail:success");
                     user = mAuth.getCurrentUser();
 
+
                     Context context = getApplicationContext();
                     CharSequence text = "Login successful";
                     int duration = Toast.LENGTH_SHORT;
                     Toast toast = Toast.makeText(context,text,duration);
                     toast.show();
-                    LoginSuccessful();
+                    String Username = user.getEmail();
+                    LoginSuccessful(Username);
 
                 }
                 else {
@@ -94,9 +97,10 @@ public class Login extends Activity implements View.OnClickListener {
 
         return !this.email.isEmpty() && !this.password.isEmpty();
     }
-    private void LoginSuccessful (){
-        Intent mapActivity = new Intent(this, MapActivity.class);
-        startActivity(mapActivity);
-
+    //After a successful login ,Pass the username , and start the main activity
+    private void LoginSuccessful (String Username){
+        Intent MainActivity = new Intent(this, MainActivity.class);
+        MainActivity.putExtra("Username", Username);
+        startActivity(MainActivity);
     }
 }

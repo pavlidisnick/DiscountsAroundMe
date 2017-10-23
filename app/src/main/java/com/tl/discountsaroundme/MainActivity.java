@@ -65,10 +65,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mDbRefDiscounts.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    String name =dataSnapshot.child("name").getValue(String.class);
-                    String price =dataSnapshot.child("price").getValue(String.class);
-                    String discount =dataSnapshot.child("discount").getValue(String.class);
-                listDiscountItems.add(name +"   "+ price+"  " + discount);
+                    String name = dataSnapshot.child("name").getValue(String.class);
+                    String price = dataSnapshot.child("price").getValue(String.class);
+                    String discount = dataSnapshot.child("discount").getValue(String.class);
+                listDiscountItems.add(name + "   "+ price + "  " + discount);
                 adapter.notifyDataSetChanged();
             }
 
@@ -100,7 +100,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (v.equals(btMap)) {
             Intent MapActivity = new Intent(this, MapActivity.class);
             startActivity(MapActivity);
-        }else if(v.equals(btSearch)){
+        }
+        else if(v.equals(btSearch)) {
             final String userSearch = etItemSearch.getText().toString().toLowerCase();
             mDbRefSearch = FirebaseDatabase.getInstance().getReference();
            // DatabaseReference mRef = mDbRefSearch.child("shops/1/items");

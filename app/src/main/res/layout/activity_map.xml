@@ -24,7 +24,7 @@
         android:textColor="@color/colorPrimaryDark" />
 
     <Button
-        android:id="@+id/nearbyButton2"
+        android:id="@+id/nearbyButton"
         android:layout_width="85dp"
         android:layout_height="35dp"
         android:layout_alignParentEnd="true"

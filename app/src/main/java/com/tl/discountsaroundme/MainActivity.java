@@ -37,7 +37,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mDbRefDiscounts = FirebaseDatabase.getInstance().getReference("/shops/1/items");//.child("shops").child("1").child("items");
+        mDbRefDiscounts = FirebaseDatabase.getInstance().getReference("/shops/1/items");
 
         btMap = findViewById(R.id.btMap);
         btSearch = findViewById(R.id.btSearch);

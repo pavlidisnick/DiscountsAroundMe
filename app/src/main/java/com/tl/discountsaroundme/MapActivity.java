@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
     LocationManager locationManager;
     Button nearbyButton;
+    Button shopsButton;
     GPSTracker gps;
     GoogleMap gm;
 
@@ -44,6 +45,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     public void onMapReady(GoogleMap googleMap) {
         gm = googleMap;
         nearbyButton = findViewById(R.id.nearbyButton);
+        shopsButton = findViewById(R.id.shopsButton);
 
         try {
             googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.dark_style));
@@ -77,6 +79,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         gps.stopUsingGPS();
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat, lng)));
         googleMap.animateCamera(zoom);
+
+        shopsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Marker(gm);
+            }
+        });
+
 
         nearbyButton.setOnClickListener(new View.OnClickListener() {
             @Override

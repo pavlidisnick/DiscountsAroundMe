@@ -11,7 +11,6 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Marker {
 
-
     public Marker(final GoogleMap m) {
         DatabaseReference databaseStores = FirebaseDatabase.getInstance().getReference("Stores");
 

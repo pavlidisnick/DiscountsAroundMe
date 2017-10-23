@@ -17,7 +17,7 @@
         android:id="@+id/shopsButton"
         android:layout_width="85dp"
         android:layout_height="35dp"
-        android:layout_alignTop="@+id/nearbyButton2"
+        android:layout_alignTop="@+id/nearbyButton"
         android:layout_centerHorizontal="true"
         android:background="@drawable/button_style"
         android:text="Shops"

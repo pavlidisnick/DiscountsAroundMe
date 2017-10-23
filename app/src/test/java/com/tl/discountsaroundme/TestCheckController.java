@@ -15,7 +15,7 @@ public class TestCheckController {
         LocationManager locationManager = Mockito.mock(LocationManager.class);
         when(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)).thenReturn(false);
         when(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)).thenReturn(true);
-        assertEquals(false, cc.GpsEnable(locationManager));
+        assertEquals(false, cc.areGPSandNetworkEnabled(locationManager));
     }
     @Test
     public void testCheckControllerWithNoNetwork() {
@@ -23,7 +23,7 @@ public class TestCheckController {
         LocationManager locationManager = Mockito.mock(LocationManager.class);
         when(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)).thenReturn(true);
         when(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)).thenReturn(false);
-        assertEquals(false, cc.GpsEnable(locationManager));
+        assertEquals(false, cc.areGPSandNetworkEnabled(locationManager));
     }
     @Test
     public void testCheckControllerWithAll() {
@@ -31,6 +31,6 @@ public class TestCheckController {
         LocationManager locationManager = Mockito.mock(LocationManager.class);
         when(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)).thenReturn(true);
         when(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)).thenReturn(true);
-        assertEquals(true, cc.GpsEnable(locationManager));
+        assertEquals(true, cc.areGPSandNetworkEnabled(locationManager));
     }
 }

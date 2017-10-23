@@ -4,5 +4,5 @@ import android.location.LocationManager;
 
 
 interface CheckInterface {
-    boolean GpsEnable(LocationManager lm);
+    boolean areGPSandNetworkEnabled(LocationManager lm);
 }

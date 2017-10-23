@@ -3,7 +3,7 @@ package com.tl.discountsaroundme;
 import android.location.LocationManager;
 
 class CheckController implements CheckInterface {
-    public boolean GpsEnable(LocationManager lm){
+    public boolean areGPSandNetworkEnabled(LocationManager lm){
         boolean gps_enabled = false;
         boolean network_enabled = false;
         try {

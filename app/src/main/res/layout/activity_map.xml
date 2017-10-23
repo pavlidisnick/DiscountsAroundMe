@@ -14,12 +14,22 @@
     tools:context="com.tl.discountsaroundme.MapActivity" />
 
     <Button
-        android:id="@+id/nearbyButton"
+        android:id="@+id/shopsButton"
         android:layout_width="85dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
+        android:layout_alignTop="@+id/nearbyButton2"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_style"
+        android:text="Shops"
+        android:textColor="@color/colorPrimaryDark" />
+
+    <Button
+        android:id="@+id/nearbyButton2"
+        android:layout_width="85dp"
+        android:layout_height="35dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="65dp"
+        android:layout_marginEnd="61dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/button_style"
         android:text="Nearby"

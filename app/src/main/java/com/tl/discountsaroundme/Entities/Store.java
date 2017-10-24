@@ -1,6 +1,5 @@
 package com.tl.discountsaroundme.Entities;
 
-
 import com.google.android.gms.maps.model.LatLng;
 
 public class Store {

@@ -1,6 +1,5 @@
 package com.tl.discountsaroundme.Entities;
 
-
 public class Item {
     private String name;
     private String type;

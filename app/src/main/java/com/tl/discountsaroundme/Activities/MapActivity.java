@@ -1,4 +1,4 @@
-package com.tl.discountsaroundme;
+package com.tl.discountsaroundme.Activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,7 +24,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.Entities.Store;
-
+import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.Services.GPSTracker;
 import java.util.ArrayList;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -33,7 +33,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     LocationManager locationManager;
     Button nearbyButton;
     Button shopsButton;
-    GPSTracker gps;
+    com.tl.discountsaroundme.Services.GPSTracker gps;
     GoogleMap gm;
 
     DatabaseReference databaseStores = FirebaseDatabase.getInstance().getReference("Stores");

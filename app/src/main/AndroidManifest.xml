@@ -40,9 +40,9 @@
       
         <activity android:name=".Login"></activity>
 
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".Activities.MainActivity"></activity>
       
-        <activity android:name=".MapActivity">
+        <activity android:name=".Activities.MapActivity">
         </activity>
         
 

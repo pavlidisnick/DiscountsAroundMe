@@ -2,6 +2,7 @@ package com.tl.discountsaroundme;
 
 
 import android.location.LocationManager;
+import com.tl.discountsaroundme.Controllers.CheckController;
 import org.junit.Test;
 import org.mockito.Mockito;
 

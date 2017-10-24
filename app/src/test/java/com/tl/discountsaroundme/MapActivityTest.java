@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme;
 
+import com.tl.discountsaroundme.Activities.MapActivity;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

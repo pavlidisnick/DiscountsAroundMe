@@ -20,7 +20,7 @@
         android:background="@drawable/button_style"
         android:text="Shops"
         android:textColor="@color/colorPrimaryDark"
-        android:layout_below="@+id/nearbyButton" android:layout_alignParentEnd="true"/>
+        android:layout_alignParentBottom="true" android:layout_alignParentEnd="true"/>
 
     <Button
         android:id="@+id/nearbyButton"
@@ -29,6 +29,6 @@
         android:background="@drawable/button_style"
         android:text="Nearby"
         android:textColor="@color/colorPrimaryDark"
-        android:layout_alignParentTop="true" android:layout_alignParentEnd="true"/>
+        android:layout_above="@+id/shopsButton" android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>

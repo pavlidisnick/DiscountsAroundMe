@@ -6,12 +6,16 @@ import com.google.android.gms.maps.model.LatLng;
 public class Store {
     private String name;
     private String type;
-    private LatLng latLng;
+    private double lat;
+    private double lng;
+
+    private Store() {}
 
     public Store(String name, String type, double lat, double lng) {
         this.name = name;
         this.type = type;
-        latLng = new LatLng(lat, lng);
+        this.lat = lat;
+        this.lng = lng;
     }
 
     public String getType() {
@@ -22,7 +26,11 @@ public class Store {
         return this.name;
     }
 
-    public LatLng getLatLng() {
-        return latLng;
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLng() {
+        return lng;
     }
 }

@@ -115,7 +115,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             public void onClick(View view) {
                 gm.clear();
                 for (Store store: stores) {
-                    gm.addMarker(new MarkerOptions().position(store.getLatLng()).title(store.getName()));
+                    gm.addMarker(new MarkerOptions().position(new LatLng(store.getLat(), store.getLng())).title(store.getName()));
                 }
             }
         });
@@ -128,7 +128,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 boolean noStores = true;
 
                 for (Store store: stores) {
-                    LatLng latLng = store.getLatLng();
+                    LatLng latLng = new LatLng(store.getLat(), store.getLng());
                     double distance = measure(latLng.latitude, latLng.longitude, gps.getLatitude(), gps.getLongitude());
                     if (distance <= 100) {
                         gm.addMarker(new MarkerOptions().position(latLng).title(store.getName()));

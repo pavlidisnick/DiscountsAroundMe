@@ -27,16 +27,14 @@ import com.tl.discountsaroundme.Entities.Store;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.Services.GPSTracker;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
-    static ArrayList<Store> stores = new ArrayList<>();
-    LocationManager locationManager;
-    Button nearbyButton;
-    Button shopsButton;
-    com.tl.discountsaroundme.Services.GPSTracker gps;
-    GoogleMap gm;
+    private static ArrayList<Store> stores = new ArrayList<>();
+    private com.tl.discountsaroundme.Services.GPSTracker gps;
+    private GoogleMap gm;
 
-    DatabaseReference databaseStores = FirebaseDatabase.getInstance().getReference("Stores");
+    private DatabaseReference databaseStores = FirebaseDatabase.getInstance().getReference("Stores");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +44,15 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        getSystemService(LOCATION_SERVICE);
     }
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gm = googleMap;
-        nearbyButton = findViewById(R.id.nearbyButton);
-        shopsButton = findViewById(R.id.shopsButton);
+        Button nearbyButton = findViewById(R.id.nearbyButton);
+        Button shopsButton = findViewById(R.id.shopsButton);
 
         databaseStores.addValueEventListener(new ValueEventListener() {
             @Override
@@ -99,8 +97,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
         double lat = 0;
         double lng = 0;
-        LocationManager locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        gps = new GPSTracker(locationManager);
+        AtomicReference<LocationManager> locationManager;
+        locationManager = new AtomicReference<>((LocationManager) this.getSystemService(LOCATION_SERVICE));
+        gps = new GPSTracker(locationManager.get());
 
         if (gps.canGetLocation()) {
             lat = gps.getLatitude();

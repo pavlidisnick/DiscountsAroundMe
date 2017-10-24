@@ -76,7 +76,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
 
         try {
-            googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.dark_style));
+            googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.girly_style));
         }
         catch (Resources.NotFoundException e) {
             e.printStackTrace();

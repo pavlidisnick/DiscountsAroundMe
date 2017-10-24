@@ -13,14 +13,11 @@ import com.tl.discountsaroundme.Controllers.CheckController;
 public class GPSTracker extends Service implements LocationListener {
 
     // GPS status
-    boolean enabledLocation = false;
+    private boolean enabledLocation = false;
 
-    // network status
-    boolean isNetworkEnabled = false;
-
-    Location location;
-    double latitude;
-    double longitude;
+    private Location location;
+    private double latitude;
+    private double longitude;
 
     // The minimum distance to change Updates in meters
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
@@ -28,14 +25,14 @@ public class GPSTracker extends Service implements LocationListener {
     // The minimum time between updates in milliseconds
     private static final long MIN_TIME_BW_UPDATES = 1000 * 2 * 60;
 
-    protected LocationManager locationManager;
+    private LocationManager locationManager;
 
     public GPSTracker(LocationManager lm) {
         locationManager = lm;
         getLocation();
     }
 
-    public Location getLocation() {
+    private void getLocation() {
         try {
             CheckController GpsEnable=new CheckController();
 
@@ -43,7 +40,7 @@ public class GPSTracker extends Service implements LocationListener {
             enabledLocation = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
             // getting network status
-            isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             if(GpsEnable.areGPSandNetworkEnabled(locationManager)) {
                 this.enabledLocation = true;
@@ -77,7 +74,6 @@ public class GPSTracker extends Service implements LocationListener {
             e.printStackTrace();
         }
 
-        return location;
     }
 
     //Stop using GPS listener

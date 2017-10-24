@@ -7,15 +7,16 @@ public class Store {
     private String id;
     private String name;
     private LatLng latLng;
+    private String type;
 
-    public Store(String id, String name, double lat, double lng) {
-        this.id = id;
+    Store(String name, String type, double lat, double lng) {
         this.name = name;
+        this.type = type;
         latLng = new LatLng(lat, lng);
     }
 
-    public String getId() {
-        return this.id;
+    public String getType() {
+        return type;
     }
 
     public String getName() {

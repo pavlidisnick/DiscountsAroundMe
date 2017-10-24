@@ -1,15 +1,14 @@
-package com.tl.discountsaroundme;
+package com.tl.discountsaroundme.Entities;
 
 
 import com.google.android.gms.maps.model.LatLng;
 
 public class Store {
-    private String id;
     private String name;
-    private LatLng latLng;
     private String type;
+    private LatLng latLng;
 
-    Store(String name, String type, double lat, double lng) {
+    public Store(String name, String type, double lat, double lng) {
         this.name = name;
         this.type = type;
         latLng = new LatLng(lat, lng);
@@ -23,7 +22,7 @@ public class Store {
         return this.name;
     }
 
-    LatLng getLatLng() {
+    public LatLng getLatLng() {
         return latLng;
     }
 }

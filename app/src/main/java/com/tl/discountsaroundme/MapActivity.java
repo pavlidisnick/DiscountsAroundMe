@@ -24,9 +24,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.tl.discountsaroundme.Entities.Store;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
     static ArrayList<Store> stores = new ArrayList<>();

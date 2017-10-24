@@ -40,6 +40,9 @@ public class Register extends Activity implements View.OnClickListener {
 
         register.setOnClickListener(this);
         login.setOnClickListener(this);
+
+        FillDatabase a = new FillDatabase();
+        a.fillData();
     }
 
     @Override

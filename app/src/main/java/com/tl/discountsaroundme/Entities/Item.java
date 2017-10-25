@@ -8,7 +8,8 @@ public class Item {
     private double discount;
 //    Leave it alone for now
     private String picture;
-
+// Added empty constructor for firebase to work
+    public Item (){};
     public Item(String name, String type, double price, double discount) {
         this.name = name;
         this.type = type;

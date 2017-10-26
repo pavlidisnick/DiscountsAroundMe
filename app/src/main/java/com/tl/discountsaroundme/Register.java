@@ -23,21 +23,17 @@ import static android.content.ContentValues.TAG;
 
 public class Register extends Activity implements View.OnClickListener {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-    Button register;
-    Button login;
-
-    String email;
-    String password;
+    private Button register;
+    private Button login;
+    private String email;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
         register = findViewById(R.id.register_button);
         login = findViewById(R.id.login_button);
-
         register.setOnClickListener(this);
         login.setOnClickListener(this);
     }
@@ -82,12 +78,12 @@ public class Register extends Activity implements View.OnClickListener {
         }
     }
 
-    void signUp(String email, String password) {
+    private void signUp(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 Context context = getApplicationContext();
-                CharSequence text= "";
+                CharSequence text;
                 int duration = Toast.LENGTH_SHORT;
 
 
@@ -118,7 +114,6 @@ public class Register extends Activity implements View.OnClickListener {
         TextView password = findViewById(R.id.password);
         this.email = email.getText().toString();
         this.password = password.getText().toString();
-
         return !this.email.isEmpty() && !this.password.isEmpty();
     }
 
@@ -126,7 +121,7 @@ public class Register extends Activity implements View.OnClickListener {
      * Checks if there is internet connection
      * @return true if it has internet connection
      */
-    public boolean isOnline() {
+    private boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();

@@ -22,28 +22,25 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
-    Button btMap;
-    Button btSearch;
-    EditText etItemSearch;
-    ArrayList<String> listDiscountItems = new ArrayList<>();
-    ArrayList<String> listSearchItems = new ArrayList<>();
-    ArrayAdapter<String> adapter,searchAdapter;
-    private DatabaseReference mDbRefDiscounts ;
-    private DatabaseReference mDbRefSearch ;
+    private Button btMap;
+    private Button btSearch;
+    private EditText etItemSearch;
+    private ArrayList<String> listDiscountItems = new ArrayList<>();
+    private ArrayList<String> listSearchItems = new ArrayList<>();
+    private ArrayAdapter<String> adapter,searchAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mDbRefDiscounts = FirebaseDatabase.getInstance().getReference("/shops/1/items");
-
+        DatabaseReference mDbRefDiscounts = FirebaseDatabase.getInstance().getReference("/shops/1/items");
         btMap = findViewById(R.id.btMap);
         btSearch = findViewById(R.id.btSearch);
         TextView tvWelcome =  findViewById(R.id.tvWelcomeMessage);
         TextView tvTopDiscounts =  findViewById(R.id.tvTopDiscounts);
         etItemSearch =  findViewById(R.id.etItemSearch);
-        ListView lvDiscountsList = (ListView) findViewById(R.id.lvDiscounts);
-        ListView lvSearchList =  (ListView) findViewById(R.id.lvItemsSearched);
+        ListView lvDiscountsList = findViewById(R.id.lvDiscounts);
+        ListView lvSearchList = findViewById(R.id.lvItemsSearched);
         btMap.setOnClickListener(this);
         btSearch.setOnClickListener(this);
 
@@ -54,9 +51,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 tvWelcome.setText("Welcome "+ value);
             }
         //Create the list adapters  and set it on the list views
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, listDiscountItems);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listDiscountItems);
         lvDiscountsList.setAdapter(adapter);
-        searchAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, listSearchItems);
+        searchAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listSearchItems);
         lvSearchList.setAdapter(searchAdapter);
 
         //Todays Top Discounts
@@ -101,7 +98,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
         else if(v.equals(btSearch)) {
             final String userSearch = etItemSearch.getText().toString().toLowerCase();
-            mDbRefSearch = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference mDbRefSearch = FirebaseDatabase.getInstance().getReference();
            // DatabaseReference mRef = mDbRefSearch.child("shops/1/items");
             Query searchQuery = mDbRefSearch.child("items").orderByKey().equalTo(userSearch);
             searchQuery.addValueEventListener(new ValueEventListener() {
@@ -111,7 +108,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     if (dataSnapshot.exists()){
                         // do something
 
-                        listSearchItems.add(dataSnapshot.child(userSearch).getKey().toString()+ "   "
+                        listSearchItems.add(dataSnapshot.child(userSearch).getKey() + "   "
                                 +"price: "+dataSnapshot.child(userSearch+"/price").getValue().toString() + "   "
                                 +"discount: "+dataSnapshot.child(userSearch).child("discount").getValue().toString()+"% "
                                 +"from: "+dataSnapshot.child(userSearch).child("shop").getValue().toString());

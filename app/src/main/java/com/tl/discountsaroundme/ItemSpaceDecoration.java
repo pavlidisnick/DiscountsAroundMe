@@ -11,7 +11,7 @@ import android.view.View;
 public class ItemSpaceDecoration extends RecyclerView.ItemDecoration {
     private final int mSpace;
 
-    public  ItemSpaceDecoration(int space){
+    public  ItemSpaceDecoration(int space) {
         this.mSpace = space;
     }
     @Override
@@ -20,7 +20,7 @@ public class ItemSpaceDecoration extends RecyclerView.ItemDecoration {
             outRect.right = mSpace;
             outRect.bottom = mSpace;
 
-            if(parent.getChildAdapterPosition(view) == 0){
+            if (parent.getChildAdapterPosition(view) == 0) {
                 outRect.top = mSpace;
             }
     }

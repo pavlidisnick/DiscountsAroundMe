@@ -9,12 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.RequestOptions;
 import com.tl.discountsaroundme.Entities.Item;
-import com.tl.discountsaroundme.R;
-import com.bumptech.glide.module.AppGlideModule;
 
 import java.util.ArrayList;
 
@@ -35,9 +31,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
     @Override
         public ItemView onCreateViewHolder(ViewGroup parent, int viewType) {
             View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout,parent,false);
-            ItemView itemView = new ItemView(layoutView);
-
-        return itemView;
+        return new ItemView(layoutView);
     }
 
     @Override
@@ -74,11 +68,11 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
 
         public ItemView(View itemView) {
             super(itemView);
-            imageView = (ImageView) itemView.findViewById(R.id.img);
-            tvItemName = (TextView) itemView.findViewById(R.id.tvItemName);
-            tvItemDetails = (TextView) itemView.findViewById(R.id.tvItemDetail);
-            tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
-            tvStoreName = (TextView) itemView.findViewById(R.id.tvStoreName);
+            imageView = itemView.findViewById(R.id.img);
+            tvItemName = itemView.findViewById(R.id.tvItemName);
+            tvItemDetails = itemView.findViewById(R.id.tvItemDetail);
+            tvPrice = itemView.findViewById(R.id.tvPrice);
+            tvStoreName = itemView.findViewById(R.id.tvStoreName);
         }
     }
 }

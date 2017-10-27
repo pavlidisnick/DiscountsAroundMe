@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class DiscountsTab extends Fragment{
 
     RecyclerView mRecyclerView;
-    ArrayList<Item> DiscountItems = new ArrayList<Item>();
+    ArrayList<Item> DiscountItems = new ArrayList<>();
     private DatabaseReference mDBDiscountItems;
     ItemViewAdapter adapter;
 
@@ -36,7 +36,7 @@ public class DiscountsTab extends Fragment{
 
         mDBDiscountItems = FirebaseDatabase.getInstance().getReference("/items");
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.item_grid);
+        mRecyclerView = rootView.findViewById(R.id.item_grid);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
 
         adapter = new ItemViewAdapter(getActivity(),DiscountItems);

@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.tl.discountsaroundme.Activities.MainActivity;
 
 import static android.content.ContentValues.TAG;
 
@@ -100,7 +101,7 @@ public class Login extends Activity implements View.OnClickListener {
     }
     //After a successful login ,Pass the username , and start the main activity
     private void LoginSuccessful (String Username){
-        Intent MainActivity = new Intent(this, com.tl.discountsaroundme.Activities.MainActivity.class);
+        Intent MainActivity = new Intent(Login.this, MainActivity.class);
         MainActivity.putExtra("Username", Username);
         startActivity(MainActivity);
     }

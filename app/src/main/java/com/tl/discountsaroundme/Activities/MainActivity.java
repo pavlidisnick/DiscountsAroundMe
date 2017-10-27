@@ -1,104 +1,123 @@
 package com.tl.discountsaroundme.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.tl.discountsaroundme.Entities.Item;
+import com.tl.discountsaroundme.DiscountsTab;
+import com.tl.discountsaroundme.MainTab;
 import com.tl.discountsaroundme.R;
-import java.util.ArrayList;
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
-    Button btMap;
-    Button btSearch;
-    EditText etItemSearch;
-    ArrayList<Item> listDiscountItems = new ArrayList<Item>();
-    ArrayList<Item> listSearchItems = new ArrayList<Item>();
-    private DatabaseReference mDbRefDiscounts ;
-    private DatabaseReference mDbRefSearch ;
 
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mDbRefDiscounts = FirebaseDatabase.getInstance().getReference("/id");
 
-        btMap = findViewById(R.id.btMap);
-        btSearch = findViewById(R.id.btSearch);
-        TextView tvWelcome =  findViewById(R.id.tvWelcomeMessage);
-        TextView tvTopDiscounts =  findViewById(R.id.tvTopDiscounts);
-        etItemSearch =  findViewById(R.id.etItemSearch);
-        ListView lvDiscountsList = (ListView) findViewById(R.id.lvDiscounts);
-        ListView lvSearchList =  (ListView) findViewById(R.id.lvItemsSearched);
-        btMap.setOnClickListener(this);
-        btSearch.setOnClickListener(this);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        // Create the adapter that will return a fragment for each of the two
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        //Get the username from the login activity And set it on the welcome Page
-        Bundle extras = getIntent().getExtras();
-            if (extras != null){
-                String value = extras.getString("Username");
-                tvWelcome.setText("Welcome "+ value);
-            }
-
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.equals(btMap)) {
-            Intent MapActivity = new Intent(this, MapActivity.class);
-            startActivity(MapActivity);
-        }
-        else if(v.equals(btSearch)) {
-            final String userSearch = etItemSearch.getText().toString();//toLowerCase();
-            //Search Code.
-            GetSearchResults(userSearch);
-        }
-    }
-
-
-
-
-
-    public void GetSearchResults(final String userSearch){
-        mDbRefSearch = FirebaseDatabase.getInstance().getReference();
-        Query searchQuery = mDbRefSearch.orderByChild("name").equalTo(userSearch);
-        searchQuery.addValueEventListener(new ValueEventListener() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    for (DataSnapshot child : dataSnapshot.getChildren()){
-                        Item item = child.getValue(Item.class);
-                        listSearchItems.add(item);
-                    }
-
-                    Toast.makeText(MainActivity.this, "We found something", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(MainActivity.this,"We didnt find anything.",Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,MapActivity.class);
+                startActivity(intent);
             }
         });
 
+    }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main22, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position){
+                case 0:
+                    DiscountsTab tab1 = new DiscountsTab();
+                    return tab1;
+                case 1:
+                    MainTab tab2 = new MainTab();
+                    return tab2;
+                default:
+                    return null;
+
+            }
+        }
+
+        @Override
+        public int getCount() {
+            // Show 2 total pages.
+            return 2;
+        }
+        @Override
+        public CharSequence getPageTitle(int position){
+            switch (position){
+                case 0:
+                    return "DISCOUNTS";
+                case 1:
+                    return "MAIN PAGE";
+            }
+            return null;
+        }
     }
 }
-

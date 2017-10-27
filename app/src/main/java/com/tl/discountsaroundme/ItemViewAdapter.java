@@ -26,7 +26,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
     ArrayList<Item> items;
 
 
-    public ItemViewAdapter (Context context , ArrayList<Item> items)
+    public ItemViewAdapter ( Context context ,ArrayList<Item> items)
     {
         this.items = items;
         this.context = context;

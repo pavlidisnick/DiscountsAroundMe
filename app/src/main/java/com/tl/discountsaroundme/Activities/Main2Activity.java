@@ -24,7 +24,7 @@ public class Main2Activity extends AppCompatActivity {
     ArrayList<Item> DiscountItems = new ArrayList<Item>();
     private DatabaseReference mDBDiscountItems;
     ItemViewAdapter adapter;
-
+    //changes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

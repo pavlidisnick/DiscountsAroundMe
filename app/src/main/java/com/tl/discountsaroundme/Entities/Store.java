@@ -8,9 +8,15 @@ public class Store {
     private double lat;
     private double lng;
 
+    private String image;
+    private String description;
+
+
     private Store() {}
 
-    public Store(String name, String type, double lat, double lng) {
+    public Store(String name, String type, double lat, double lng,String image,String description) {
+        this.description = description;
+        this.image =image;
         this.name = name;
         this.type = type;
         this.lat = lat;
@@ -32,4 +38,8 @@ public class Store {
     public double getLng() {
         return lng;
     }
+
+    public String getImage(){return image;}
+
+    public String Description(){return description;}
 }

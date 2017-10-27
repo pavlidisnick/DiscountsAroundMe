@@ -17,7 +17,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.Entities.Item;
-import com.tl.discountsaroundme.ItemArrayAdapter;
 import com.tl.discountsaroundme.R;
 import java.util.ArrayList;
 
@@ -30,7 +29,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     ArrayList<Item> listSearchItems = new ArrayList<Item>();
     private DatabaseReference mDbRefDiscounts ;
     private DatabaseReference mDbRefSearch ;
-    ItemArrayAdapter discountAdapter, searchAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +53,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 String value = extras.getString("Username");
                 tvWelcome.setText("Welcome "+ value);
             }
-        discountAdapter = new ItemArrayAdapter(listDiscountItems,this,R.layout.activity_main);
-        searchAdapter = new ItemArrayAdapter(listSearchItems,this,R.layout.activity_main);
-        lvDiscountsList.setAdapter(discountAdapter);
-        lvSearchList.setAdapter(searchAdapter);
-        GetTopDiscounts();
+
+
     }
 
     @Override
@@ -74,22 +70,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    public void GetTopDiscounts(){
-        mDbRefDiscounts.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Item item = dataSnapshot.getValue(Item.class);
-                listDiscountItems.add(item);
-                discountAdapter.notifyDataSetChanged();
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
 
-    }
 
     public void GetSearchResults(final String userSearch){
         mDbRefSearch = FirebaseDatabase.getInstance().getReference();
@@ -102,7 +85,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         Item item = child.getValue(Item.class);
                         listSearchItems.add(item);
                     }
-                    searchAdapter.notifyDataSetChanged();
+
                     Toast.makeText(MainActivity.this, "We found something", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(MainActivity.this,"We didnt find anything.",Toast.LENGTH_SHORT).show();

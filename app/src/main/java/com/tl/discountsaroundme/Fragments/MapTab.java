@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
@@ -75,6 +74,7 @@ public class MapTab extends Fragment {
                     MarkerOptions marker = new MarkerOptions()
                             .position(new LatLng(store.getLat(), store.getLng()))
                             .title(store.getName())
+                            .snippet(store.getType())
                             .flat(true)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
                     googleMap.addMarker(marker);

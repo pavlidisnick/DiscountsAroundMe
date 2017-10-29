@@ -34,7 +34,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private com.tl.discountsaroundme.Services.GPSTracker gps;
     private GoogleMap gm;
 
-    private DatabaseReference databaseStores = FirebaseDatabase.getInstance().getReference("Stores");
+    private DatabaseReference databaseStores = FirebaseDatabase.getInstance().getReference("shops");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

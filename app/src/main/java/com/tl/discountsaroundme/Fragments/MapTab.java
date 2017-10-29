@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MapTab extends Fragment {
-    MapView mMapView;
+    private MapView mMapView;
     private GPSTracker gps;
     private GoogleMap googleMap;
     private StoreManager storeManager = new StoreManager();
@@ -74,6 +74,7 @@ public class MapTab extends Fragment {
                     MarkerOptions marker = new MarkerOptions()
                             .position(new LatLng(store.getLat(), store.getLng()))
                             .title(store.getName())
+                            .snippet(store.getType())
                             .flat(true)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
                     googleMap.addMarker(marker);

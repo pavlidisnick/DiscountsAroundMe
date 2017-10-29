@@ -1,4 +1,4 @@
-package com.tl.discountsaroundme;
+package com.tl.discountsaroundme.Fragments;
 
 
 import android.os.Bundle;
@@ -9,9 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-/**
- * Created by rezu on 27/10/2017.
- */
+import com.tl.discountsaroundme.R;
 
 public class MainTab extends Fragment{
     @Override

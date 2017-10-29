@@ -30,12 +30,14 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Register" />
+        <activity android:name=".Register">
+
+        </activity>
+
         <activity android:name=".Login" />
-        <activity android:name=".Activities.MapActivity" />
+
         <activity
             android:name=".Activities.MainActivity"
-            android:label="@string/title_activity_main22"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

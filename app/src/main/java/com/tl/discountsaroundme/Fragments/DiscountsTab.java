@@ -1,4 +1,4 @@
-package com.tl.discountsaroundme;
+package com.tl.discountsaroundme.Fragments;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -14,27 +14,23 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.Entities.Item;
+import com.tl.discountsaroundme.ItemSpaceDecoration;
+import com.tl.discountsaroundme.ItemViewAdapter;
+import com.tl.discountsaroundme.R;
 
 import java.util.ArrayList;
 
-/**
- * Created by rezu on 27/10/2017.
- */
-
 public class DiscountsTab extends Fragment{
+    private DatabaseReference mDBDiscountItems = FirebaseDatabase.getInstance().getReference("/items");
+    private int discountValue = 30;
 
     RecyclerView mRecyclerView;
     ArrayList<Item> DiscountItems = new ArrayList<>();
-    private DatabaseReference mDBDiscountItems;
     ItemViewAdapter adapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.grid_layout, container, false);
-
-
-        mDBDiscountItems = FirebaseDatabase.getInstance().getReference("/items");
 
         mRecyclerView = rootView.findViewById(R.id.item_grid);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
@@ -54,8 +50,11 @@ public class DiscountsTab extends Fragment{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()){
                     Item item = child.getValue(Item.class);
-                    DiscountItems.add(item);
-                    adapter.notifyDataSetChanged();}
+                    if (item.getDiscount() >= discountValue) {
+                        DiscountItems.add(item);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
             }
 
             @Override

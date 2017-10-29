@@ -15,20 +15,4 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar2"
-        android:layout_width="match_parent"
-        android:layout_height="33dp"
-        android:layout_weight="1"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
-
-    <SearchView
-        android:background="@color/colorAccent"
-        android:layout_width="match_parent"
-        android:layout_height="32dp">
-
-    </SearchView>
-
 </android.support.design.widget.CoordinatorLayout>

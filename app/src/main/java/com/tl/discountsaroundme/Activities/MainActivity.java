@@ -1,84 +1,62 @@
 package com.tl.discountsaroundme.Activities;
 
-import android.content.Intent;
-import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.tl.discountsaroundme.DiscountsTab;
-import com.tl.discountsaroundme.MainTab;
+import com.tl.discountsaroundme.Fragments.DiscountsTab;
+import com.tl.discountsaroundme.Fragments.MainTab;
+import com.tl.discountsaroundme.Fragments.MapTab;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.ZoomOutPageTransformer;
 
 public class MainActivity extends AppCompatActivity {
+    ViewPager mViewPager;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the two
-        // primary sections of the activity.
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        // Set up the ViewPager with the sections adapter.
-        ViewPager mViewPager = findViewById(R.id.container);
+
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        TabLayout tabLayout = findViewById(R.id.tabs);
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+        mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        mViewPager.setOffscreenPageLimit(2);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,MapActivity.class);
-                startActivity(intent);
-            }
-        });
-
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.menu_discounts)
+                            mViewPager.setCurrentItem(0);
+                        else if (id == R.id.menu_map)
+                            mViewPager.setCurrentItem(1);
+                        else if (id == R.id.menu_clothes)
+                            mViewPager.setCurrentItem(2);
+                        return true;
+                    }
+                });
     }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main22, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    class SectionsPagerAdapter extends FragmentPagerAdapter {
+        private Fragment discount = new DiscountsTab();
+        private Fragment map = new MapTab();
+        private Fragment main = new MainTab();
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -86,29 +64,32 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch (position){
+            switch (position) {
                 case 0:
-                    return new DiscountsTab();
+                    return discount;
                 case 1:
-                    return new MainTab();
+                    return map;
+                case 2:
+                    return main;
                 default:
                     return null;
-
             }
         }
 
         @Override
         public int getCount() {
-            // Show 2 total pages.
-            return 2;
+            return 3;
         }
+
         @Override
-        public CharSequence getPageTitle(int position){
-            switch (position){
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
                 case 0:
                     return "DISCOUNTS";
                 case 1:
-                    return "MAIN PAGE";
+                    return "MAP";
+                case 2:
+                    return "MAIN";
             }
             return null;
         }

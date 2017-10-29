@@ -1,15 +1,16 @@
 package com.tl.discountsaroundme;
 
-import com.tl.discountsaroundme.Activities.MapActivity;
+import com.tl.discountsaroundme.FirebaseData.StoreManager;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class MapActivityTest {
+public class StoreManagerTest {
     @Test
     public void measureDistanceIsCorrect1() throws Exception {
-        MapActivity mapsActivity = new MapActivity();
+        StoreManager mapFragment = new StoreManager();
         double expectedDistance = 232.166;
-        double actualDistance = mapsActivity.measure(41.090051, 23.549554, 41.088241, 23.548624);
+        double actualDistance = mapFragment.measure(41.090051, 23.549554, 41.088241, 23.548624);
         assertEquals(expectedDistance, actualDistance, 17);
     }
 }

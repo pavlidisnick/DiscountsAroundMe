@@ -16,6 +16,9 @@ android:
 sudo: false
 
 before_install:
+  - chmod +x gradlew
+
+before_install:
   - touch local.properties
 
 script:

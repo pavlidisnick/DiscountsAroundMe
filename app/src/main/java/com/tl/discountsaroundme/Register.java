@@ -15,20 +15,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
 import static android.content.ContentValues.TAG;
 
 public class Register extends Activity implements View.OnClickListener {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-    Button register;
-    Button login;
+    private Button register;
+    private Button login;
 
-    String email;
-    String password;
+    private String email;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +54,12 @@ public class Register extends Activity implements View.OnClickListener {
                     .setCancelable(false)
                     .setMessage("Please open wifi or mobile data.")
                     .setPositiveButton("Settings",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                            startActivity(i);
-                        }
-                    });
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                                    startActivity(i);
+                                }
+                            });
             AlertDialog alert = builder.create();
             alert.show();
         }
@@ -72,22 +74,21 @@ public class Register extends Activity implements View.OnClickListener {
                 Context context = getApplicationContext();
                 CharSequence text = "Please fill the form";
                 int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context,text,duration);
+                Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
             }
-        }
-        else if (view.equals(login)) {
+        } else if (view.equals(login)) {
             Intent LoginActivity = new Intent(this, Login.class);
             startActivity(LoginActivity);
         }
     }
 
-    void signUp(String email, String password) {
+    private void signUp(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 Context context = getApplicationContext();
-                CharSequence text= "";
+                CharSequence text;
                 int duration = Toast.LENGTH_SHORT;
 
 
@@ -97,8 +98,7 @@ public class Register extends Activity implements View.OnClickListener {
                     text = "Register successful! Welcome";
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
-                }
-                else {
+                } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
                     text = "Register Failed";
@@ -124,9 +124,10 @@ public class Register extends Activity implements View.OnClickListener {
 
     /**
      * Checks if there is internet connection
+     *
      * @return true if it has internet connection
      */
-    public boolean isOnline() {
+    private boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();

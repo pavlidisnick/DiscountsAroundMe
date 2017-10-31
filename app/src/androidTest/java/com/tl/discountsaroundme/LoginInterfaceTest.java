@@ -18,17 +18,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by rezu on 22/10/2017.
- */
-
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class LoginInterfaceTest {
 
     @Rule
-    public ActivityTestRule<Login> mActivityRule = new ActivityTestRule(Login.class);
+    public ActivityTestRule<Login> mActivityRule = new ActivityTestRule<>(Login.class);
 
     public void useAppContext() throws Exception {
         // Context of the app under test.
@@ -36,16 +32,19 @@ public class LoginInterfaceTest {
 
         assertEquals("com.tl.discountsaroundme", appContext.getPackageName());
     }
+
     @Test
-    public void EmailTypeTest(){
+    public void EmailTypeTest() {
         Espresso.onView(withId(R.id.emailText)).perform(typeText("Email@mail.com")).check(matches(isDisplayed()));
     }
+
     @Test
-    public void PasswordTypeTest(){
+    public void PasswordTypeTest() {
         Espresso.onView(withId(R.id.passwordText)).perform(typeText("Pass")).check(matches(isDisplayed()));
     }
+
     @Test
-    public void LoginButtonClickTest(){
+    public void LoginButtonClickTest() {
         Espresso.onView(withId(R.id.login)).perform(click());
     }
 }

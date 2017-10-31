@@ -17,7 +17,6 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.tl.discountsaroundme.Entities.Store;
 import com.tl.discountsaroundme.FirebaseData.StoreManager;
@@ -28,7 +27,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MapTab extends Fragment {
-    MapView mMapView;
+    private MapView mMapView;
     private GPSTracker gps;
     private GoogleMap googleMap;
     private StoreManager storeManager = new StoreManager();
@@ -55,8 +54,7 @@ public class MapTab extends Fragment {
                 // For showing a move to my location button
                 try {
                     googleMap.setMyLocationEnabled(true);
-                }
-                catch (SecurityException e) {
+                } catch (SecurityException e) {
                     e.printStackTrace();
                 }
             }
@@ -73,7 +71,7 @@ public class MapTab extends Fragment {
             @Override
             public void onClick(View view) {
                 googleMap.clear();
-                for (Store store: storeManager.getStores()) {
+                for (Store store : storeManager.getStores()) {
                     MarkerOptions marker = new MarkerOptions()
                             .position(new LatLng(store.getLat(), store.getLng()))
                             .title(store.getName())
@@ -92,7 +90,7 @@ public class MapTab extends Fragment {
                 if (stores.isEmpty())
                     Toast.makeText(getContext(), "There are no shops nearby", Toast.LENGTH_LONG).show();
                 else {
-                    for (Store store :stores) {
+                    for (Store store : stores) {
                         MarkerOptions marker = new MarkerOptions()
                                 .position(new LatLng(store.getLat(), store.getLng()))
                                 .title(store.getName())

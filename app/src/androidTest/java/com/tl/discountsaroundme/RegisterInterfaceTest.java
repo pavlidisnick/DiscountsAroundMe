@@ -16,7 +16,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Instrumentation test, which will execute on an Android device.
@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
 @LargeTest
 public class RegisterInterfaceTest {
     @Rule
-    public ActivityTestRule<Register> mActivityRule = new ActivityTestRule(Register.class);
+    public ActivityTestRule<Register> mActivityRule = new ActivityTestRule<>(Register.class);
 
     @Test
     public void useAppContext() throws Exception {
@@ -38,19 +38,22 @@ public class RegisterInterfaceTest {
     }
 
     @Test
-    public void EmailTypeTest(){
+    public void EmailTypeTest() {
         Espresso.onView(withId(R.id.email)).perform(typeText("Email@mail.com")).check(matches(isDisplayed()));
     }
+
     @Test
-    public void PasswordTypeTest(){
+    public void PasswordTypeTest() {
         Espresso.onView(withId(R.id.password)).perform(typeText("Pass")).check(matches(isDisplayed()));
     }
+
     @Test
-    public void RegisterButtonClickTest(){
+    public void RegisterButtonClickTest() {
         Espresso.onView(withId(R.id.register_button)).perform(click());
     }
+
     @Test
-    public void LoginButtonClickTest(){
+    public void LoginButtonClickTest() {
         Espresso.onView(withId(R.id.login_button)).perform(click());
     }
 }

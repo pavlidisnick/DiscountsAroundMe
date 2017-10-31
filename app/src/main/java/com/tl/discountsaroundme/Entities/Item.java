@@ -6,11 +6,12 @@ public class Item {
     private String description;
     private double price;
     private double discount;
-//    Leave it alone for now
     private String picture;
-// Added empty constructor for firebase to work
-    public Item (){};
-    public Item(String name, String type, double price, double discount , String description, String picture) {
+
+    public Item() {
+    }
+
+    public Item(String name, String type, double price, double discount, String description, String picture) {
         this.name = name;
         this.type = type;
         this.price = price;
@@ -39,5 +40,8 @@ public class Item {
     public double getDiscount() {
         return discount;
     }
-    public String getPicture() {return picture;}
+
+    public String getPicture() {
+        return picture;
+    }
 }

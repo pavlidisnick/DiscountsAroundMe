@@ -4,16 +4,16 @@
     <scale
         android:duration="1"
         android:fromXScale="100%p"
-        android:toXScale="95%p"
         android:fromYScale="100%p"
-        android:toYScale="95%p"
         android:pivotX="50%p"
-        android:pivotY="50%p" />
+        android:pivotY="50%p"
+        android:toXScale="95%p"
+        android:toYScale="95%p" />
     <translate
         android:duration="2"
         android:fromYDelta="0"
-        android:toYDelta="100%p"
-        android:startOffset="0" />
+        android:startOffset="0"
+        android:toYDelta="100%p" />
     <alpha
         android:duration="2"
         android:fromAlpha="1.0"

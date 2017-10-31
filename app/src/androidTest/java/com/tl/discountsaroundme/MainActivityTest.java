@@ -25,7 +25,7 @@ import static org.junit.Assert.assertEquals;
 public class MainActivityTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule(MainActivity.class);
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
     public void useAppContext() throws Exception {
         // Context of the app under test.
@@ -35,17 +35,17 @@ public class MainActivityTest {
     }
 
     @Test
-    public void DiscountsTest(){
+    public void DiscountsTest() {
         Espresso.onView(withId(R.id.menu_discounts)).perform(click()).check(matches(isDisplayed()));
     }
 
     @Test
-    public void MapTest(){
+    public void MapTest() {
         Espresso.onView(withId(R.id.menu_map)).perform(click()).check(matches(isDisplayed()));
     }
 
     @Test
-    public void ClothesTest(){
+    public void ClothesTest() {
         Espresso.onView(withId(R.id.menu_clothes)).perform(click()).check(matches(isDisplayed()));
     }
 }

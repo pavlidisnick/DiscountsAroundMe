@@ -19,12 +19,11 @@ public class StoreManager {
         databaseStores.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot storesSnapshot: dataSnapshot.getChildren()) {
+                for (DataSnapshot storesSnapshot : dataSnapshot.getChildren()) {
                     try {
                         Store store = storesSnapshot.getValue(Store.class);
                         storeArrayList.add(store);
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -39,15 +38,16 @@ public class StoreManager {
 
     /**
      * Gets all the stores that are within a radius of maxDistance
-     * @param lat user's current latitude
-     * @param lng user's current longitude
+     *
+     * @param lat         user's current latitude
+     * @param lng         user's current longitude
      * @param maxDistance max distance between user and any store
      * @return all stores that are within the maxDistance
      */
     public ArrayList<Store> getNearbyStores(double lat, double lng, int maxDistance) {
         ArrayList<Store> nearbyStores = new ArrayList<>();
 
-        for (Store store: storeArrayList) {
+        for (Store store : storeArrayList) {
             LatLng latLng = new LatLng(store.getLat(), store.getLng());
             double distance = measure(latLng.latitude, latLng.longitude, lat, lng);
             if (distance <= maxDistance)
@@ -62,6 +62,7 @@ public class StoreManager {
 
     /**
      * Measures the distance between 2 locations in meters
+     *
      * @param lat1 first location latitude
      * @param lng1 first location longitude
      * @param lat2 second location latitude

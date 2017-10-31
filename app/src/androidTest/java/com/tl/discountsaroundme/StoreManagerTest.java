@@ -3,7 +3,8 @@ package com.tl.discountsaroundme;
 import com.tl.discountsaroundme.FirebaseData.StoreManager;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 public class StoreManagerTest {
     @Test

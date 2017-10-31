@@ -15,22 +15,20 @@ import com.tl.discountsaroundme.Entities.Item;
 import java.util.ArrayList;
 
 
-
 public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemView> {
 
     private Context context;
-    ArrayList<Item> items;
+    private ArrayList<Item> items;
 
 
-    public ItemViewAdapter ( Context context ,ArrayList<Item> items)
-    {
+    public ItemViewAdapter(Context context, ArrayList<Item> items) {
         this.items = items;
         this.context = context;
     }
 
     @Override
-        public ItemView onCreateViewHolder(ViewGroup parent, int viewType) {
-            View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout,parent,false);
+    public ItemView onCreateViewHolder(ViewGroup parent, int viewType) {
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
         return new ItemView(layoutView);
     }
 
@@ -44,11 +42,11 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
 
         holder.tvItemName.setText(items.get(position).getName());
         holder.tvItemDetails.setText(items.get(position).getDescription());
-       // holder.tvStoreName.setText(storeList[position]);
+        // holder.tvStoreName.setText(storeList[position]);
         holder.tvPrice.setText(Double.toString(items.get(position).getPrice()));
         RequestOptions options = new RequestOptions();
         Glide.with(context)
-             .load(items.get(position).getPicture())
+                .load(items.get(position).getPicture())
                 .into(holder.imageView);
     }
 
@@ -56,7 +54,6 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
     public int getItemCount() {
         return items.size();
     }
-
 
 
     public class ItemView extends RecyclerView.ViewHolder {

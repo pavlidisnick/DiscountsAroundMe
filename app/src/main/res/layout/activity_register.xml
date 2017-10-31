@@ -65,7 +65,7 @@
             android:background="@drawable/button_style"
             android:text="register"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:textColor="@color/colorPrimaryWhite"/>
 
         <Space
             android:layout_width="match_parent"
@@ -79,7 +79,7 @@
             android:background="@drawable/button_style"
             android:text="Already have an account"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryWhite" />
 
     </LinearLayout>
 

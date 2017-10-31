@@ -9,9 +9,7 @@
         android:id="@+id/img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-
-         />
+        android:adjustViewBounds="true"/>
 
     <TextView
         android:id="@+id/tvItemName"
@@ -43,6 +41,7 @@
         android:gravity="left"
         android:padding="8dp"
         android:textSize="42px"
+        android:textColor="@color/colorPrice"
         android:textStyle="italic"/>
 
 

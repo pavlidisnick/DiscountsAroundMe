@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/button_style"
             android:text="login"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryWhite" />
 
         <Space
             android:layout_width="match_parent"

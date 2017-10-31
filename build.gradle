@@ -8,19 +8,34 @@ buildscript {
         classpath 'com.android.tools.build:gradle:2.3.3'
         classpath 'com.google.gms:google-services:3.1.1'
 
-
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
 allprojects {
+    apply plugin: 'jacoco'
     repositories {
         jcenter()
         maven {
             url "https://maven.google.com" // Google's Maven repository
         }
     }
+}
+
+task codeCoverageReport(type: JacocoReport) {
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    reports {
+        xml.enabled true
+        xml.destination "${buildDir}/reports/jacoco/report.xml"
+        html.enabled false
+        csv.enabled false
+    }
+}
+
+codeCoverageReport.dependsOn {
+    subprojects*.test
 }
 
 task clean(type: Delete) {

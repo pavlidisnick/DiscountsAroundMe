@@ -1,4 +1,5 @@
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/pavlidisnick/DiscountsAroundMe.svg?columns=all)](https://waffle.io/pavlidisnick/DiscountsAroundMe)
+[![Build Status](https://travis-ci.org/pavlidisnick/DiscountsAroundMe.svg?branch=master)](https://travis-ci.org/pavlidisnick/DiscountsAroundMe)
 
 # Discounts Around Me
 

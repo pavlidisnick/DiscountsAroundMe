@@ -29,8 +29,6 @@ before_install:
 
 script:
   - ./gradlew --daemon clean assemble
-  - echo "--" > .adjust_token
-  - ./gradlew --daemon jacocoTestReport
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock

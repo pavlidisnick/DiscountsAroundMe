@@ -72,9 +72,9 @@ We use Semantic Versioning:
 MAJOR.MINOR.PATCH
 ```
 
-MAJOR version when you make incompatible API changes,
-MINOR version when you add functionality in a backwards-compatible manner, and
-PATCH version when you make backwards-compatible bug fixes.
+1. MAJOR version when you make incompatible API changes,
+2. MINOR version when you add functionality in a backwards-compatible manner, and
+3. PATCH version when you make backwards-compatible bug fixes.
 
 
 ## Deployment

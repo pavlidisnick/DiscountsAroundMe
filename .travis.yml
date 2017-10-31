@@ -23,10 +23,6 @@ script:
   - echo "--" > .adjust_token
   - ./gradlew jacocoTestReport
 
-after_success:
-  - python <(curl -s https://raw.githubusercontent.com/TouK/sputnik-ci/master/sputnik-ci.py)
-  - bash <(curl -s https://codecov.io/bash)
-
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/

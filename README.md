@@ -2,7 +2,6 @@
 [![Build Status](https://travis-ci.org/pavlidisnick/DiscountsAroundMe.svg?branch=master)](https://travis-ci.org/pavlidisnick/DiscountsAroundMe)
 
 # Discounts Around Me 
-/play whoomp
 Android Application for checking product discounts and notifying you whenever a shop with discount is nearby.
 
 This project is for our semester in Technological Educational Institute of Central Macedonia.

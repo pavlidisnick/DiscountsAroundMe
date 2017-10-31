@@ -7,10 +7,6 @@ Android Application for checking product discounts and notifying you whenever a 
 
 This project is for our semester in Technological Educational Institute of Central Macedonia.
 
-### APK
-
-You can download the apk file of the current version from app/src/release/apk.
-
 ## Getting Started
 
 In Android Studio -> Checkout project from Version Control and copy the git address.
@@ -72,13 +68,15 @@ Give an example
 ```
 
 ## Versioning
-
+We use Semantic Versioning:
 ```
 MAJOR.MINOR.PATCH
 ```
-Major = a complete package with a completed stories.
-Minor = completed story.
-Patch = commit/fix.
+
+MAJOR version when you make incompatible API changes,
+MINOR version when you add functionality in a backwards-compatible manner, and
+PATCH version when you make backwards-compatible bug fixes.
+
 
 ## Deployment
 

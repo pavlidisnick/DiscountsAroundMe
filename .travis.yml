@@ -1,3 +1,18 @@
-language: java
-jdk:
-  - oraclejdk8
+language: android
+jdk: oraclejdk8
+sudo: true
+
+android:
+  components:
+    - platform-tools
+    - tools
+    - build-tools-26.0.2
+    - android-21
+    - android-26
+    - sys-img-armeabi-v7a-android-22
+    - extra-android-m2repository
+    
+before_install:
+ - chmod +x gradlew
+ 
+script: ./gradlew connectedAndroidTest

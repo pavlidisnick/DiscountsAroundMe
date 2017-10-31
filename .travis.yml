@@ -25,7 +25,7 @@ before_install:
   - touch local.properties
 
 script:
-  - ./gradlew clean assemble
+  - ./gradlew --daemon clean assemble
   - echo "--" > .adjust_token
   - ./gradlew jacocoTestReport
 

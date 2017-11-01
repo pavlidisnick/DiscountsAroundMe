@@ -89,8 +89,9 @@ public class MainActivity extends AppCompatActivity {
                     return "MAP";
                 case 2:
                     return "MAIN";
+                default:
+                    return null;
             }
-            return null;
         }
     }
 }

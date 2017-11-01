@@ -1,18 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/quickreturn_coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.tl.discountsaroundme.Activities.MainActivity">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/item_grid"
+    <HorizontalScrollView
+        android:id="@+id/horizontalScroll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:animateLayoutChanges="true"
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Space
+                android:layout_width="6dp"
+                android:layout_height="28dp" />
+
+            <Button
+                android:id="@+id/clothes_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:background="@drawable/category_tags"
+                android:elevation="2dp"
+                android:text="clothes"
+                android:textColor="@color/colorPrimaryWhite" />
+
+            <Space
+                android:layout_width="6dp"
+                android:layout_height="28dp" />
+
+            <Button
+                android:id="@+id/jewelry_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:background="@drawable/category_tags"
+                android:elevation="2dp"
+                android:text="jewelry"
+                android:textColor="@color/colorPrimaryWhite" />
+
+            <Space
+                android:layout_width="6dp"
+                android:layout_height="28dp" />
+
+            <Button
+                android:id="@+id/a"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:background="@drawable/category_tags"
+                android:elevation="2dp"
+                android:text="shoes"
+                android:textColor="@color/colorPrimaryWhite" />
+
+            <Space
+                android:layout_width="6dp"
+                android:layout_height="28dp" />
+
+            <Button
+                android:id="@+id/b"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:background="@drawable/category_tags"
+                android:elevation="2dp"
+                android:text="shoes"
+                android:textColor="@color/colorPrimaryWhite" />
+
+            <Space
+                android:layout_width="6dp"
+                android:layout_height="28dp" />
+
+            <Button
+                android:id="@+id/c"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:background="@drawable/category_tags"
+                android:elevation="2dp"
+                android:text="shoes"
+                android:textColor="@color/colorPrimaryWhite" />
+
+            <Space
+                android:layout_width="6dp"
+                android:layout_height="28dp" />
+
+            <Button
+                android:id="@+id/d"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:background="@drawable/category_tags"
+                android:elevation="2dp"
+                android:text="shoes"
+                android:textColor="@color/colorPrimaryWhite" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swiperefresh"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="53dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/quickreturn_coordinator"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="527dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.727"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalScroll"
+        app:layout_constraintVertical_bias="0.0"
+        tools:context="com.tl.discountsaroundme.Activities.MainActivity">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/item_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-</android.support.design.widget.CoordinatorLayout>
+        </android.support.v7.widget.RecyclerView>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</android.support.constraint.ConstraintLayout>

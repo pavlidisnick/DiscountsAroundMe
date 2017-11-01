@@ -14,9 +14,9 @@
         android:title="Map"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/menu_clothes"
+        android:id="@+id/menu_user_options"
         android:enabled="true"
-        android:icon="@drawable/ic_clothes"
-        android:title="Items"
+        android:icon="@drawable/ic_user_options"
+        android:title="User Options"
         app:showAsAction="ifRoom" />
 </menu>

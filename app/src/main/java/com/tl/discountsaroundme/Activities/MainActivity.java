@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.tl.discountsaroundme.Fragments.DiscountsTab;
-import com.tl.discountsaroundme.Fragments.MainTab;
+import com.tl.discountsaroundme.Fragments.UserTab;
 import com.tl.discountsaroundme.Fragments.MapTab;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.ZoomOutPageTransformer;
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                             mViewPager.setCurrentItem(0);
                         else if (id == R.id.menu_map)
                             mViewPager.setCurrentItem(1);
-                        else if (id == R.id.menu_clothes)
+                        else if (id == R.id.menu_user_options)
                             mViewPager.setCurrentItem(2);
                         return true;
                     }
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     class SectionsPagerAdapter extends FragmentPagerAdapter {
         private Fragment discount = new DiscountsTab();
         private Fragment map = new MapTab();
-        private Fragment main = new MainTab();
+        private Fragment main = new UserTab();
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);

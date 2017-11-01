@@ -46,6 +46,6 @@ public class MainActivityTest {
 
     @Test
     public void ClothesTest() {
-        Espresso.onView(withId(R.id.menu_clothes)).perform(click()).check(matches(isDisplayed()));
+        Espresso.onView(withId(R.id.menu_user_options)).perform(click()).check(matches(isDisplayed()));
     }
 }

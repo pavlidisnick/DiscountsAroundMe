@@ -3,6 +3,11 @@ language: android
 jdk:
   - oraclejdk8
 
+env:
+    global:
+    - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
+    - ADB_INSTALL_TIMEOUT=10    #Time out to 10 min
+
 android:
   components:
   - tools
@@ -14,6 +19,10 @@ android:
   - extra-google-m2repository
   - extra-android-m2repository
   - addon-google_apis-google-26
+
+  #system images
+  - sys-img-armeabi-v7a-android-19
+  - sys-img-armeabi-v7a-android-21
 
 licenses:
   - 'android-sdk-license-c81a61d9'
@@ -27,14 +36,25 @@ sudo: false
 before_install:
   - chmod +x gradlew
   - touch local.properties
+  - pip install --user codecov
+
+before_script:
+  - chmod +x gradlew      #Grand permissions
+  - android list targets
+  - echo no | android create avd --force --name test --target $ANDROID_TARGET --abi $ANDROID_ABI
+  - emulator -avd test -no-skin -no-audio -no-window &    #Start emulator
 
 script:
   - ./gradlew --daemon build jacocoTestReport assembleAndroidTest
   - ./gradlew --daemon check
-  - ./gradlew --daemon codeCoverageReport
+  - android-wait-for-emulator
+  - adb devices   #Display list of devices
+  - adb shell input keyevent 82 &
+  - ./gradlew --daemon connectedCheck --stacktrace
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - codecov
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock

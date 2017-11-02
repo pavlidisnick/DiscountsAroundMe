@@ -126,17 +126,17 @@
 
     <Button
         android:id="@+id/saveButton"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="112dp"
-        android:layout_height="36dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="512dp"
-        android:background="@drawable/button_style"
-        android:elevation="0dp"
+        android:elevation="2dp"
         android:text="apply"
         android:textColor="@color/colorPrimaryWhite"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.925"
+        app:layout_constraintHorizontal_bias="0.07"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

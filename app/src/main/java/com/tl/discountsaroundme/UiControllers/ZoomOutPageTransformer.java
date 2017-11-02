@@ -1,4 +1,4 @@
-package com.tl.discountsaroundme;
+package com.tl.discountsaroundme.UiControllers;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;

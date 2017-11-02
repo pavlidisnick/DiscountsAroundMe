@@ -14,7 +14,7 @@ import com.tl.discountsaroundme.Fragments.DiscountsTab;
 import com.tl.discountsaroundme.Fragments.UserTab;
 import com.tl.discountsaroundme.Fragments.MapTab;
 import com.tl.discountsaroundme.R;
-import com.tl.discountsaroundme.ZoomOutPageTransformer;
+import com.tl.discountsaroundme.UiControllers.ZoomOutPageTransformer;
 
 public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;

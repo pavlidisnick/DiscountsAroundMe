@@ -14,8 +14,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.Entities.Item;
-import com.tl.discountsaroundme.ItemSpaceDecoration;
-import com.tl.discountsaroundme.ItemViewAdapter;
+import com.tl.discountsaroundme.UiControllers.ItemSpaceDecoration;
+import com.tl.discountsaroundme.UiControllers.ItemViewAdapter;
 import com.tl.discountsaroundme.R;
 
 import java.util.ArrayList;

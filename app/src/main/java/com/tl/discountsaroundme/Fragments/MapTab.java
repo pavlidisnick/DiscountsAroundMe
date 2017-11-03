@@ -76,7 +76,7 @@ public class MapTab extends Fragment {
                             .title(store.getName())
                             .snippet(store.getType())
                             .flat(true)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_coffee));
                     googleMap.addMarker(marker);
                 }
             }
@@ -96,7 +96,7 @@ public class MapTab extends Fragment {
                                 .title(store.getName())
                                 .snippet(store.getType())
                                 .flat(true)
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_coffee));
                         googleMap.addMarker(marker);
                     }
                 }

@@ -18,6 +18,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.category;
+
 import java.util.ArrayList;
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -28,6 +30,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private ArrayList<String> listDiscountItems = new ArrayList<>();
     private ArrayList<String> listSearchItems = new ArrayList<>();
     private ArrayAdapter<String> adapter,searchAdapter;
+
+
+    //for category
+    ArrayList<String> temp = new ArrayList<>();
+    ArrayList<String> temp2 = new ArrayList<>();
+    category g=new category();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +63,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         lvDiscountsList.setAdapter(adapter);
         searchAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listSearchItems);
         lvSearchList.setAdapter(searchAdapter);
+
+        //for category
+        g.getCategoriesFromItems();
+        g.getCategories();
+
 
         //Todays Top Discounts
         mDbRefDiscounts.addChildEventListener(new ChildEventListener() {
@@ -133,4 +146,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        g.getCategories();
+        g.getCategoriesFromItems();
+
+        temp = g.getCategorie();
+        for(int i=0;i<temp.size();i++){
+            System.out.println(temp.get(i)+" ONSTART");
+        }
+
+
+        temp2 = g.getItems();
+        for(int i=0;i<temp2.size();i++){
+            System.out.println(temp2.get(i)+" ONSTART");
+        }
+        g.findNewCategories();
+    }
 }

@@ -12,16 +12,16 @@ import java.util.ArrayList;
 public class category {
     DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
-    private ArrayList<String> items = new ArrayList<>();
-    private ArrayList<String> cat = new ArrayList<>();
+    private ArrayList<String> itemsCat = new ArrayList<>();
+    private ArrayList<String> categories = new ArrayList<>();
 
 
     public void findNewCategories(){
         getCategories();
         getCategoriesFromItems();
 
-        for (String e: items){
-            if(!cat.contains(e)){
+        for (String e: itemsCat){
+            if(!categories.contains(e)){
                 // query to add the category to firebase
                 String id = database.push().getKey();
                 database.child("categories").child(id).child("name").setValue(e.toString());
@@ -37,8 +37,8 @@ public class category {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot itemSnapshot: dataSnapshot.getChildren()) {
                     String itemName = itemSnapshot.child("name").getValue(String.class);
-                    if (!cat.contains(itemName)) {
-                        cat.add(itemName);
+                    if (!categories.contains(itemName)) {
+                        categories.add(itemName);
                     }
                 }
             }
@@ -48,7 +48,7 @@ public class category {
 
             }
         });
-        return cat;
+        return categories;
     }
 
     public ArrayList<String> getCategoriesFromItems(){
@@ -59,8 +59,8 @@ public class category {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot itemSnapshot: dataSnapshot.getChildren()) {
                     String itemName = itemSnapshot.child("name").getValue(String.class);
-                    if (!items.contains(itemName)) {
-                        items.add(itemName);
+                    if (!itemsCat.contains(itemName)) {
+                        itemsCat.add(itemName);
                     }
                 }
             }
@@ -70,14 +70,14 @@ public class category {
 
             }
         });
-        return items;
+        return itemsCat;
     }
 
     public ArrayList<String> getCategorie() {
-        return cat;
+        return categories;
     }
 
     public ArrayList<String> getItems() {
-        return items;
+        return itemsCat;
     }
 }

@@ -98,13 +98,12 @@
 
         <Spinner
             android:id="@+id/sShopType"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:dropDownSelector="@color/colorPrimaryWhite"
             android:dropDownWidth="match_parent"
             android:ems="18"
-            android:entries="@array/shopTypeSpinner"
-            android:spinnerMode="dialog"
+            android:textAlignment="center"
             android:visibility="gone" />
 
 

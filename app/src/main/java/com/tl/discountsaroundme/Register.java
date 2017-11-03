@@ -12,6 +12,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -59,6 +60,9 @@ public class Register extends Activity implements View.OnClickListener, Compound
         cbBusinessAccount =  findViewById(R.id.cbBusinessAccount);
         tvShopLocation = findViewById(R.id.tvShopLocation);
         sShopType = findViewById(R.id.sShopType);
+        ArrayAdapter<CharSequence> spineradapter = ArrayAdapter.createFromResource(this,R.array.shopTypeSpinner,R.layout.spinnerdropdownlist);
+        spineradapter.setDropDownViewResource(R.layout.spinnerdropdownlist);
+        sShopType.setAdapter(spineradapter);
 
         cbBusinessAccount.setOnCheckedChangeListener(this);
         register.setOnClickListener(this);

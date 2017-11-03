@@ -201,8 +201,8 @@ public class Register extends Activity implements View.OnClickListener, Compound
         Shop.setDescription("Details");
         Shop.setName(etShopName.getText().toString());
         Shop.setImage("");
-        Shop.setLat(40);
-        Shop.setLng(40);
+        Shop.setLat(0);
+        Shop.setLng(0);
         Shop.setType(sShopType.getSelectedItem().toString());
         Shop.setOwnerUID(BAuserUID);
 

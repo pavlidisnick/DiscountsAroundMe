@@ -34,12 +34,6 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
 
     @Override
     public void onBindViewHolder(ItemView holder, int position) {
-        /*holder.imageView.setImageResource(imgList[position]);
-        holder.tvItemName.setText(nameList[position]);
-        holder.tvItemDetails.setText(detailsList[position]);
-        holder.tvStoreName.setText(storeList[position]);
-        holder.tvPrice.setText(Integer.toString(priceList[position]));*/
-
         holder.tvItemName.setText(items.get(position).getName());
         holder.tvItemDetails.setText(items.get(position).getDescription());
         // holder.tvStoreName.setText(storeList[position]);

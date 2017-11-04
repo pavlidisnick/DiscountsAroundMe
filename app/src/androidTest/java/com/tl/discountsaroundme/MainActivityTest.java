@@ -3,20 +3,37 @@ package com.tl.discountsaroundme;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
+
+import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.widget.RecyclerView;
 
 import com.tl.discountsaroundme.Activities.MainActivity;
+import com.tl.discountsaroundme.Entities.Item;
 
+import org.hamcrest.FeatureMatcher;
+import org.hamcrest.Matcher;
+import org.hamcrest.core.AllOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.onData;
+import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertEquals;
 
 
@@ -36,16 +53,26 @@ public class MainActivityTest {
 
     @Test
     public void DiscountsTest() {
-        Espresso.onView(withId(R.id.menu_discounts)).perform(click()).check(matches(isDisplayed()));
+        onView(withId(R.id.menu_discounts)).perform(click()).check(matches(isDisplayed()));
+    }
+
+    /**
+     * Discounts Fragment Test
+     */
+    @Test
+    public void DiscountsListTest (){
+        onView(withId(R.id.menu_discounts)).perform(click());
+       onView(withId(R.id.item_grid)).check(matches(isDisplayed()));
     }
 
     @Test
     public void MapTest() {
-        Espresso.onView(withId(R.id.menu_map)).perform(click()).check(matches(isDisplayed()));
+        onView(withId(R.id.menu_map)).perform(click()).check(matches(isDisplayed()));
     }
 
     @Test
     public void ClothesTest() {
-        Espresso.onView(withId(R.id.menu_clothes)).perform(click()).check(matches(isDisplayed()));
+        onView(withId(R.id.menu_clothes)).perform(click()).check(matches(isDisplayed()));
     }
+
 }

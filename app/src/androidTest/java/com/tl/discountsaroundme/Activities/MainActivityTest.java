@@ -68,11 +68,6 @@ public class MainActivityTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        ViewInteraction imageView = onView(
-                allOf(withContentDescription("Η τοποθεσία μου"), isDisplayed()));
-        imageView.perform(click());
-
     }
 
 

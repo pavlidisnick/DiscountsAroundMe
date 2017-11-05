@@ -37,7 +37,7 @@ public class DiscountsTab extends Fragment {
         final DiscountsManager discountsManager = new DiscountsManager();
 
         LinearLayout linearLayout = rootView.findViewById(R.id.linear_layout);
-        //  Add Category with addCategoryToLayout.addCategory()
+        //  Add category with addCategoryToLayout.addCategory()
         AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, getActivity());
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.item_grid);

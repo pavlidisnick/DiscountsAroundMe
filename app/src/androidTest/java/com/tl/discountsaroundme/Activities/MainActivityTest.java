@@ -34,7 +34,7 @@ public class MainActivityTest {
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void mainActivityTestMenuMap() {
+    public void TestMenuMap() {
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
@@ -78,7 +78,7 @@ public class MainActivityTest {
 
 
     @Test
-    public void mainActivityTestSlide() {
+    public void TestSlideOnMenu() {
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
@@ -117,7 +117,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void mainActivityTestUserOptions() {
+    public void TestUserOptionsMenu() {
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -160,7 +160,7 @@ public class MainActivityTest {
 
 
     @Test
-    public void FirstScreenAllParameters() {
+    public void TestTopDiscountsMenu() {
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html

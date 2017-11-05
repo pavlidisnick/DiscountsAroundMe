@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,18 +25,16 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
+    //for category
+    ArrayList<String> temp = new ArrayList<>();
+    ArrayList<String> temp2 = new ArrayList<>();
+    category g = new category();
     private Button btMap;
     private Button btSearch;
     private EditText etItemSearch;
     private ArrayList<String> listDiscountItems = new ArrayList<>();
     private ArrayList<String> listSearchItems = new ArrayList<>();
-    private ArrayAdapter<String> adapter,searchAdapter;
-
-
-    //for category
-    ArrayList<String> temp = new ArrayList<>();
-    ArrayList<String> temp2 = new ArrayList<>();
-    category g=new category();
+    private ArrayAdapter<String> adapter, searchAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +43,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         DatabaseReference mDbRefDiscounts = FirebaseDatabase.getInstance().getReference("/shops/1/items");
         btMap = findViewById(R.id.btMap);
         btSearch = findViewById(R.id.btSearch);
-        TextView tvWelcome =  findViewById(R.id.tvWelcomeMessage);
-        TextView tvTopDiscounts =  findViewById(R.id.tvTopDiscounts);
-        etItemSearch =  findViewById(R.id.etItemSearch);
+        TextView tvWelcome = findViewById(R.id.tvWelcomeMessage);
+        TextView tvTopDiscounts = findViewById(R.id.tvTopDiscounts);
+        etItemSearch = findViewById(R.id.etItemSearch);
         ListView lvDiscountsList = findViewById(R.id.lvDiscounts);
         ListView lvSearchList = findViewById(R.id.lvItemsSearched);
         btMap.setOnClickListener(this);
@@ -54,10 +53,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         //Get the username from the login activity And set it on the welcome Page
         Bundle extras = getIntent().getExtras();
-            if (extras != null){
-                String value = extras.getString("Username");
-                tvWelcome.setText("Welcome "+ value);
-            }
+        if (extras != null) {
+            String value = extras.getString("Username");
+            tvWelcome.setText("Welcome " + value);
+        }
         //Create the list adapters  and set it on the list views
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listDiscountItems);
         lvDiscountsList.setAdapter(adapter);
@@ -69,14 +68,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
         g.getCategories();
 
 
-        //Todays Top Discounts
+        //Today's Top Discounts
         mDbRefDiscounts.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    String name = dataSnapshot.child("name").getValue(String.class);
-                    String price = dataSnapshot.child("price").getValue(String.class);
-                    String discount = dataSnapshot.child("discount").getValue(String.class);
-                listDiscountItems.add(name + "   "+ price + "  " + discount);
+                String name = dataSnapshot.child("name").getValue(String.class);
+                String price = dataSnapshot.child("price").getValue(String.class);
+                String discount = dataSnapshot.child("discount").getValue(String.class);
+                listDiscountItems.add(name + "   " + price + "  " + discount);
                 adapter.notifyDataSetChanged();
             }
 
@@ -108,29 +107,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (v.equals(btMap)) {
             Intent MapActivity = new Intent(this, MapActivity.class);
             startActivity(MapActivity);
-        }
-        else if(v.equals(btSearch)) {
+        } else if (v.equals(btSearch)) {
             final String userSearch = etItemSearch.getText().toString().toLowerCase();
             DatabaseReference mDbRefSearch = FirebaseDatabase.getInstance().getReference();
-           // DatabaseReference mRef = mDbRefSearch.child("shops/1/items");
+            // DatabaseReference mRef = mDbRefSearch.child("shops/1/items");
             Query searchQuery = mDbRefSearch.child("items").orderByKey().equalTo(userSearch);
             searchQuery.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    if (dataSnapshot.exists()){
+                    if (dataSnapshot.exists()) {
                         // do something
 
                         listSearchItems.add(dataSnapshot.child(userSearch).getKey() + "   "
-                                +"price: "+dataSnapshot.child(userSearch+"/price").getValue().toString() + "   "
-                                +"discount: "+dataSnapshot.child(userSearch).child("discount").getValue().toString()+"% "
-                                +"from: "+dataSnapshot.child(userSearch).child("shop").getValue().toString());
+                                + "price: " + dataSnapshot.child(userSearch + "/price").getValue().toString() + "   "
+                                + "discount: " + dataSnapshot.child(userSearch).child("discount").getValue().toString() + "% "
+                                + "from: " + dataSnapshot.child(userSearch).child("shop").getValue().toString());
                         searchAdapter.notifyDataSetChanged();
                         Toast.makeText(MainActivity.this, "We found something", Toast.LENGTH_SHORT).show();
 
 
-                    }else{
-                        Toast.makeText(MainActivity.this,"We didnt find anything.",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "We didnt find anything.", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -139,7 +137,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                 }
             });
-
 
 
             //Search Code.
@@ -154,14 +151,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
         g.getCategoriesFromItems();
 
         temp = g.getCategorie();
-        for(int i=0;i<temp.size();i++){
-            System.out.println(temp.get(i)+" ONSTART");
+        for (int i = 0; i < temp.size(); i++) {
+            System.out.println(temp.get(i) + " ONSTART");
         }
 
 
         temp2 = g.getItems();
-        for(int i=0;i<temp2.size();i++){
-            System.out.println(temp2.get(i)+" ONSTART");
+        for (int i = 0; i < temp2.size(); i++) {
+            System.out.println(temp2.get(i) + " ONSTART");
         }
         g.findNewCategories();
     }

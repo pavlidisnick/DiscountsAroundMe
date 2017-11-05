@@ -20,7 +20,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.tl.discountsaroundme.Activities.Login;
 import com.tl.discountsaroundme.R;
 
 import static android.content.ContentValues.TAG;
@@ -78,8 +77,7 @@ public class Register extends Activity implements View.OnClickListener {
                 toast.show();
             }
         } else if (view.equals(login)) {
-            Intent LoginActivity = new Intent(this, Login.class);
-            startActivity(LoginActivity);
+            finish();
         }
     }
 

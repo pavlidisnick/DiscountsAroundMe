@@ -25,12 +25,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.tl.discountsaroundme.R;
 
 public class Login extends FragmentActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
     private static final int RC_SIGN_IN = 9000;
 
     Button login;
+    Button register;
     LoginButton loginFacebook;
     SignInButton signInButton;
     String email;
@@ -64,6 +66,9 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
         login = findViewById(R.id.login);
         login.setOnClickListener(this);
 
+        register = findViewById(R.id.register);
+        register.setOnClickListener(this);
+
         loginFacebook = findViewById(R.id.login_facebook);
         loginFacebook.setReadPermissions("email", "public_profile");
 
@@ -87,6 +92,14 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
         });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null)
+            loginSuccessful();
+    }
+
 
     @Override
     public void onClick(View view) {
@@ -98,6 +111,9 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
             }
         } else if (view.equals(signInButton)) {
             signIn();
+        } else if (view.equals(register)) {
+            Intent registerActivity = new Intent(this, Register.class);
+            startActivity(registerActivity);
         }
     }
 

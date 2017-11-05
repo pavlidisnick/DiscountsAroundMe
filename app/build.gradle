@@ -53,6 +53,10 @@ dependencies {
     androidTestCompile 'com.android.support:support-annotations:27.0.0'
     androidTestCompile 'com.android.support.test:runner:1.0.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.1'
+    testCompile 'org.powermock:powermock-api-mockito:1.6.5'
+    testCompile 'org.powermock:powermock-module-junit4-rule-agent:1.6.5'
+    testCompile 'org.powermock:powermock-module-junit4-rule:1.6.5'
+    testCompile 'org.powermock:powermock-module-junit4:1.6.5'
     compile 'com.android.support:cardview-v7:26.1.0'
 }
 apply plugin: 'com.google.gms.google-services'

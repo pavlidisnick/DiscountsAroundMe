@@ -63,10 +63,21 @@
             android:text="login"
             android:textColor="@color/colorPrimaryWhite" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="120dp" />
 
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_facebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="30dp" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_btgoogle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            />
     </LinearLayout>
 
 </RelativeLayout>

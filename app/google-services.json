@@ -1,33 +1,43 @@
 {
   "project_info": {
-    "project_number": "771682716755",
-    "project_id": "discoundarroundme"
+    "project_number": "13303654686",
+    "firebase_url": "https://tlproject-84356.firebaseio.com",
+    "project_id": "tlproject-84356",
+    "storage_bucket": "tlproject-84356.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:771682716755:android:88ccb47613c49087",
+        "mobilesdk_app_id": "1:13303654686:android:88ccb47613c49087",
         "android_client_info": {
           "package_name": "com.tl.discountsaroundme"
         }
       },
       "oauth_client": [
         {
-          "client_id": "771682716755-ju9j17siqn8db622sj2u0i0ud8k1es5o.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "771682716755-40dbn0n480eqsf91gv3a77oolgtm6gb4.apps.googleusercontent.com",
+          "client_id": "13303654686-jgghagv04uc0c3g9bcq55ha8sgbur27q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.tl.discountsaroundme",
-            "certificate_hash": "118bf11c138d7092f951b46dd31d014bac005656"
+            "certificate_hash": "6d99857bd29430abf2f0164e36837cf676a08e98"
           }
+        },
+        {
+          "client_id": "13303654686-ujb2hh85uu3h8lnefbi2p52mcaugqv93.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tl.discountsaroundme",
+            "certificate_hash": "d12efe291124c5c521a5bf5bd681cbc1f0a89fb6"
+          }
+        },
+        {
+          "client_id": "13303654686-k9qnv6306gnl2t2kpi0h6045gkdgmb3p.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBasdGwSBxXnF3ndXd-6hfFQlz0wt-0YME"
+          "current_key": "AIzaSyBjotB1h-6-bJGVJ0xAyrkNfs3JIHWX3nU"
         }
       ],
       "services": {
@@ -35,11 +45,16 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "13303654686-k9qnv6306gnl2t2kpi0h6045gkdgmb3p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

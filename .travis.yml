@@ -1,0 +1,47 @@
+language: android
+
+jdk:
+  - oraclejdk8
+
+android:
+  components:
+  - tools
+  - platform-tools
+  - build-tools-26.0.2
+  - android-26
+  - extra-android-support
+  - extra-google-google_play_services
+  - extra-google-m2repository
+  - extra-android-m2repository
+
+licenses:
+  - 'android-sdk-license-c81a61d9'
+  - 'android-sdk-preview-license-.+'
+  - 'android-sdk-license-.+'
+  - 'google-gdk-license-.+'
+  - 'intel-android-extra-license.+'
+
+sudo: false
+
+before_install:
+  - chmod +x gradlew
+  - touch local.properties
+  - pip install --user codecov
+
+script:
+  - ./gradlew --daemon build jacocoTestReport assembleAndroidTest
+  - ./gradlew --daemon check
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+  - codecov
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/
+  - $HOME/.android/build-cache

@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.Services;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
@@ -8,23 +9,20 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+
 import com.tl.discountsaroundme.Controllers.CheckController;
 
 public class GPSTracker extends Service implements LocationListener {
 
+    // The minimum distance to change Updates in meters
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
+    // The minimum time between updates in milliseconds
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 2 * 60;
     // GPS status
     private boolean enabledLocation = false;
-
     private Location location;
     private double latitude;
     private double longitude;
-
-    // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
-
-    // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 2 * 60;
-
     private LocationManager locationManager;
 
     public GPSTracker(LocationManager lm) {
@@ -32,9 +30,10 @@ public class GPSTracker extends Service implements LocationListener {
         getLocation();
     }
 
+    @SuppressLint("MissingPermission")
     private void getLocation() {
         try {
-            CheckController GpsEnable=new CheckController();
+            CheckController GpsEnable = new CheckController();
 
             // getting GPS status
             enabledLocation = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -42,7 +41,7 @@ public class GPSTracker extends Service implements LocationListener {
             // getting network status
             boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-            if(GpsEnable.areGPSandNetworkEnabled(locationManager)) {
+            if (GpsEnable.areGPSandNetworkEnabled(locationManager)) {
                 this.enabledLocation = true;
                 if (isNetworkEnabled) {
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
@@ -85,8 +84,8 @@ public class GPSTracker extends Service implements LocationListener {
 
     // Function to get latitude
 
-    public double getLatitude(){
-        if(location != null){
+    public double getLatitude() {
+        if (location != null) {
             latitude = location.getLatitude();
         }
 
@@ -95,8 +94,8 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     // Function to get longitude
-    public double getLongitude(){
-        if(location != null){
+    public double getLongitude() {
+        if (location != null) {
             longitude = location.getLongitude();
         }
 

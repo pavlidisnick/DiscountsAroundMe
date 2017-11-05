@@ -1,0 +1,36 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/shopsButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/nearbyButton"
+        android:layout_alignBottom="@+id/nearbyButton"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="18dp"
+        android:elevation="2dp"
+        android:text="Shops"
+        android:textColor="@color/colorPrimaryWhite" />
+
+    <Button
+        android:id="@+id/nearbyButton"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="23dp"
+        android:layout_marginEnd="14dp"
+        android:layout_toStartOf="@+id/shopsButton"
+        android:elevation="2dp"
+        android:text="Nearby"
+        android:textColor="@color/colorPrimaryWhite" />
+
+</RelativeLayout>

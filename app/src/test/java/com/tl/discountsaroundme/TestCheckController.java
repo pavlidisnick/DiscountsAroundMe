@@ -2,7 +2,9 @@ package com.tl.discountsaroundme;
 
 
 import android.location.LocationManager;
+
 import com.tl.discountsaroundme.Controllers.CheckController;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -18,6 +20,7 @@ public class TestCheckController {
         when(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)).thenReturn(true);
         assertEquals(false, cc.areGPSandNetworkEnabled(locationManager));
     }
+
     @Test
     public void testCheckControllerWithNoNetwork() {
         CheckController cc = new CheckController();
@@ -26,6 +29,7 @@ public class TestCheckController {
         when(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)).thenReturn(false);
         assertEquals(false, cc.areGPSandNetworkEnabled(locationManager));
     }
+
     @Test
     public void testCheckControllerWithAll() {
         CheckController cc = new CheckController();

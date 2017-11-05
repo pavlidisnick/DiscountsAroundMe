@@ -7,21 +7,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-
 public class category {
+    public category(final AddCategoryToLayout addCategoryToLayout) {
+        DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("/categories");
 
-    private ArrayList<String> categories = new ArrayList<>();
-
-    public category() {
-        DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference().child("categories");
-
-        categoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        categoryRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                addCategoryToLayout.clearCategories();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    String itemName = itemSnapshot.child("name").getValue(String.class);
-                    categories.add(itemName);
+                    String category = itemSnapshot.child("name").getValue(String.class);
+                    addCategoryToLayout.addCategory(category);
                 }
             }
 
@@ -30,9 +26,5 @@ public class category {
 
             }
         });
-    }
-
-    public ArrayList<String> getCategories() {
-        return categories;
     }
 }

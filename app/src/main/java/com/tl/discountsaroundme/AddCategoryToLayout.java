@@ -43,6 +43,10 @@ public class AddCategoryToLayout {
         linearLayout.addView(space, linearLayout.getChildCount());
     }
 
+    public void clearCategories() {
+        linearLayout.removeAllViews();
+    }
+
     /**
      * Converts dp to pixels
      * @return pixels

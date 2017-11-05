@@ -47,6 +47,7 @@ public class DiscountsTab extends Fragment {
         }
 
 
+
         RecyclerView mRecyclerView = rootView.findViewById(R.id.item_grid);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 

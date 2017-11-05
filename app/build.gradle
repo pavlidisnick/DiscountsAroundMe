@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco-android'
 
 android {
     compileSdkVersion 26
@@ -12,10 +13,16 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 configurations.all {
@@ -46,5 +53,6 @@ dependencies {
     androidTestCompile 'com.android.support:support-annotations:27.0.0'
     androidTestCompile 'com.android.support.test:runner:1.0.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile 'com.android.support:cardview-v7:26.1.0'
 }
 apply plugin: 'com.google.gms.google-services'

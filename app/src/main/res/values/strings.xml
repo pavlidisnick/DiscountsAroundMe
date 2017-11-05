@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">DiscountsAroundMe</string>
     <string name="title_activity_map">Map</string>
+    <string name="facebook_app_id">128367924531428</string>
+    <string name="fb_login_protocol_scheme">fb128367924531428</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_main3">Main3Activity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="tab_text_1">Discounts</string>
+    <string name="tab_text_2">Main</string>
+    <string name="title_item_list">Items</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="web_client_id">13303654686-k9qnv6306gnl2t2kpi0h6045gkdgmb3p.apps.googleusercontent.com</string>
+
 </resources>

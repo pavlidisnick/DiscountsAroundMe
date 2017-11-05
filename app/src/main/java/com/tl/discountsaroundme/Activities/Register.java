@@ -1,4 +1,4 @@
-package com.tl.discountsaroundme;
+package com.tl.discountsaroundme.Activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,16 +15,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.tl.discountsaroundme.R;
+
 import static android.content.ContentValues.TAG;
 
 public class Register extends Activity implements View.OnClickListener {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
     private Button register;
     private Button login;
+  
     private String email;
     private String password;
 
@@ -48,12 +53,12 @@ public class Register extends Activity implements View.OnClickListener {
                     .setCancelable(false)
                     .setMessage("Please open wifi or mobile data.")
                     .setPositiveButton("Settings",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                            startActivity(i);
-                        }
-                    });
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                                    startActivity(i);
+                                }
+                            });
             AlertDialog alert = builder.create();
             alert.show();
         }
@@ -68,13 +73,11 @@ public class Register extends Activity implements View.OnClickListener {
                 Context context = getApplicationContext();
                 CharSequence text = "Please fill the form";
                 int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context,text,duration);
+                Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
             }
-        }
-        else if (view.equals(login)) {
-            Intent LoginActivity = new Intent(this, Login.class);
-            startActivity(LoginActivity);
+        } else if (view.equals(login)) {
+            finish();
         }
     }
 
@@ -93,8 +96,7 @@ public class Register extends Activity implements View.OnClickListener {
                     text = "Register successful! Welcome";
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
-                }
-                else {
+                } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
                     text = "Register Failed";
@@ -119,6 +121,7 @@ public class Register extends Activity implements View.OnClickListener {
 
     /**
      * Checks if there is internet connection
+     *
      * @return true if it has internet connection
      */
     private boolean isOnline() {

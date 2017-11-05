@@ -1,26 +1,23 @@
 package com.tl.discountsaroundme.Activities;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.tl.discountsaroundme.R;
-import java.util.ArrayList;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
-public class MainActivity extends Activity implements View.OnClickListener {
+import com.tl.discountsaroundme.Fragments.DiscountsTab;
+import com.tl.discountsaroundme.Fragments.UserTab;
+import com.tl.discountsaroundme.Fragments.MapTab;
+import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.UiControllers.ZoomOutPageTransformer;
+
+public class MainActivity extends AppCompatActivity {
+    private ViewPager mViewPager;
 
     private Button btMap;
     private Button btSearch;
@@ -88,49 +85,74 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         });
 
-    }
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-    @Override
-    public void onClick(View v) {
-        if (v.equals(btMap)) {
-            Intent MapActivity = new Intent(this, MapActivity.class);
-            startActivity(MapActivity);
-        }
-        else if(v.equals(btSearch)) {
-            final String userSearch = etItemSearch.getText().toString().toLowerCase();
-            DatabaseReference mDbRefSearch = FirebaseDatabase.getInstance().getReference();
-           // DatabaseReference mRef = mDbRefSearch.child("shops/1/items");
-            Query searchQuery = mDbRefSearch.child("items").orderByKey().equalTo(userSearch);
-            searchQuery.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-                    if (dataSnapshot.exists()){
-                        // do something
+        mViewPager = findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        mViewPager.setOffscreenPageLimit(2);
 
-                        listSearchItems.add(dataSnapshot.child(userSearch).getKey() + "   "
-                                +"price: "+dataSnapshot.child(userSearch+"/price").getValue().toString() + "   "
-                                +"discount: "+dataSnapshot.child(userSearch).child("discount").getValue().toString()+"% "
-                                +"from: "+dataSnapshot.child(userSearch).child("shop").getValue().toString());
-                        searchAdapter.notifyDataSetChanged();
-                        Toast.makeText(MainActivity.this, "We found something", Toast.LENGTH_SHORT).show();
-
-
-                    }else{
-                        Toast.makeText(MainActivity.this,"We didnt find anything.",Toast.LENGTH_SHORT).show();
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.menu_discounts)
+                            mViewPager.setCurrentItem(0);
+                        else if (id == R.id.menu_map)
+                            mViewPager.setCurrentItem(1);
+                        else if (id == R.id.menu_user_options)
+                            mViewPager.setCurrentItem(2);
+                        return true;
                     }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-
-
-            //Search Code.
-        }
+                });
     }
 
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    class SectionsPagerAdapter extends FragmentPagerAdapter {
+        private Fragment discount = new DiscountsTab();
+        private Fragment map = new MapTab();
+        private Fragment main = new UserTab();
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return discount;
+                case 1:
+                    return map;
+                case 2:
+                    return main;
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "DISCOUNTS";
+                case 1:
+                    return "MAP";
+                case 2:
+                    return "MAIN";
+            }
+            return null;
+        }
+    }
 }

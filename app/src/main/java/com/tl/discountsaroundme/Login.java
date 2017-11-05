@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.tl.discountsaroundme.Activities.MainActivity;
 import static android.content.ContentValues.TAG;
 
 public class Login extends Activity implements View.OnClickListener {
@@ -39,12 +40,11 @@ public class Login extends Activity implements View.OnClickListener {
             if (isFormFilled()) {
                 signIn(email, password);
 
-            }
-            else{
+            } else {
                 Context context = getApplicationContext();
                 CharSequence text = "Please fill the form";
                 int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context,text,duration);
+                Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
             }
         }
@@ -63,19 +63,18 @@ public class Login extends Activity implements View.OnClickListener {
                     Context context = getApplicationContext();
                     CharSequence text = "Login successful";
                     int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context,text,duration);
+                    Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                     String Username = user.getEmail();
                     LoginSuccessful(Username);
 
-                }
-                else {
+                } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.getException());
                     Context context = getApplicationContext();
                     CharSequence text = "Login fail.";
                     int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context,text,duration);
+                    Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                 }
             }
@@ -93,9 +92,10 @@ public class Login extends Activity implements View.OnClickListener {
 
         return !this.email.isEmpty() && !this.password.isEmpty();
     }
+
     //After a successful login ,Pass the username , and start the main activity
-    private void LoginSuccessful (String Username){
-        Intent MainActivity = new Intent(this, com.tl.discountsaroundme.Activities.MainActivity.class);
+    private void LoginSuccessful(String Username) {
+        Intent MainActivity = new Intent(Login.this, MainActivity.class);
         MainActivity.putExtra("Username", Username);
         startActivity(MainActivity);
     }

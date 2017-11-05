@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/item_style">
+
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="4dp" />
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="ItemImage" />
+
+    <TextView
+        android:id="@+id/tvItemName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:padding="8dp"
+        android:textSize="32px" />
+
+    <TextView
+        android:id="@+id/tvItemDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:maxLines="4"
+        android:padding="8dp"
+        android:textSize="24px" />
+
+    <TextView
+        android:id="@+id/tvStoreName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:padding="8dp"
+        android:textSize="28px"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:padding="8dp"
+        android:textColor="@color/colorPrice"
+        android:textSize="42px"
+        android:textStyle="italic" />
+
+
+</LinearLayout>

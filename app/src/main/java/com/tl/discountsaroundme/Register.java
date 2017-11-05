@@ -28,7 +28,7 @@ public class Register extends Activity implements View.OnClickListener {
 
     private Button register;
     private Button login;
-
+  
     private String email;
     private String password;
 
@@ -36,10 +36,8 @@ public class Register extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
         register = findViewById(R.id.register_button);
         login = findViewById(R.id.login_button);
-
         register.setOnClickListener(this);
         login.setOnClickListener(this);
     }
@@ -118,7 +116,6 @@ public class Register extends Activity implements View.OnClickListener {
         TextView password = findViewById(R.id.password);
         this.email = email.getText().toString();
         this.password = password.getText().toString();
-
         return !this.email.isEmpty() && !this.password.isEmpty();
     }
 

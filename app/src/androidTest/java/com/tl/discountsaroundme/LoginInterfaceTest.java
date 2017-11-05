@@ -4,6 +4,8 @@ import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.tl.discountsaroundme.Activities.Login;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

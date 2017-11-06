@@ -57,7 +57,7 @@ public class AddCategoryToLayoutTest {
         LayoutInflater layoutInflater = mock(LayoutInflater.class);
         when(layoutInflater.inflate(R.layout.button_category_tag, null, false)).thenReturn(button);
         PowerMockito.mockStatic(LayoutInflater.class);
-        Mockito.when(LayoutInflater.from(activity)).thenReturn(layoutInflater);;
+        Mockito.when(LayoutInflater.from(activity)).thenReturn(layoutInflater);
 
         addCategoryToLayout1.addCategory("ok");
         assertNotNull(addCategoryToLayout);

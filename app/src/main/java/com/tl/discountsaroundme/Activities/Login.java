@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -33,7 +34,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.R;
-import com.tl.discountsaroundme.Activities.Register;
 
 public class Login extends FragmentActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
     private static final int RC_SIGN_IN = 9000;
@@ -55,6 +55,11 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if(isLoggedIn()==true || (mGoogleApiClient != null && mGoogleApiClient.isConnected())) {
+            Toast.makeText(getApplicationContext(), "Already connected", Toast.LENGTH_LONG).show();
+            loginSuccessful("user");
+        }else{
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.web_client_id))
@@ -99,6 +104,7 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
                 Toast.makeText(getApplicationContext(), "####Error-facebook####", Toast.LENGTH_LONG).show();
             }
         });
+        }
     }
 
     @Override
@@ -252,5 +258,12 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
             }
         });
 
+    }
+    public boolean isLoggedIn() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        if(accessToken == null)
+            return false;
+        else
+            return  true;
     }
 }

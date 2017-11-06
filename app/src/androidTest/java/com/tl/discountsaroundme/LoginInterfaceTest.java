@@ -48,14 +48,10 @@ public class LoginInterfaceTest {
         assertEquals("com.tl.discountsaroundme.Activities", appContext.getPackageName());
     }
 
-
-
     @Test
     public void normalLogin(){
         onView(withId(R.id.emailText)).perform(typeText("pavlidis.nik95@gmail.com")).check(matches(withText("pavlidis.nik95@gmail.com")));
         onView(withId(R.id.passwordText)).perform(typeText("pavlidis")).check(matches(withText("pavlidis")));
-
-
     }
 
     @Test

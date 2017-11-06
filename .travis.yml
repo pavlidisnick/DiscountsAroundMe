@@ -45,3 +45,13 @@ cache:
   - $HOME/.gradle/caches/
   - $HOME/.gradle/wrapper/
   - $HOME/.android/build-cache
+
+deploy:
+  provider: releases
+  file: yourapp.apk
+  skip_cleanup: true
+  api_key: "084404f5da365d06de7b45d662b734d5ccb62e48"
+  on:
+    repo: pavlidisnick/DiscountsAroundMe
+    tags: true
+    jdk: oraclejdk8

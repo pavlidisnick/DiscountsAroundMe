@@ -8,8 +8,24 @@ android {
         applicationId "com.tl.discountsaroundme"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+
+        def versionPropsFile = file('version.properties')
+
+        if (versionPropsFile.canRead()) {
+            Properties versionProps = new Properties()
+
+            versionProps.load(new FileInputStream(versionPropsFile))
+
+            def code = versionProps['VERSION_CODE'].toInteger() + 1
+
+            versionProps['VERSION_CODE'] = code.toString()
+            versionProps.store(versionPropsFile.newWriter(), null)
+
+            versionCode code
+            versionName "1.0." + code
+        } else {
+            throw new GradleException("Could not read version.properties!")
+        }
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

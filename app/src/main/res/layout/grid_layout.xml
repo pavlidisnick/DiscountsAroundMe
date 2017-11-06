@@ -37,49 +37,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Space
-                android:layout_width="6dp"
-                android:layout_height="28dp" />
-
-            <Button
-                android:id="@+id/clothes_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="28dp"
-                android:background="@drawable/category_tags"
-                android:elevation="2dp"
-                android:text="clothes"
-                android:textColor="@color/colorPrimaryWhite" />
-
-            <Space
-                android:layout_width="6dp"
-                android:layout_height="28dp" />
-
-            <Button
-                android:id="@+id/jewelry_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="28dp"
-                android:background="@drawable/category_tags"
-                android:elevation="2dp"
-                android:text="jewelry"
-                android:textColor="@color/colorPrimaryWhite" />
-
-            <Space
-                android:layout_width="6dp"
-                android:layout_height="28dp" />
-
-            <Button
-                android:id="@+id/a"
-                android:layout_width="wrap_content"
-                android:layout_height="28dp"
-                android:background="@drawable/category_tags"
-                android:elevation="2dp"
-                android:text="shoes"
-                android:textColor="@color/colorPrimaryWhite" />
-
-            <Space
-                android:layout_width="6dp"
-                android:layout_height="28dp" />
-
         </LinearLayout>
     </HorizontalScrollView>
 

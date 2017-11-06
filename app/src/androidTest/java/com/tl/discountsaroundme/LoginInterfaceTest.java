@@ -6,6 +6,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
@@ -136,6 +137,7 @@ public class LoginInterfaceTest {
         mActivityRule.launchActivity(new Intent());
         onView(withId(R.id.emailText)).perform(typeText("test@gmail.com"));
         onView(withId(R.id.passwordText)).perform(typeText("123456"));
+        pressBack();
         onView(withId(R.id.login)).perform(click());
         onView(isRoot()).perform(waitFor(5000));
         intended(hasComponent(MainActivity.class.getName()));
@@ -162,5 +164,9 @@ public class LoginInterfaceTest {
                 uiController.loopMainThreadForAtLeast(millis);
             }
         };
+    }
+
+    public static void pressBack() {
+        onView(isRoot()).perform(ViewActions.pressBack());
     }
 }

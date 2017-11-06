@@ -167,23 +167,10 @@ public class MainActivityTest {
 
 
         ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.clothes_tag), withText("clothes"),
+                allOf(withId(R.id.clothes_tag), withText("Sweater"),
                         withParent(allOf(withId(R.id.linear_layout),
                                 withParent(withId(R.id.horizontalScroll))))));
         appCompatButton.perform(scrollTo(), click());
-
-        ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.jewelry_tag), withText("jewelry"),
-                        withParent(allOf(withId(R.id.linear_layout),
-                                withParent(withId(R.id.horizontalScroll))))));
-        appCompatButton2.perform(scrollTo(), click());
-
-        ViewInteraction appCompatButton3 = onView(
-                allOf(withId(R.id.a), withText("shoes"),
-                        withParent(allOf(withId(R.id.linear_layout),
-                                withParent(withId(R.id.horizontalScroll))))));
-        appCompatButton3.perform(scrollTo(), click());
-
 
         ViewInteraction searchInputView = onView(
                 allOf(withId(R.id.search_bar_text),

@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,7 +27,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.Activities.Register;
 
 public class Login extends FragmentActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
     private static final int RC_SIGN_IN = 9000;
@@ -41,6 +48,8 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
     CallbackManager callbackManager;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private GoogleApiClient mGoogleApiClient;
+    private DatabaseReference mDbRef = FirebaseDatabase.getInstance().getReference("/shops");
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +86,7 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
-                loginSuccessful();
+                loginSuccessful("user");
             }
 
             @Override
@@ -96,8 +105,18 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null)
-            loginSuccessful();
+        if (currentUser != null) {
+            CheckUserType(); //And login
+        }
+    }
+
+    /**
+     * Added a signout way thus the login tests will be able to run
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAuth.signOut();
     }
 
 
@@ -133,10 +152,19 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
-                    loginSuccessful();
+                    // Sign in success, update UI with the signed-in user's information
+
+                    CheckUserType();
+
+
                 } else {
-                    Toast.makeText(getApplicationContext(), "Incorrect email or password", Toast.LENGTH_LONG).show();
+                    // If sign in fails, display a message to the user.
+
+                    Context context = getApplicationContext();
+                    CharSequence text = "Login fail.";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
             }
         });
@@ -166,7 +194,7 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
-            loginSuccessful();
+            loginSuccessful("user");
         } else {
             Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
         }
@@ -185,8 +213,44 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
     }
 
     //After a successful login start the main activity
-    private void loginSuccessful() {
-        Intent MainActivity = new Intent(this, com.tl.discountsaroundme.Activities.MainActivity.class);
+    private void loginSuccessful(String Type) {
+
+        //TODO: change the main activity according to the user TYPE
+        CharSequence text= "";
+        text = Type;
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast;
+        toast = Toast.makeText(context, text, duration);
+        toast.show();
+        Intent MainActivity = new Intent(Login.this, MainActivity.class);
+
         startActivity(MainActivity);
+    }
+
+    private void CheckUserType (){
+        user = mAuth.getCurrentUser();
+        String Username = user.getEmail();
+        mDbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String usertype = null;
+                String UserUID = user.getUid().toString();
+                String dbUID;
+                for (DataSnapshot child : dataSnapshot.getChildren()){
+                    dbUID = child.child("ownerUID").getValue().toString();
+                    if (  dbUID.equals(UserUID)){
+                        usertype="owner";
+                    }else {usertype = "user";}
+                }
+                loginSuccessful(usertype);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

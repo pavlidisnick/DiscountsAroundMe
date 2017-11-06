@@ -12,5 +12,10 @@
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="web_client_id">13303654686-k9qnv6306gnl2t2kpi0h6045gkdgmb3p.apps.googleusercontent.com</string>
-
+    <string-array name="shopTypeSpinner">
+        <item>Choose a type</item>
+        <item>Clothing</item>
+        <item>Technology</item>
+        <item>Sport</item>
+    </string-array>
 </resources>

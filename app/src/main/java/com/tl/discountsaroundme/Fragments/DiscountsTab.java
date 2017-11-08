@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.Fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -8,31 +9,39 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.tl.discountsaroundme.AddCategoryToLayout;
+import com.tl.discountsaroundme.Discounts.SearchSuggest;
+import com.tl.discountsaroundme.Discounts.SuggestListMaker;
 import com.tl.discountsaroundme.category;
 import com.tl.discountsaroundme.FirebaseData.DiscountsManager;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.UiControllers.ItemSpaceDecoration;
 import com.tl.discountsaroundme.UiControllers.ItemViewAdapter;
 
+import java.util.List;
+
 public class DiscountsTab extends Fragment {
     public static int discountValue = 30;
+    FloatingSearchView mSearchView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.grid_layout, container, false);
+        final View rootView = inflater.inflate(R.layout.grid_layout, container, false);
 
         final DiscountsManager discountsManager = new DiscountsManager();
-
         LinearLayout linearLayout = rootView.findViewById(R.id.linear_layout);
-
         AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, getActivity());
-
         new category(addCategoryToLayout);
 
-        RecyclerView mRecyclerView = rootView.findViewById(R.id.item_grid);
+        final RecyclerView mRecyclerView = rootView.findViewById(R.id.item_grid);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
         final ItemViewAdapter adapter = new ItemViewAdapter(getActivity(), discountsManager.getDiscountItems());
@@ -52,6 +61,44 @@ public class DiscountsTab extends Fragment {
         });
 
         discountsManager.getTopDiscounts(adapter);
+
+        mSearchView = rootView.findViewById(R.id.floating_search_view);
+        mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
+            @Override
+            public void onSearchTextChanged(String oldQuery, final String newQuery) {
+                SuggestListMaker suggestListMaker = new SuggestListMaker();
+                List<SearchSuggest> searchSuggestList;
+                searchSuggestList = suggestListMaker.convertStringArrayToSuggest(discountsManager.getSuggestionsDiscounts(), newQuery);
+
+                //pass them on to the search view
+                 mSearchView.swapSuggestions(searchSuggestList);
+            }
+        });
+
+        mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
+            @Override
+            public void onBindSuggestion(View suggestionView, ImageView leftIcon, final TextView textView, final SearchSuggestion item, int itemPosition) {
+                suggestionView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        discountsManager.getDiscountsByName(item.getBody(), adapter);
+                        mSearchView.setSearchBarTitle(item.getBody());
+                        mSearchView.clearFocus();
+                    }
+                });
+            }
+
+        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                }
+            });
+        }
+
         return rootView;
     }
 }

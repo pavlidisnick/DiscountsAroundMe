@@ -33,11 +33,30 @@ public class DiscountsManager {
         });
     }
 
+    public void getDiscountsByName(String searchQuery, ItemViewAdapter adapter) {
+        ArrayList<Item> matchingArray = new ArrayList<>();
+        for (Item item: discountItems) {
+            String name = item.getName().toUpperCase();
+            if (name.contains(searchQuery.toUpperCase()))
+                matchingArray.add(item);
+        }
+        discountItems.clear();
+        discountItems.addAll(matchingArray);
+        adapter.notifyDataSetChanged();
+    }
+
     public void clearTopDiscounts() {
         discountItems.clear();
     }
 
     public ArrayList<Item> getDiscountItems() {
         return discountItems;
+    }
+
+    public ArrayList<String> getSuggestionsDiscounts() {
+        ArrayList<String> discountNamesList = new ArrayList<>();
+        for (Item item: discountItems)
+            discountNamesList.add(item.getName());
+        return discountNamesList;
     }
 }

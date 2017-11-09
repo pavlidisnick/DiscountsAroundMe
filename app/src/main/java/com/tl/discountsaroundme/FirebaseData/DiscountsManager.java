@@ -15,29 +15,45 @@ import java.util.ArrayList;
 public class DiscountsManager {
     private DatabaseReference mDBDiscountItems = FirebaseDatabase.getInstance().getReference("/items");
     private ArrayList<Item> discountItems = new ArrayList<>();
+    private ArrayList<Item> unchangedList = new ArrayList<>();
+    private ItemViewAdapter adapter;
 
-    public void getTopDiscounts(final ItemViewAdapter adapter) {
+    public void setAdapter(ItemViewAdapter adapter) {
+        this.adapter = adapter;
+    }
+
+    public void getTopDiscounts() {
         mDBDiscountItems.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                discountItems.clear();
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Item item = child.getValue(Item.class);
-                    if (item.getDiscount() >= DiscountsTab.discountValue) {
+                    if (item.getDiscount() >= DiscountsTab.discountValue)
                         discountItems.add(item);
-                        adapter.notifyDataSetChanged();
-                    }
                 }
+                adapter.notifyDataSetChanged();
+                unchangedList.clear();
+                unchangedList.addAll(discountItems);
             }
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
     }
 
-    public void getDiscountsByName(String searchQuery, ItemViewAdapter adapter) {
+    /**
+     * Invoked on search, based on the searchQuery it changes the list
+     *
+     * @param searchQuery the search String for discounts
+     */
+    public void getDiscountsByName(String searchQuery) {
+        searchQuery = searchQuery.toUpperCase();
         ArrayList<Item> matchingArray = new ArrayList<>();
-        for (Item item: discountItems) {
+        for (Item item : unchangedList) {
             String name = item.getName().toUpperCase();
-            if (name.contains(searchQuery.toUpperCase()))
+            if (name.contains(searchQuery))
                 matchingArray.add(item);
         }
         discountItems.clear();
@@ -55,8 +71,25 @@ public class DiscountsManager {
 
     public ArrayList<String> getSuggestionsDiscounts() {
         ArrayList<String> discountNamesList = new ArrayList<>();
-        for (Item item: discountItems)
+        for (Item item : unchangedList)
             discountNamesList.add(item.getName());
         return discountNamesList;
+    }
+
+    /**
+     * Checks the category of every item and changes accordingly
+     * Invoked by the categories buttons onClickListener
+     *
+     * @param category the item category which is also the category button text
+     */
+    public void getDiscountsByCategory(String category) {
+        discountItems.clear();
+        category = category.toUpperCase();
+        for (Item item : unchangedList) {
+            String type = item.getType().toUpperCase();
+            if (type.contains(category))
+                discountItems.add(item);
+        }
+        adapter.notifyDataSetChanged();
     }
 }

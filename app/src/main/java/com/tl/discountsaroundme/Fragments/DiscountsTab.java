@@ -1,6 +1,5 @@
 package com.tl.discountsaroundme.Fragments;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
@@ -20,11 +18,11 @@ import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.tl.discountsaroundme.AddCategoryToLayout;
 import com.tl.discountsaroundme.Discounts.SearchSuggest;
 import com.tl.discountsaroundme.Discounts.SuggestListMaker;
-import com.tl.discountsaroundme.category;
 import com.tl.discountsaroundme.FirebaseData.DiscountsManager;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.UiControllers.ItemSpaceDecoration;
 import com.tl.discountsaroundme.UiControllers.ItemViewAdapter;
+import com.tl.discountsaroundme.category;
 
 import java.util.List;
 
@@ -89,15 +87,6 @@ public class DiscountsTab extends Fragment {
             }
 
         });
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-                @Override
-                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-                }
-            });
-        }
 
         return rootView;
     }

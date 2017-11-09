@@ -44,7 +44,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
         holder.tvItemName.setText(items.get(position).getName());
         holder.tvItemDetails.setText(items.get(position).getDescription());
         // holder.tvStoreName.setText(storeList[position]);
-        holder.tvPrice.setText(Double.toString(items.get(position).getPrice()));
+        holder.tvPrice.setText(Double.toString(items.get(position).getPrice()) + " $");
         RequestOptions options = new RequestOptions();
         Glide.with(context)
                 .load(items.get(position).getPicture())

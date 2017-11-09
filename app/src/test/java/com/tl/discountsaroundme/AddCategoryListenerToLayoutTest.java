@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({TypedValue.class, LayoutInflater.class, AddCategoryToLayout.class})
-public class AddCategoryToLayoutTest {
+public class AddCategoryListenerToLayoutTest {
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();

@@ -22,7 +22,7 @@ import com.tl.discountsaroundme.FirebaseData.DiscountsManager;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.UiControllers.ItemSpaceDecoration;
 import com.tl.discountsaroundme.UiControllers.ItemViewAdapter;
-import com.tl.discountsaroundme.category;
+import com.tl.discountsaroundme.CategoryListener;
 
 import java.util.List;
 
@@ -35,14 +35,12 @@ public class DiscountsTab extends Fragment {
         final View rootView = inflater.inflate(R.layout.grid_layout, container, false);
 
         final DiscountsManager discountsManager = new DiscountsManager();
-        LinearLayout linearLayout = rootView.findViewById(R.id.linear_layout);
-        AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, getActivity());
-        new category(addCategoryToLayout);
 
         final RecyclerView mRecyclerView = rootView.findViewById(R.id.item_grid);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
         final ItemViewAdapter adapter = new ItemViewAdapter(getActivity(), discountsManager.getDiscountItems());
+        discountsManager.setAdapter(adapter);
         mRecyclerView.setAdapter(adapter);
         //ItemDecoration for spacing between items
         ItemSpaceDecoration decoration = new ItemSpaceDecoration(16);
@@ -53,12 +51,16 @@ public class DiscountsTab extends Fragment {
             @Override
             public void onRefresh() {
                 discountsManager.clearTopDiscounts();
-                discountsManager.getTopDiscounts(adapter);
+                discountsManager.getTopDiscounts();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
 
-        discountsManager.getTopDiscounts(adapter);
+        LinearLayout linearLayout = rootView.findViewById(R.id.linear_layout);
+        AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, getActivity());
+        new CategoryListener(addCategoryToLayout, discountsManager);
+
+        discountsManager.getTopDiscounts();
 
         mSearchView = rootView.findViewById(R.id.floating_search_view);
         mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
@@ -66,7 +68,7 @@ public class DiscountsTab extends Fragment {
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
                 SuggestListMaker suggestListMaker = new SuggestListMaker();
                 List<SearchSuggest> searchSuggestList;
-                searchSuggestList = suggestListMaker.convertStringArrayToSuggest(discountsManager.getSuggestionsDiscounts(), newQuery);
+                searchSuggestList = suggestListMaker.convertStringsToSuggestions(discountsManager.getSuggestionsDiscounts(), newQuery);
 
                 //pass them on to the search view
                  mSearchView.swapSuggestions(searchSuggestList);
@@ -79,7 +81,7 @@ public class DiscountsTab extends Fragment {
                 suggestionView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        discountsManager.getDiscountsByName(item.getBody(), adapter);
+                        discountsManager.getDiscountsByName(item.getBody());
                         mSearchView.setSearchBarTitle(item.getBody());
                         mSearchView.clearFocus();
                     }

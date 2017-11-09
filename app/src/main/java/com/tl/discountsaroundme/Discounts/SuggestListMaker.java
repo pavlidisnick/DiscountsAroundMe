@@ -6,7 +6,7 @@ import java.util.List;
 
 public class SuggestListMaker {
 
-    public List<SearchSuggest> convertStringArrayToSuggest(ArrayList<String> searchSuggests, String searchQuery) {
+    public List<SearchSuggest> convertStringsToSuggestions(ArrayList<String> searchSuggests, String searchQuery) {
         List<SearchSuggest> searchSuggestList = new ArrayList<>();
         for (String searchSuggest: searchSuggests) {
             if (searchSuggest.toUpperCase().contains(searchQuery.toUpperCase()))

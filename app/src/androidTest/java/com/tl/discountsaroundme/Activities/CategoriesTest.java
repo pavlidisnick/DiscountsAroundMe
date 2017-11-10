@@ -35,9 +35,9 @@ public class CategoriesTest {
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void categoriesTest() {
+    public void clothingTest() {
         try {
-            Thread.sleep(5000);
+            Thread.sleep(300);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -71,7 +71,10 @@ public class CategoriesTest {
                         1),
                         isDisplayed()));
         linearLayout2.check(matches(isDisplayed()));
+    }
 
+    @Test
+    public void shoesCategory() throws Exception {
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.clothes_tag), withText("Shoes"),
                         childAtPosition(
@@ -101,7 +104,6 @@ public class CategoriesTest {
                         1),
                         isDisplayed()));
         linearLayout4.check(matches(isDisplayed()));
-
     }
 
     private static Matcher<View> childAtPosition(

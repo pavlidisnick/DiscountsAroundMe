@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.tl.discountsaroundme.FirebaseData.DiscountsManager;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,7 +28,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({TypedValue.class, LayoutInflater.class, AddCategoryToLayout.class})
-public class AddCategoryListenerToLayoutTest {
+public class AddCategoryTest {
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -59,7 +61,8 @@ public class AddCategoryListenerToLayoutTest {
         PowerMockito.mockStatic(LayoutInflater.class);
         Mockito.when(LayoutInflater.from(activity)).thenReturn(layoutInflater);
 
-        addCategoryToLayout1.addCategory("ok");
+        DiscountsManager mockDiscountManager = mock(DiscountsManager.class);
+        addCategoryToLayout1.addCategory("ok", mockDiscountManager);
         assertNotNull(addCategoryToLayout);
     }
 }

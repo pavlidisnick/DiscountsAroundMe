@@ -8,6 +8,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 
 import com.tl.discountsaroundme.R;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -164,13 +165,6 @@ public class MainActivityTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
-        ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.clothes_tag), withText("Sweater"),
-                        withParent(allOf(withId(R.id.linear_layout),
-                                withParent(withId(R.id.horizontalScroll))))));
-        appCompatButton.perform(scrollTo(), click());
 
         ViewInteraction searchInputView = onView(
                 allOf(withId(R.id.search_bar_text),

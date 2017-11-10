@@ -48,7 +48,6 @@ public class Item {
     }
 
     public String getStore() {
-        Store.name=store;
         return store;
     }
 }

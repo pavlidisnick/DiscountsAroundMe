@@ -45,7 +45,7 @@ public class DiscountsTab extends Fragment {
         //ItemDecoration for spacing between items
         ItemSpaceDecoration decoration = new ItemSpaceDecoration(16);
         mRecyclerView.addItemDecoration(decoration);
-
+        mRecyclerView.setHasFixedSize(true);
         final SwipeRefreshLayout swipeRefreshLayout = rootView.findViewById(R.id.swiperefresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

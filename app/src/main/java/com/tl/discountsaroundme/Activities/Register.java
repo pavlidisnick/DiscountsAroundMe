@@ -30,7 +30,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.Activities.Login;
 import com.tl.discountsaroundme.Entities.Store;
+import com.tl.discountsaroundme.Entities.User;
 import com.tl.discountsaroundme.R;
+
+import java.security.Key;
 
 import static android.content.ContentValues.TAG;
 
@@ -122,14 +125,13 @@ public class Register extends Activity implements View.OnClickListener, Compound
                     //Issue 8  in case the user is a shop owner
                     if (cbBusinessAccount.isChecked()){
                         OnBusinessAccountCreation(task);}
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "createUserWithEmail:success");
-                    text = "Register successful! Welcome";
+                    // Sign in success, update UI with the signed-in user's information and store the user in the database
+                    StoreAccountIntoDB(task);
+                    text = "Register successful! Welcome " + task.getResult().getUser().getEmail();
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
                     text = "Register Failed";
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
@@ -199,11 +201,9 @@ public class Register extends Activity implements View.OnClickListener, Compound
      * */
 
     public void OnBusinessAccountCreation(Task<AuthResult> task){
-
         FirebaseUser user = task.getResult().getUser();
         String BAuserUID = user.getUid();
         Store Shop = new Store();
-
         Shop.setDescription("Details");
         Shop.setName(etShopName.getText().toString());
         Shop.setImage("");
@@ -211,8 +211,15 @@ public class Register extends Activity implements View.OnClickListener, Compound
         Shop.setLng(0);
         Shop.setType(sShopType.getSelectedItem().toString());
         Shop.setOwnerUID(BAuserUID);
-
         String Key = mDbRef.child("shops").push().getKey();
         mDbRef.child("shops").child(Key).setValue(Shop);
+    }
+    public void StoreAccountIntoDB(Task<AuthResult> task){
+        FirebaseUser user = task.getResult().getUser();
+        String userType = "Customer";
+        if(cbBusinessAccount.isChecked()){
+            userType = "Store owner";}
+        User newUser = new User("",user.getEmail(),userType,"imgURL");
+        mDbRef.child("users").child(user.getUid()).setValue(newUser);
     }
 }

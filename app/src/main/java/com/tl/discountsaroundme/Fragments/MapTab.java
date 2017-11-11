@@ -21,7 +21,7 @@ import com.tl.discountsaroundme.Entities.Store;
 import com.tl.discountsaroundme.FirebaseData.StoreManager;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.Services.GPSTracker;
-
+import com.google.maps.android.SphericalUtil;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 

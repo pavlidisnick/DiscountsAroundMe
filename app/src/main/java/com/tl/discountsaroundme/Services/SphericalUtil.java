@@ -148,7 +148,7 @@ public class SphericalUtil {
      * Returns the angle between two LatLngs, in radians. This is the same as the distance
      * on the unit sphere.
      */
-    static double computeAngleBetween(LatLng from, LatLng to) {
+    public static double computeAngleBetween(LatLng from, LatLng to) {
         return distanceRadians(toRadians(from.latitude), toRadians(from.longitude),
                 toRadians(to.latitude), toRadians(to.longitude));
     }

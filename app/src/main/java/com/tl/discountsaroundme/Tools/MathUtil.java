@@ -1,4 +1,4 @@
-package com.tl.discountsaroundme.Services;
+package com.tl.discountsaroundme.Tools;
 
 
         import static java.lang.Math.*;

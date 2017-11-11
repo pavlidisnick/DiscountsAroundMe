@@ -1,13 +1,13 @@
-package com.tl.discountsaroundme.Services;
+package com.tl.discountsaroundme.Tools;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-import static com.tl.discountsaroundme.Services.MathUtil.EARTH_RADIUS;
-import static com.tl.discountsaroundme.Services.MathUtil.arcHav;
-import static com.tl.discountsaroundme.Services.MathUtil.havDistance;
-import static com.tl.discountsaroundme.Services.MathUtil.wrap;
+import static com.tl.discountsaroundme.Tools.MathUtil.EARTH_RADIUS;
+import static com.tl.discountsaroundme.Tools.MathUtil.arcHav;
+import static com.tl.discountsaroundme.Tools.MathUtil.havDistance;
+import static com.tl.discountsaroundme.Tools.MathUtil.wrap;
 import static java.lang.Math.*;
 
 public class SphericalUtil {

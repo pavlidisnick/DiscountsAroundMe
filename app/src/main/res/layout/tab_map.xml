@@ -1,36 +1,142 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <com.arlib.floatingsearchview.FloatingSearchView
+        android:id="@+id/map_floating_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="12dp"
+        app:floatingSearch_close_search_on_keyboard_dismiss="true"
+        app:floatingSearch_leftActionMode="noLeftAction"
+        app:floatingSearch_menu="@menu/map_search_menu"
+        app:floatingSearch_searchBarMarginLeft="8dp"
+        app:floatingSearch_searchBarMarginRight="8dp"
+        app:floatingSearch_searchBarMarginTop="8dp"
+        app:floatingSearch_searchHint="Search Stores"
+        app:floatingSearch_showSearchKey="false"
+        app:floatingSearch_suggestionsListAnimDuration="250" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 
-    <Button
-        android:id="@+id/shopsButton"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="85dp"
+    <LinearLayout
+        android:id="@+id/popup_menu"
+        android:layout_width="260dp"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/nearbyButton"
-        android:layout_alignBottom="@+id/nearbyButton"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="18dp"
-        android:elevation="2dp"
-        android:text="Shops"
-        android:textColor="@color/colorPrimaryWhite" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/dialog_bg"
+        android:elevation="8dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical"
+        android:visibility="invisible">
 
-    <Button
-        android:id="@+id/nearbyButton"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="85dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="23dp"
-        android:layout_marginEnd="14dp"
-        android:layout_toStartOf="@+id/shopsButton"
-        android:elevation="2dp"
-        android:text="Nearby"
-        android:textColor="@color/colorPrimaryWhite" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <Space
+                android:layout_width="75dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_marginTop="5dp"
+                android:text="Shop Options"
+                android:textSize="18sp" />
+
+            <Space
+                android:layout_width="30dp"
+                android:layout_height="match_parent" />
+
+            <ImageButton
+                android:id="@+id/close_popup"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                app:srcCompat="@drawable/ic_close"
+                android:background="@drawable/category_tags" />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/shopsButton"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="155dp"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/nearbyButton"
+            android:layout_alignTop="@+id/nearbyButton"
+            android:layout_marginTop="54dp"
+            android:elevation="2dp"
+            android:text="Show All Shops"
+            android:textColor="@color/colorPrimaryWhite" />
+
+        <Button
+            android:id="@+id/nearbyButton"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="155dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="10dp"
+            android:elevation="2dp"
+            android:text="Nearby Shops"
+            android:textColor="@color/colorPrimaryWhite" />
+
+        <TextView
+            android:id="@+id/radius_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Shop Radius: 1km" />
+
+        <SeekBar
+            android:id="@+id/radius_seekBar"
+            style="@style/Widget.AppCompat.SeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:max="10"
+            android:progress="1" />
+
+        <CheckBox
+            android:id="@+id/topOffers_check"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+            android:checked="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Show only top offers" />
+
+        <TextView
+            android:id="@+id/offers_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Offers above 20%" />
+
+        <SeekBar
+            android:id="@+id/offer_seekBar"
+            style="@style/Widget.AppCompat.SeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:max="10"
+            android:progress="2" />
+
+    </LinearLayout>
 
 </RelativeLayout>

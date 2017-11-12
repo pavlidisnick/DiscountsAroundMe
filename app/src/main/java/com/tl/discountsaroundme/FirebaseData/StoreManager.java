@@ -44,7 +44,7 @@ public class StoreManager {
      * @param maxDistance max distance between user and any store
      * @return all stores that are within the maxDistance
      */
-    public ArrayList<Store> getNearbyStores(double lat, double lng, int maxDistance) {
+    public ArrayList<Store> getNearbyStores(double lat, double lng, double maxDistance) {
         ArrayList<Store> nearbyStores = new ArrayList<>();
 
         for (Store store : storeArrayList) {
@@ -79,4 +79,6 @@ public class StoreManager {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return (float) (earthRadius * c);
     }
+
+
 }

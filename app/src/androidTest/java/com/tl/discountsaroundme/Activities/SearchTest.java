@@ -88,7 +88,7 @@ public class SearchTest {
                 allOf(withId(R.id.suggestions_list),
                         childAtPosition(
                                 withId(R.id.suggestions_list_container),
-                                0)));
+                                0), isDisplayed()));
         recyclerView.perform(actionOnItemAtPosition(2, click()));
 
         ViewInteraction linearLayout = onView(
@@ -133,7 +133,7 @@ public class SearchTest {
                 allOf(withId(R.id.suggestions_list),
                         childAtPosition(
                                 withId(R.id.suggestions_list_container),
-                                0)));
+                                0), isDisplayed()));
         recyclerView.perform(actionOnItemAtPosition(0, click()));
 
         ViewInteraction linearLayout = onView(

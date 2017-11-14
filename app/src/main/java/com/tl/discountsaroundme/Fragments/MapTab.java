@@ -36,6 +36,7 @@ import com.tl.discountsaroundme.Entities.Store;
 import com.tl.discountsaroundme.FirebaseData.StoreManager;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.Services.GPSTracker;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;

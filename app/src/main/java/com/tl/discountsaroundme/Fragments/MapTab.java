@@ -2,7 +2,6 @@ package com.tl.discountsaroundme.Fragments;
 
 
 import android.content.Context;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -193,8 +192,7 @@ public class MapTab extends Fragment {
             public void onActionMenuItemSelected(MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.gps_fixed) {
-                    Location location = googleMap.getMyLocation();
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    LatLng latLng = new LatLng(gps.getLatitude(), gps.getLongitude());
                     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16.29));
                 } else if (itemId == R.id.map_options) {
                     int visibility = popupMenu.getVisibility();

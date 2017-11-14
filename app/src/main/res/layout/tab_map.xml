@@ -113,7 +113,7 @@
         <CheckBox
             android:id="@+id/topOffers_check"
             style="@style/Widget.AppCompat.CompoundButton.CheckBox"
-            android:checked="false"
+            android:checked="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

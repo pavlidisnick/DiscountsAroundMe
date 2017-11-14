@@ -99,4 +99,6 @@ public class StoreManager {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return (float) (earthRadius * c);
     }
+
+
 }

@@ -1,16 +1,19 @@
 package com.tl.discountsaroundme.UiControllers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.tl.discountsaroundme.Entities.Item;
+import com.tl.discountsaroundme.ItemDetailsActivity;
 import com.tl.discountsaroundme.R;
 
 import java.util.ArrayList;
@@ -31,6 +34,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
     public ItemView onCreateViewHolder(ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
         return new ItemView(layoutView);
+
     }
 
     @Override
@@ -67,12 +71,24 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
 
         public ItemView(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(context,tvItemName.getText(), Toast.LENGTH_LONG).show();
+                    ItemDetails();
+
+                }
+            });
             imageView = itemView.findViewById(R.id.img);
             tvItemName = itemView.findViewById(R.id.tvItemName);
             tvItemDetails = itemView.findViewById(R.id.tvItemDetail);
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvStoreName = itemView.findViewById(R.id.tvStoreName);
         }
+    }
+    public void ItemDetails(){
+        Intent newact=new Intent(context, ItemDetailsActivity.class);
+        context.startActivity(newact);
     }
 }
 

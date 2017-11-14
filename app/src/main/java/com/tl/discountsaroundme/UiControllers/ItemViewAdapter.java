@@ -2,6 +2,7 @@ package com.tl.discountsaroundme.UiControllers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,13 +70,13 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
         TextView tvStoreName;
         TextView tvPrice;
 
-        public ItemView(View itemView) {
+        public ItemView(final View itemView) {
             super(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Toast.makeText(context,tvItemName.getText(), Toast.LENGTH_LONG).show();
-                    ItemDetails();
+                    ItemDetails((ImageView) itemView,tvItemName,tvStoreName,tvPrice,tvItemDetails);
 
                 }
             });
@@ -86,9 +87,18 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
             tvStoreName = itemView.findViewById(R.id.tvStoreName);
         }
     }
-    public void ItemDetails(){
-        Intent newact=new Intent(context, ItemDetailsActivity.class);
-        context.startActivity(newact);
+    public void ItemDetails(ImageView imageView, TextView tvItemName, TextView tvStoreName, TextView tvPrice, TextView tvItemDetails){
+
+
+        Intent ItemDetailsActivity=new Intent(context, ItemDetailsActivity.class);
+        ItemDetailsActivity.putExtra("ItemName",tvItemName.toString());
+        ItemDetailsActivity.putExtra("ItemDetails",tvItemDetails.toString());
+        ItemDetailsActivity.putExtra("StoreName",tvStoreName.toString());
+        ItemDetailsActivity.putExtra("Price",tvPrice.toString());
+        imageView.buildDrawingCache();
+        Bitmap bitmap = imageView.getDrawingCache();
+        ItemDetailsActivity.putExtra("img",bitmap);
+        context.startActivity(ItemDetailsActivity);
     }
 }
 

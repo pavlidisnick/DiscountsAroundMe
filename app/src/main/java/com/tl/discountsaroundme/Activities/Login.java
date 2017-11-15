@@ -61,54 +61,54 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if(isLoggedIn()==true || (mGoogleApiClient != null && mGoogleApiClient.isConnected())) {
+        if (isLoggedIn() == true || (mGoogleApiClient != null && mGoogleApiClient.isConnected())) {
             Toast.makeText(getApplicationContext(), "Already connected", Toast.LENGTH_LONG).show();
             loginSuccessful("user");
-        }else{
+        } else {
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.web_client_id))
-                .requestEmail()
-                .build();
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.web_client_id))
+                    .requestEmail()
+                    .build();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .enableAutoManage(this, this)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
 
-        //Facebook login
-        FacebookSdk.sdkInitialize(getApplicationContext());
+            //Facebook login
+            FacebookSdk.sdkInitialize(getApplicationContext());
 
-        signInButton = findViewById(R.id.sign_in_btgoogle);
-        signInButton.setOnClickListener(this);
+            signInButton = findViewById(R.id.sign_in_btgoogle);
+            signInButton.setOnClickListener(this);
 
-        login = findViewById(R.id.login);
-        login.setOnClickListener(this);
+            login = findViewById(R.id.login);
+            login.setOnClickListener(this);
 
-        register = findViewById(R.id.register);
-        register.setOnClickListener(this);
+            register = findViewById(R.id.register);
+            register.setOnClickListener(this);
 
-        loginFacebook = findViewById(R.id.login_facebook);
-        loginFacebook.setReadPermissions("email", "public_profile");
+            loginFacebook = findViewById(R.id.login_facebook);
+            loginFacebook.setReadPermissions("email", "public_profile");
 
-        callbackManager = CallbackManager.Factory.create();
-        loginFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
-                loginSuccessful("user");
-            }
+            callbackManager = CallbackManager.Factory.create();
+            loginFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
+                    loginSuccessful("user");
+                }
 
-            @Override
-            public void onCancel() {
-                Toast.makeText(getApplicationContext(), "Login Cancelled", Toast.LENGTH_LONG).show();
-            }
+                @Override
+                public void onCancel() {
+                    Toast.makeText(getApplicationContext(), "Login Cancelled", Toast.LENGTH_LONG).show();
+                }
 
-            @Override
-            public void onError(FacebookException error) {
-                Toast.makeText(getApplicationContext(), "####Error-facebook####", Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onError(FacebookException error) {
+                    Toast.makeText(getApplicationContext(), "####Error-facebook####", Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 
@@ -129,7 +129,7 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
     protected void onStop() {
         super.onStop();
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (mSharedPreferences.getBoolean("logoutKey",false)){
+        if (mSharedPreferences.getBoolean("logoutKey", false)) {
             mAuth.signOut();
         }
     }
@@ -231,7 +231,7 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
     private void loginSuccessful(String Type) {
 
         //TODO: change the main activity according to the user TYPE
-        CharSequence text= "";
+        CharSequence text = "";
         text = Type;
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_SHORT;
@@ -244,7 +244,7 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
         startActivity(MainActivity);
     }
 
-    private void CheckUserType (){
+    private void CheckUserType() {
         user = mAuth.getCurrentUser();
         String Username = user.getEmail();
         mDbRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -253,11 +253,13 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
                 String usertype = null;
                 String UserUID = user.getUid().toString();
                 String dbUID;
-                for (DataSnapshot child : dataSnapshot.getChildren()){
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
                     dbUID = child.child("ownerUID").getValue().toString();
-                    if (  dbUID.equals(UserUID)){
-                        usertype="owner";
-                    }else {usertype = "user";}
+                    if (dbUID.equals(UserUID)) {
+                        usertype = "owner";
+                    } else {
+                        usertype = "user";
+                    }
                 }
                 loginSuccessful(usertype);
             }
@@ -269,11 +271,12 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
         });
 
     }
+
     public boolean isLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        if(accessToken == null)
+        if (accessToken == null)
             return false;
         else
-            return  true;
+            return true;
     }
 }

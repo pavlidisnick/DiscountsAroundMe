@@ -20,11 +20,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="31dp">
+        tools:layout_editor_absoluteY="0dp">
 
         <TextView
             android:id="@+id/textView4"
@@ -140,24 +141,19 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="140dp" />
 
-        <ImageButton
-            android:id="@+id/ibtEditImage"
-            android:layout_width="121dp"
-            android:layout_height="87dp"
-            android:layout_gravity="center"
-            android:adjustViewBounds="false"
-            android:scaleType="fitCenter"
-            app:srcCompat="@mipmap/icon_circle" />
-
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:gravity="center"
             android:orientation="vertical">
+
             <TableRow>
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
                     android:layout_weight="0"
                     android:fontFamily="serif"
                     android:text="Email: "
@@ -169,25 +165,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:scrollHorizontally="false"
                     android:text="ExampleEMail@email.com"
                     android:textSize="14sp"
-                    android:scrollHorizontally="false"
                     android:textStyle="normal" />
 
-                <Button
-                    android:id="@+id/btEditEmail"
-                    style="@style/Widget.AppCompat.Button.Colored"
-                    android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:layout_gravity="right"
-                    android:layout_marginLeft="2dp"
-                    android:layout_weight="0"
-                    android:text="Edit" />
             </TableRow>
+
             <TableRow>
+
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
                     android:layout_weight="0"
                     android:fontFamily="serif"
                     android:text="Display Name: "
@@ -197,43 +187,36 @@
 
                 <TextView
                     android:id="@+id/tvDisplayName"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Displayname "
                     android:textSize="17dp"
                     android:textStyle="normal" />
 
-                <Button
-                    android:id="@+id/btEditName"
-                    style="@style/Widget.AppCompat.Button.Colored"
-                    android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:layout_gravity="right"
-                    android:layout_marginLeft="2dp"
-                    android:layout_weight="0"
-                    android:text="Edit" />
-         </TableRow>
+            </TableRow>
+
             <TableRow>
+
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:fontFamily="serif"
                     android:text="User Type: "
                     android:textAlignment="viewStart"
                     android:textSize="15dp"
                     android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/tvUserType"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="UserType "
                     android:textSize="17dp"
                     android:textStyle="normal" />
             </TableRow>
-
 
 
         </TableLayout>
@@ -242,16 +225,31 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btEditUser"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="right"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="0"
+        android:text="Edit"
+        app:layout_constraintBottom_toTopOf="@+id/btApply"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+        app:layout_constraintVertical_bias="0.917" />
+
+    <Button
+        android:id="@+id/btApply"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="148dp"
         android:text="Apply"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

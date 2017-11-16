@@ -31,16 +31,15 @@
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$ 255"
+            android:layout_marginRight="15dp"
             android:textColor="#0f0f0f"
-            android:textSize="30sp"
-            android:layout_marginRight="15dp"/>
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/correctPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$ 205"
+            android:text="$"
             android:textColor="@color/colorPrice"
             android:textSize="30sp" />
 

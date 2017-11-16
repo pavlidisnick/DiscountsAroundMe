@@ -219,7 +219,7 @@ public class Register extends Activity implements View.OnClickListener, Compound
         String userType = "Customer";
         if(cbBusinessAccount.isChecked()){
             userType = "Store owner";}
-        User newUser = new User("",user.getEmail(),userType,"imgURL");
+        User newUser = new User(user.getEmail(),user.getEmail(),userType,"imgURL");
         mDbRef.child("users").child(user.getUid()).setValue(newUser);
     }
 }

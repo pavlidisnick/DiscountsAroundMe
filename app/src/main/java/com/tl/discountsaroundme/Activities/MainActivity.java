@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.Activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -104,6 +105,14 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (mSharedPreferences.getBoolean("logoutKey",false)){
             mAuth.signOut();
+        }
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mAuth.getCurrentUser()== null){
+            Intent LoginActivity = new Intent(this, Login.class);
+            startActivity(LoginActivity);
         }
     }
 }

@@ -20,11 +20,23 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:textColor="@color/colorAccent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="User Profile"
             android:textAlignment="center"
             android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/tvDisplayName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="cursive"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp"
+            android:textStyle="italic" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -33,39 +45,134 @@
             app:srcCompat="@color/black" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/etDisplayName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Enter a new display name"
+            android:inputType="textPersonName"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/etChangeEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="New Email"
             android:inputType="textPersonName"
-            android:visibility="visible" />
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/etChangePass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="New Password"
+            android:inputType="textPassword"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Enter your  password"
+            android:inputType="textPassword"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvDelAcc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Are you sure?"
+            android:textAlignment="center"
+            android:textColor="@color/colorAlert"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btYes"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorAlert"
+                android:text="Yes"
+                android:textColor="@color/colorPrimaryWhite"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btNo"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="No"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryWhite"
+                android:textSize="18sp"
+                android:visibility="gone" />
+        </LinearLayout>
 
         <Button
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:textColor="@color/colorPrimaryWhite"
             android:id="@+id/btOk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="OK"
-            android:textAlignment="center"
             android:textSize="14sp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <Button
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:textColor="@color/colorPrimaryWhite"
             android:id="@+id/btMailChange"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Change Email" />
 
         <Button
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:textColor="@color/colorPrimaryWhite"
             android:id="@+id/btPassChange"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Change Password" />
 
         <Button
-            android:id="@+id/btPass"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:textColor="@color/colorPrimaryWhite"
+            android:id="@+id/btImageChange"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Change Image" />
+
+        <Button
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:textColor="@color/colorPrimaryWhite"
+            android:id="@+id/btDisplayName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Display Name" />
+
+        <Button
+            android:id="@+id/btDeleteAccount"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAlert"
+            android:text="Delete Account"
+            android:visibility="visible" />
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

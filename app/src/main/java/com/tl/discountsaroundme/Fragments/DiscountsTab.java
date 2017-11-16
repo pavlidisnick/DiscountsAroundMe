@@ -102,17 +102,6 @@ public class DiscountsTab extends Fragment {
 
         mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
 
-        mSearchView.setOnLeftMenuClickListener(new FloatingSearchView.OnLeftMenuClickListener() {
-            @Override
-            public void onMenuOpened() {
-                mDrawerLayout.openDrawer(Gravity.START);
-            }
-
-            @Override
-            public void onMenuClosed() {
-
-            }
-        });
 
         mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
 

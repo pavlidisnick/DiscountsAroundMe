@@ -3,6 +3,7 @@ package com.tl.discountsaroundme.UiControllers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
     private Context context;
     private ArrayList<Item> items;
     private String itemType;
+    private String imageItem;
     private double discount;
 
 
@@ -59,7 +61,8 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
         holder.tvItemDetails.setText(items.get(position).getDescription());
         holder.tvStoreName.setText(items.get(position).getStore());
        itemType = items.get(position).getType().toString();
-       discount = ((float) items.get(position).getDiscount());
+
+
 
         // holder.tvStoreName.setText(storeList[position]);
         holder.tvPrice.setText(Double.toString(items.get(position).getPrice()) + " $");
@@ -67,6 +70,8 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
         Glide.with(context)
                 .load(items.get(position).getPicture())
                 .into(holder.imageView);
+        imageItem = items.get(position).getPicture();
+        discount =  items.get(position).getDiscount();
     }
 
     @Override
@@ -100,10 +105,18 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
                     String itemName = tvItemName.getText().toString();
                     String price = tvPrice.getText().toString();
                     String storeName = tvStoreName.getText().toString();
-                    String img = imageView.getDrawable().toString();
+
+
+                    //imageView.setDrawingCacheEnabled(true);
+
+                    //Bitmap bitmap=imageView.getDrawingCache();
+
+
+
+                    //String img = imageView.getDrawable().toString();
                     String itemDiscount = Double.toString(discount);
 
-                    ItemDetails(details,itemName,price,storeName,img,itemType,itemDiscount);
+                    ItemDetails(details,itemName,price,storeName,imageItem,itemType,itemDiscount);
                 }
             });
 

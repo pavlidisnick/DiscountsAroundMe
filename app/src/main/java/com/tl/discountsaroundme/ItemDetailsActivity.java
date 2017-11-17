@@ -2,10 +2,12 @@ package com.tl.discountsaroundme;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.tl.discountsaroundme.UiControllers.ItemViewAdapter;
 
 public class ItemDetailsActivity extends Activity {
@@ -30,6 +32,8 @@ public class ItemDetailsActivity extends Activity {
 
         Intent intent = getIntent();
 
+        //Bitmap bitmap = (Bitmap) intent.getParcelableExtra(ItemViewAdapter.DATA_IMAGE);
+
 
         dataprice = intent.getStringExtra(ItemViewAdapter.DATA_ITEM_PRICE);
         dataitemName = intent.getStringExtra(ItemViewAdapter.DATA_ITEM_NAME);
@@ -46,11 +50,11 @@ public class ItemDetailsActivity extends Activity {
         ItemDetails = findViewById(R.id.description);
         ItemName = findViewById(R.id.item);
         StoreName = findViewById(R.id.store);
-        imageView = findViewById(R.id.img);
+        imageView = findViewById(R.id.imgItem);
         Type = findViewById(R.id.type);
         Discount = findViewById(R.id.correctPrice);
 
-
+        Glide.with(this).load(dataImg).into(imageView);
         Price.setText(" "+dataprice);
         ItemDetails.append(dataitemDetails);
         ItemName.setText(dataitemName);

@@ -20,11 +20,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:textColor="@color/colorAccent"
+            android:id="@+id/tvUserProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="User Profile"
             android:textAlignment="center"
+            android:textColor="@color/colorAccent"
             android:textSize="24sp" />
 
         <TextView

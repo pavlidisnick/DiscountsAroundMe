@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-  
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -103,6 +103,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        if (mAuth.getCurrentUser() == null){
+            Intent LoginActivity = new Intent(this, Login.class);
+            startActivity(LoginActivity);
+        }
     }
 }

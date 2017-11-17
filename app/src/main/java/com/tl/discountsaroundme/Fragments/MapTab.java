@@ -2,8 +2,10 @@ package com.tl.discountsaroundme.Fragments;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.tl.discountsaroundme.Entities.Store;
 import com.tl.discountsaroundme.FirebaseData.StoreManager;
 import com.tl.discountsaroundme.R;
@@ -31,7 +34,7 @@ public class MapTab extends Fragment {
     private GPSTracker gps;
     private GoogleMap googleMap;
     private StoreManager storeManager = new StoreManager();
-
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab_map, container, false);
@@ -129,5 +132,9 @@ public class MapTab extends Fragment {
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 }

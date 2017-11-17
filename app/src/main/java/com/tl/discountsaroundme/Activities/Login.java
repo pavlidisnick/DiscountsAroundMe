@@ -126,16 +126,6 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
      */
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (mSharedPreferences.getBoolean("logoutKey", false)) {
-            mAuth.signOut();
-        }
-    }
-
-
-    @Override
     public void onClick(View view) {
         if (view.equals(login)) {
             if (isFormFilled())
@@ -168,13 +158,9 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     // Sign in success, update UI with the signed-in user's information
-
                     CheckUserType();
-
-
                 } else {
                     // If sign in fails, display a message to the user.
-
                     Context context = getApplicationContext();
                     CharSequence text = "Login fail.";
                     int duration = Toast.LENGTH_SHORT;
@@ -229,7 +215,6 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
 
     //After a successful login start the main activity
     private void loginSuccessful(String Type) {
-
         //TODO: change the main activity according to the user TYPE
         CharSequence text = "";
         text = Type;
@@ -238,15 +223,12 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
         Toast toast;
         toast = Toast.makeText(context, text, duration);
         toast.show();
-
         Intent MainActivity = new Intent(Login.this, MainActivity.class);
-
         startActivity(MainActivity);
     }
 
     private void CheckUserType() {
         user = mAuth.getCurrentUser();
-        String Username = user.getEmail();
         mDbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -257,6 +239,7 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
                     dbUID = child.child("ownerUID").getValue().toString();
                     if (dbUID.equals(UserUID)) {
                         usertype = "owner";
+                        break;
                     } else {
                         usertype = "user";
                     }

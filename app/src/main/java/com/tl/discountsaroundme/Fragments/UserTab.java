@@ -43,7 +43,7 @@ public class UserTab extends Fragment implements CompoundButton.OnCheckedChangeL
         SharedPreferences mSharedprefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         swLogout.setChecked(mSharedprefs.getBoolean("logoutKey", false));
         btEditUser = rootview.findViewById(R.id.btEditUser);
-        btApply= rootview.findViewById(R.id.btApply);
+        btApply = rootview.findViewById(R.id.btApply);
         btEditUser.setOnClickListener(this);
         btApply.setOnClickListener(this);
         swLogout.setOnCheckedChangeListener(this);
@@ -52,6 +52,9 @@ public class UserTab extends Fragment implements CompoundButton.OnCheckedChangeL
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        /**
+         * TODO:Make it work properly.
+         */
         SharedPreferences mSharedprefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         LogoutOnStop = isChecked;
         SharedPreferences.Editor editor = mSharedprefs.edit();
@@ -62,12 +65,12 @@ public class UserTab extends Fragment implements CompoundButton.OnCheckedChangeL
 
     @Override
     public void onClick(View v) {
-      if (v.equals(btEditUser)){
-          Intent UserProfileActivity = new Intent(getActivity(),UserProfileActivity.class);
-          startActivity(UserProfileActivity);
-      }else if (v.equals(btApply)) {
+        if (v.equals(btEditUser)) {
+            Intent UserProfileActivity = new Intent(getActivity(), UserProfileActivity.class);
+            startActivity(UserProfileActivity);
+        } else if (v.equals(btApply)) {
             //APPLY USER PREFS
-      }
+        }
     }
 
 }

@@ -1,11 +1,17 @@
 package com.tl.discountsaroundme.Activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,14 +24,16 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     EditText etChangeEmail, etChangePass, etChoice, etPassword, etDisplayName;
     Button btOk, btMailChange, btPassChange, btImageChange, btDisplayName, btDeleteAcc, btYes, btNo;
     TextView tvUserDisplayName, tvDeleteAccount;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    ImageView Image;
     FirebaseUser user;
-
+    private static int RESULT_LOAD_IMAGE;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        Image = findViewById(R.id.Image);
         tvDeleteAccount = findViewById(R.id.tvDelAcc);
         tvUserDisplayName = findViewById(R.id.tvDisplayName);
         tvUserDisplayName.setText(UserInfoManager.Currentuser.getName());
@@ -55,25 +63,33 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         ClearLayout();
         btOk.setVisibility(View.GONE);
-        if (v.equals(btImageChange)) {
-
-        } else if (v.equals(btPassChange)) {
-            LayoutChange(etChangePass);
-        } else if (v.equals(btMailChange)) {
-            LayoutChange(etChangeEmail);
-        } else if (v.equals(btDeleteAcc)) {
-            DeleteAccountLayoutChange();
-        } else if (v.equals(btYes)) {
-            DeleteAccount();
-            DeleteAccountCancel();
-        } else if (v.equals(btNo)) {
-            DeleteAccountCancel();
-        } else if (v.equals(btDisplayName)) {
-            LayoutChange(etDisplayName);
-        } else if (v.equals(btOk)) {
-            ChangeAction();
+        switch (v.getId()) {
+            case R.id.btPassChange:
+                LayoutChange(etChangePass);
+                break;
+            case R.id.btImageChange:
+                //TODO Change image
+                break;
+            case R.id.btMailChange:
+                LayoutChange(etChangeEmail);
+                break;
+            case R.id.btDeleteAccount:
+                DeleteAccountLayoutChange();
+                break;
+            case R.id.btYes:
+                DeleteAccount();
+                DeleteAccountCancel();
+                break;
+            case R.id.btNo:
+                DeleteAccountCancel();
+                break;
+            case R.id.btDisplayName:
+                LayoutChange(etDisplayName);
+                break;
+            case R.id.btOk:
+                ChangeAction();
+                break;
         }
-
     }
 
     public void LayoutChange(EditText etView) {
@@ -128,7 +144,8 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         btNo.setVisibility(View.VISIBLE);
         tvDeleteAccount.setVisibility(View.VISIBLE);
     }
-    public void DeleteAccountCancel(){
+
+    public void DeleteAccountCancel() {
         btDisplayName.setVisibility(View.VISIBLE);
         btMailChange.setVisibility(View.VISIBLE);
         btImageChange.setVisibility(View.VISIBLE);
@@ -139,9 +156,14 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         btNo.setVisibility(View.GONE);
         tvDeleteAccount.setVisibility(View.GONE);
     }
-    public void DeleteAccount(){
+
+    public void DeleteAccount() {
         String password = etPassword.getText().toString();
-        UserInfoManager.DeleteAccount(user,password);
+        UserInfoManager.DeleteAccount(user, password);
     }
+    public void UploadImage(){
+    }
+
+
 
 }

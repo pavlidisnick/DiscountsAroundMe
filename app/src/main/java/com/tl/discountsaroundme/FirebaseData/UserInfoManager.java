@@ -38,7 +38,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  */
 
 public class UserInfoManager {
-    static DatabaseReference mDbref = FirebaseDatabase.getInstance().getReference("/users");
+    static DatabaseReference mDbref = FirebaseDatabase.getInstance().getReference();
     public static User Currentuser;
 
     public static void UserInformation(String UserUID, View rootview) {
@@ -48,7 +48,7 @@ public class UserInfoManager {
         /**
          * Using the current user's UID get the user Account details from firebase. And using the rootview set the correct values to the UI
          */
-        mDbref.child(UserUID).addValueEventListener(new ValueEventListener() {
+        mDbref.child("users").child(UserUID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -74,7 +74,7 @@ public class UserInfoManager {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     ToastMessage("Email change successful");
-                    mDbref.child(user.getUid()).child("email").setValue(Email);
+                    mDbref.child("users").child(user.getUid()).child("email").setValue(Email);
                 } else {
                     ToastMessage("Email change not successful Try again");
                 }
@@ -91,7 +91,7 @@ public class UserInfoManager {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     ToastMessage("Your display name has changed!");
-                    mDbref.child(user.getUid()).child("name").setValue(DisplayName);
+                    mDbref.child("users").child(user.getUid()).child("name").setValue(DisplayName);
                 }
             }
         });
@@ -134,7 +134,8 @@ public class UserInfoManager {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     ToastMessage("Account Deleted");
-                    mDbref.child(user.getUid()).removeValue();
+                    mDbref.child("users").child(user.getUid()).removeValue();
+                    mDbref.child("shops").child(user.getUid()).removeValue();
                     FirebaseAuth mAuth = FirebaseAuth.getInstance();
                     mAuth.signOut();
                 } else {

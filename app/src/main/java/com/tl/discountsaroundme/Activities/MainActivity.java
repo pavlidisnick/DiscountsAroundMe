@@ -99,20 +99,10 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
-    @Override
-    protected void onStop() {
-        super.onStop();
-        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (mSharedPreferences.getBoolean("logoutKey",false)){
-            mAuth.signOut();
-        }
-    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        if(mAuth.getCurrentUser()== null){
-            Intent LoginActivity = new Intent(this, Login.class);
-            startActivity(LoginActivity);
-        }
+
     }
 }

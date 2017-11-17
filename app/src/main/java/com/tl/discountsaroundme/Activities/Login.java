@@ -121,10 +121,6 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
         }
     }
 
-    /**
-     * Added a signout way thus the login tests will be able to run
-     */
-
     @Override
     public void onClick(View view) {
         if (view.equals(login)) {

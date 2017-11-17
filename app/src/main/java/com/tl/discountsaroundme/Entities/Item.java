@@ -7,17 +7,19 @@ public class Item {
     private double price;
     private double discount;
     private String picture;
+    private String store;
 
     public Item() {
     }
 
-    public Item(String name, String type, double price, double discount, String description, String picture) {
+    public Item(String name, String type, double price, double discount, String description, String picture, String store) {
         this.name = name;
         this.type = type;
         this.price = price;
         this.discount = discount;
         this.description = description;
         this.picture = picture;
+        this.store = store;
     }
 
 
@@ -43,5 +45,9 @@ public class Item {
 
     public String getPicture() {
         return picture;
+    }
+
+    public String getStore() {
+        return store;
     }
 }

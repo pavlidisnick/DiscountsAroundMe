@@ -16,11 +16,9 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -51,26 +49,7 @@ public class MainActivityTest {
         ViewInteraction viewPager = onView(
                 allOf(withId(R.id.container), isDisplayed()));
         viewPager.perform(swipeLeft());
-
-        ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.nearbyButton), withText("Nearby"), isDisplayed()));
-        appCompatButton.perform(click());
-
-        ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.shopsButton), withText("Shops"), isDisplayed()));
-        appCompatButton2.perform(click());
-
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        try {
-            Thread.sleep(3363);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
-
-
 
     @Test
     public void TestSlideOnMenu() {
@@ -106,17 +85,10 @@ public class MainActivityTest {
         ViewInteraction viewPager4 = onView(
                 allOf(withId(R.id.container), isDisplayed()));
         viewPager4.perform(swipeRight());
-
-
-
     }
 
     @Test
     public void TestUserOptionsMenu() {
-
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -156,21 +128,11 @@ public class MainActivityTest {
 
     @Test
     public void TestTopDiscountsMenu() {
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             Thread.sleep(3597);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
-        ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.clothes_tag), withText("Sweater"),
-                        withParent(allOf(withId(R.id.linear_layout),
-                                withParent(withId(R.id.horizontalScroll))))));
-        appCompatButton.perform(scrollTo(), click());
 
         ViewInteraction searchInputView = onView(
                 allOf(withId(R.id.search_bar_text),

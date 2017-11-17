@@ -1,20 +1,16 @@
 package com.tl.discountsaroundme.UiControllers;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.tl.discountsaroundme.Activities.MainActivity;
 import com.tl.discountsaroundme.Entities.Item;
 import com.tl.discountsaroundme.ItemDetailsActivity;
 import com.tl.discountsaroundme.R;
@@ -23,7 +19,7 @@ import java.util.ArrayList;
 
 
 public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemView> {
-    public final static String DATA_ITEM_NAME ="NAME";
+    public final static String DATA_ITEM_NAME = "NAME";
     public final static String DATA_ITEM_DETAILS = "DETAILS";
     public final static String DATA_ITEM_PRICE = "PRICE";
     public final static String DATA_ITEM_STORE = "STORE";
@@ -32,9 +28,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
     public final static String DATA_DISCOUNT = "DISCOUNT";
     private Context context;
     private ArrayList<Item> items;
-    private String itemType;
-    private String imageItem;
-    private double discount;
+
 
 
     public ItemViewAdapter(Context context, ArrayList<Item> items) {
@@ -60,18 +54,15 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
         holder.tvItemName.setText(items.get(position).getName());
         holder.tvItemDetails.setText(items.get(position).getDescription());
         holder.tvStoreName.setText(items.get(position).getStore());
-       itemType = items.get(position).getType().toString();
-
-
-
+        holder.imgString.setText(items.get(position).getPicture());
+        holder.itemDiscount.setText(Double.toString(items.get(position).getDiscount()));
+        holder.type.setText(items.get(position).getType());
         // holder.tvStoreName.setText(storeList[position]);
         holder.tvPrice.setText(Double.toString(items.get(position).getPrice()) + " $");
         RequestOptions options = new RequestOptions();
         Glide.with(context)
                 .load(items.get(position).getPicture())
                 .into(holder.imageView);
-        imageItem = items.get(position).getPicture();
-        discount =  items.get(position).getDiscount();
     }
 
     @Override
@@ -79,13 +70,15 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
         return items.size();
     }
 
-
     public class ItemView extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView tvItemName;
         TextView tvItemDetails;
         TextView tvStoreName;
         TextView tvPrice;
+        TextView imgString;
+        TextView type;
+        TextView itemDiscount;
 
         public ItemView(final View itemView) {
             super(itemView);
@@ -94,47 +87,39 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
             tvItemDetails = itemView.findViewById(R.id.tvItemDetail);
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvStoreName = itemView.findViewById(R.id.tvStoreName);
+            imgString = itemView.findViewById(R.id.imgString);
+            type = itemView.findViewById(R.id.type);
+            itemDiscount = itemView.findViewById(R.id.itemDiscount);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   // Toast.makeText(context,tvItemName.getText(), Toast.LENGTH_LONG).show();
+                    // Toast.makeText(context,tvItemName.getText(), Toast.LENGTH_LONG).show();
 
                     //ItemDetails((ImageView) itemView,tvItemName,tvStoreName,tvPrice,tvItemDetails);
                     String details = tvItemDetails.getText().toString();
                     String itemName = tvItemName.getText().toString();
                     String price = tvPrice.getText().toString();
                     String storeName = tvStoreName.getText().toString();
+                    String img = imgString.getText().toString();
+                    String discountData = itemDiscount.getText().toString();
+                    String itemType = type.getText().toString();
 
+                    Intent ItemDetailsActivit = new Intent(context, ItemDetailsActivity.class);
 
-                    //imageView.setDrawingCacheEnabled(true);
-
-                    //Bitmap bitmap=imageView.getDrawingCache();
-
-
-
-                    //String img = imageView.getDrawable().toString();
-                    String itemDiscount = Double.toString(discount);
-
-                    ItemDetails(details,itemName,price,storeName,imageItem,itemType,itemDiscount);
+                    ItemDetailsActivit.putExtra(DATA_ITEM_DETAILS, details);
+                    ItemDetailsActivit.putExtra(DATA_ITEM_NAME, itemName);
+                    ItemDetailsActivit.putExtra(DATA_ITEM_STORE, storeName);
+                    ItemDetailsActivit.putExtra(DATA_ITEM_PRICE, price);
+                    ItemDetailsActivit.putExtra(DATA_IMAGE, img);
+                    ItemDetailsActivit.putExtra(DATA_TYPE, itemType);
+                    ItemDetailsActivit.putExtra(DATA_DISCOUNT, discountData);
+                    context.startActivity(ItemDetailsActivit);
                 }
             });
 
         }
 
-    }
-    public void ItemDetails(String dataItemDetails, String dataItemName, String dataPrice, String dataStoreName, String img,String dataType,String dataDiscount){
-
-        Intent ItemDetailsActivit=new Intent(context, ItemDetailsActivity.class);
-
-        ItemDetailsActivit.putExtra(DATA_ITEM_DETAILS,dataItemDetails);
-        ItemDetailsActivit.putExtra(DATA_ITEM_NAME,dataItemName);
-        ItemDetailsActivit.putExtra(DATA_ITEM_STORE,dataStoreName);
-        ItemDetailsActivit.putExtra(DATA_ITEM_PRICE,dataPrice);
-        ItemDetailsActivit.putExtra(DATA_IMAGE,img);
-        ItemDetailsActivit.putExtra(DATA_TYPE,dataType);
-        ItemDetailsActivit.putExtra(DATA_DISCOUNT,dataDiscount);
-        context.startActivity(ItemDetailsActivit);
     }
 }
 

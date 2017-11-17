@@ -4,98 +4,233 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.tl.discountsaroundme.ItemDetailsActivity">
 
-    <ImageView
-        android:id="@+id/imgItem"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp">
-
-        <TextView
-            android:id="@+id/item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ItemName: "
-            android:textSize="30sp"/>
-
-        <TextView
-            android:id="@+id/price"
-            android:text="$"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:textColor="#0f0f0f"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/correctPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="$"
-            android:textColor="@color/colorPrice"
-            android:textSize="30sp" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Type: "
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"/>
-
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Description: "
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"/>
-
-    <TextView
-        android:id="@+id/store"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Store: "
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"/>
-
-
-    <LinearLayout
+    <Space
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="55dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="12dp">
+        android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/favoritesButton"
-            style="@style/Widget.AppCompat.Button.Colored"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="42dp"
+            android:background="@drawable/com_facebook_auth_dialog_background"
+            android:src="@drawable/com_facebook_auth_dialog_background" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_alignEnd="@+id/imageView4"
+            android:layout_below="@+id/imageView4"
+            android:layout_marginEnd="139dp"
+            android:gravity="left"
+            android:orientation="vertical"
+            android:id="@+id/linearLayout2">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="124dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:text="Type :"
+                android:textAlignment="textStart"
+                android:textSize="18sp"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="126dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:text="Item :"
+                android:textAlignment="textStart"
+                android:textSize="18sp"
+                android:textStyle="bold|italic" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="127dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:text="Description :"
+                android:textAlignment="textStart"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="126dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:text="Price :"
+                android:textAlignment="textStart"
+                android:textSize="18sp"
+                android:textStyle="bold|italic" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="126dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:text="Discount :"
+                android:textAlignment="textStart"
+                android:textSize="18sp"
+                android:textStyle="bold|italic" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="127dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:text="Store :"
+                android:textAlignment="textStart"
+                android:textSize="18sp"
+                android:textStyle="bold|italic" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_alignStart="@+id/ratingBar"
+            android:layout_below="@+id/imageView4"
+            android:layout_marginStart="58dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:textSize="18sp"
+                android:textStyle="italic" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:textSize="18sp"
+                android:textStyle="italic" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:textSize="18sp"
+                android:textStyle="italic" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:textSize="18sp"
+                android:textStyle="italic" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvDiscount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:textSize="18sp"
+                android:textStyle="italic" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvStore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:textSize="18sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/linearLayout2"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout3">
+
+            <Button
+                android:id="@+id/button2"
+                style="@android:style/Widget.Button.Inset"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="Add to Cart"
+                android:textSize="12sp"
+                android:textStyle="italic" />
+
+            <Button
+                style="@android:style/Widget.Button.Inset"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="Add to Favourite"
+                android:textAllCaps="false"
+                android:textSize="12sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <RatingBar
+            android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add to favorites" />
-
-        <Button
-            android:id="@+id/cartButton"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add to cart" />
-
-    </LinearLayout>
-
-
+            android:layout_below="@+id/linearLayout3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="18dp" />
+    </RelativeLayout>
 </LinearLayout>

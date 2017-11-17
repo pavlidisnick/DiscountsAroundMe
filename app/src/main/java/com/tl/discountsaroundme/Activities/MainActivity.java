@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-
+import com.tl.discountsaroundme.Fragments.NearbyTab;
 import com.tl.discountsaroundme.Fragments.DiscountsTab;
 import com.tl.discountsaroundme.Fragments.MapTab;
 import com.tl.discountsaroundme.Fragments.UserTab;
@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
                             mViewPager.setCurrentItem(1);
                         else if (id == R.id.menu_user_options)
                             mViewPager.setCurrentItem(2);
+                        else if (id == R.id.menu_nearby)
+                            mViewPager.setCurrentItem(3);
                         return true;
                     }
                 });
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         private Fragment discount = new DiscountsTab();
         private Fragment map = new MapTab();
         private Fragment userTab = new UserTab();
+        private Fragment nearby = new NearbyTab();
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -71,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
                     return map;
                 case 2:
                     return userTab;
+                case 3:
+                    return nearby;
                 default:
                     return null;
             }
@@ -78,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
 
         @Override
@@ -90,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
                     return "MAP";
                 case 2:
                     return "USER TAB";
+                case 3:
+                    return "NEARBY";
             }
             return null;
         }

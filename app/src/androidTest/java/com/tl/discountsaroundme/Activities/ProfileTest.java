@@ -24,9 +24,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by rezu on 17/11/2017.
- */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class ProfileTest {
@@ -45,7 +42,6 @@ public class ProfileTest {
     @Test
     public void LayoutDisplayTest() {
         getUserOptionView();
-        onView(withId(R.id.tvUserProfile)).check(matches(isDisplayed()));
         onView(withId(R.id.btMailChange)).check(matches(isDisplayed()));
         onView(withId(R.id.tvDisplayName)).check(matches(isDisplayed()));
         onView(withId(R.id.Image)).check(matches(isDisplayed()));

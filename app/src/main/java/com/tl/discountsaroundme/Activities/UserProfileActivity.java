@@ -1,13 +1,7 @@
 package com.tl.discountsaroundme.Activities;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,19 +12,20 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.tl.discountsaroundme.FirebaseData.UserInfoManager;
 import com.tl.discountsaroundme.R;
-import com.tl.discountsaroundme.Services.GPSTracker;
 
 public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener {
+    private static int RESULT_LOAD_IMAGE;
     EditText etChangeEmail, etChangePass, etChoice, etPassword, etDisplayName;
     Button btOk, btMailChange, btPassChange, btImageChange, btDisplayName, btDeleteAcc, btYes, btNo;
     TextView tvUserDisplayName, tvDeleteAccount;
     ImageView Image;
     FirebaseUser user;
-    private static int RESULT_LOAD_IMAGE;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         Image = findViewById(R.id.Image);
@@ -161,9 +156,9 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         String password = etPassword.getText().toString();
         UserInfoManager.DeleteAccount(user, password);
     }
-    public void UploadImage(){
-    }
 
+    public void UploadImage() {
+    }
 
 
 }

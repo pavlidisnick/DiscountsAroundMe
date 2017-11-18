@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +41,7 @@ import com.tl.discountsaroundme.Entities.Store;
 import com.tl.discountsaroundme.FirebaseData.StoreManager;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.Services.GPSTracker;
+import com.tl.discountsaroundme.Services.Notifications.NotificationReceiverActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -272,14 +274,19 @@ public class MapTab extends Fragment {
     public void createNotification(View v) {
         // Prepare intent which is triggered if the
         // notification is selected
-        Intent myIntent = new Intent(MapTab.this.getActivity(), MapTab.class);
+        Intent myIntent = new Intent(MapTab.this.getActivity(), NotificationReceiverActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(getContext(), (int) System.currentTimeMillis(), myIntent, 0);
 
         // Build notification
         // Actions are just fake
         Notification notification = new Notification.Builder(getContext())
-                .setContentTitle("Nearby Discount")
-                .setContentText("empty").setSmallIcon(R.mipmap.icon_circle)
+                .setSmallIcon(R.mipmap.icon_circle)
+                .setContentTitle("Awesome Title!")
+/*
+                .setColor(ContextCompat.getColor(context, colorRes))
+*/
+                .setContentText("Cool content!")
+                .setSmallIcon(R.mipmap.icon_circle)
                 .setContentIntent(pIntent)
                 .build();
         NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);

@@ -2,6 +2,7 @@ package com.tl.discountsaroundme;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,17 +10,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.tl.discountsaroundme.UiControllers.ItemViewAdapter;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class ItemDetailsActivity extends Activity {
-
-    String dataPrice, dataItemName, dataItemDetails, dataStoreName, dataImg, dataType, dataDiscount;
-
-    TextView price;
-    TextView itemName;
-    TextView itemDetails;
-    TextView storeName;
-    ImageView imageView;
-    TextView type;
-    TextView discount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,30 +21,39 @@ public class ItemDetailsActivity extends Activity {
         setContentView(R.layout.activity_item_details);
 
         Intent intent = getIntent();
-        dataPrice = intent.getStringExtra(ItemViewAdapter.DATA_ITEM_PRICE);
-        dataItemName = intent.getStringExtra(ItemViewAdapter.DATA_ITEM_NAME);
-        dataStoreName = intent.getStringExtra(ItemViewAdapter.DATA_ITEM_STORE);
-        dataItemDetails = intent.getStringExtra(ItemViewAdapter.DATA_ITEM_DETAILS);
-        dataImg = intent.getStringExtra(ItemViewAdapter.DATA_IMAGE);
-        dataType = intent.getStringExtra(ItemViewAdapter.DATA_TYPE);
-        dataDiscount = intent.getStringExtra(ItemViewAdapter.DATA_DISCOUNT);
+        String dataPrice = intent.getStringExtra(ItemViewAdapter.DATA_ITEM_PRICE);
+        String dataItemName = intent.getStringExtra(ItemViewAdapter.DATA_ITEM_NAME);
+        String dataStoreName = intent.getStringExtra(ItemViewAdapter.DATA_ITEM_STORE);
+        String dataItemDetails = intent.getStringExtra(ItemViewAdapter.DATA_ITEM_DETAILS);
+        String dataImg = intent.getStringExtra(ItemViewAdapter.DATA_IMAGE);
+        String dataType = intent.getStringExtra(ItemViewAdapter.DATA_TYPE);
+        String dataDiscount = intent.getStringExtra(ItemViewAdapter.DATA_DISCOUNT);
 
-        price = findViewById(R.id.price);
-        itemDetails = findViewById(R.id.description);
-        itemName = findViewById(R.id.item);
-        storeName = findViewById(R.id.store);
-        imageView = findViewById(R.id.imgItem);
-        type = findViewById(R.id.type);
-        discount = findViewById(R.id.correctPrice);
+        TextView price = findViewById(R.id.price);
+        TextView itemDetails = findViewById(R.id.description);
+        TextView itemName = findViewById(R.id.item);
+        TextView storeName = findViewById(R.id.store);
+        ImageView imageView = findViewById(R.id.imgItem);
+        TextView type = findViewById(R.id.type);
+        TextView discount = findViewById(R.id.correctPrice);
 
-        price.setText(" " + dataPrice);
+        price.setText(dataPrice);
+        discount.setText(getFinalPrice(dataPrice, dataDiscount));
+        price.setPaintFlags(price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         itemDetails.append(dataItemDetails);
         itemName.setText(dataItemName);
         storeName.append(dataStoreName);
         type.append(dataType);
-        discount.setText(dataDiscount+"%");
         Glide.with(this)
                 .load(dataImg)
                 .into(imageView);
+    }
+
+    private String getFinalPrice(String priceString, String discountString) {
+        priceString = priceString.replace("$", "").trim();
+        double price = Double.parseDouble(priceString);
+        double discount = Double.parseDouble(discountString);
+        BigDecimal finalPrice = BigDecimal.valueOf(price - (price * discount / 100)).setScale(2, RoundingMode.HALF_UP);
+        return String.valueOf(finalPrice);
     }
 }

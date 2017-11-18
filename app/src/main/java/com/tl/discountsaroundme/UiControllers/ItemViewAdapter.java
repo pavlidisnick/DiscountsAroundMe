@@ -94,9 +94,6 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Toast.makeText(context,tvItemName.getText(), Toast.LENGTH_LONG).show();
-
-                    //ItemDetails((ImageView) itemView,tvItemName,tvStoreName,tvPrice,tvItemDetails);
                     String details = tvItemDetails.getText().toString();
                     String itemName = tvItemName.getText().toString();
                     String price = tvPrice.getText().toString();
@@ -105,16 +102,16 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
                     String discountData = itemDiscount.getText().toString();
                     String itemType = type.getText().toString();
 
-                    Intent ItemDetailsActivit = new Intent(context, ItemDetailsActivity.class);
+                    Intent itemDetailsActivity = new Intent(context, ItemDetailsActivity.class);
 
-                    ItemDetailsActivit.putExtra(DATA_ITEM_DETAILS, details);
-                    ItemDetailsActivit.putExtra(DATA_ITEM_NAME, itemName);
-                    ItemDetailsActivit.putExtra(DATA_ITEM_STORE, storeName);
-                    ItemDetailsActivit.putExtra(DATA_ITEM_PRICE, price);
-                    ItemDetailsActivit.putExtra(DATA_IMAGE, img);
-                    ItemDetailsActivit.putExtra(DATA_TYPE, itemType);
-                    ItemDetailsActivit.putExtra(DATA_DISCOUNT, discountData);
-                    context.startActivity(ItemDetailsActivit);
+                    itemDetailsActivity.putExtra(DATA_ITEM_DETAILS, details);
+                    itemDetailsActivity.putExtra(DATA_ITEM_NAME, itemName);
+                    itemDetailsActivity.putExtra(DATA_ITEM_STORE, storeName);
+                    itemDetailsActivity.putExtra(DATA_ITEM_PRICE, price);
+                    itemDetailsActivity.putExtra(DATA_IMAGE, img);
+                    itemDetailsActivity.putExtra(DATA_TYPE, itemType);
+                    itemDetailsActivity.putExtra(DATA_DISCOUNT, discountData);
+                    context.startActivity(itemDetailsActivity);
                 }
             });
 

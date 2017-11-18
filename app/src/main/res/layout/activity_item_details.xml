@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryWhite"
     android:orientation="vertical"
     tools:context="com.tl.discountsaroundme.ItemDetailsActivity">
 
@@ -25,7 +26,7 @@
             android:id="@+id/item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ItemName: "
+            android:text="ItemName"
             android:textSize="30sp"/>
 
         <TextView
@@ -33,6 +34,7 @@
             android:text="$"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:textColor="#0f0f0f"
             android:textSize="30sp" />
@@ -85,6 +87,7 @@
         <Button
             android:id="@+id/favoritesButton"
             style="@style/Widget.AppCompat.Button.Colored"
+            android:textColor="@color/colorPrimaryWhite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add to favorites" />
@@ -92,8 +95,10 @@
         <Button
             android:id="@+id/cartButton"
             style="@style/Widget.AppCompat.Button.Colored"
+            android:textColor="@color/colorPrimaryWhite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_shoping_cart"
             android:text="Add to cart" />
 
     </LinearLayout>

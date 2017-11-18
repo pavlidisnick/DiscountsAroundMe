@@ -15,16 +15,19 @@ import android.widget.TextView;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.tl.discountsaroundme.Activities.MainActivity;
 import com.tl.discountsaroundme.AddCategoryToLayout;
 import com.tl.discountsaroundme.Discounts.SearchSuggest;
 import com.tl.discountsaroundme.Discounts.SuggestListMaker;
 import com.tl.discountsaroundme.FirebaseData.DiscountsManager;
+import com.tl.discountsaroundme.FirebaseData.SearchHistory;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.UiControllers.ItemSpaceDecoration;
 import com.tl.discountsaroundme.UiControllers.ItemViewAdapter;
 import com.tl.discountsaroundme.CategoryListener;
 
 import java.util.List;
+import java.util.Queue;
 
 public class DiscountsTab extends Fragment {
     public static int discountValue = 30;
@@ -71,37 +74,44 @@ public class DiscountsTab extends Fragment {
                 searchSuggestList = suggestListMaker.convertStringsToSuggestions(discountsManager.getSuggestionsDiscounts(), newQuery);
 
                 //pass them on to the search view
-                 mSearchView.swapSuggestions(searchSuggestList);
+                mSearchView.swapSuggestions(searchSuggestList);
             }
         });
+
+        final SearchHistory searchHistory = new SearchHistory(MainActivity.USER_ID);
 
         mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
             @Override
             public void onBindSuggestion(View suggestionView, ImageView leftIcon, final TextView textView, final SearchSuggestion item, int itemPosition) {
+                final String suggestion = item.getBody();
+                if (searchHistory.getHistoryList().contains(suggestion))
+                    leftIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_history));
+
                 suggestionView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        discountsManager.getDiscountsByName(item.getBody());
-                        mSearchView.setSearchBarTitle(item.getBody());
+                        searchHistory.newSearchAdd(suggestion);
+                        discountsManager.getDiscountsByName(suggestion);
+                        mSearchView.setSearchBarTitle(suggestion);
                         mSearchView.clearFocus();
                     }
                 });
             }
 
         });
+
         mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
             @Override
             public void onFocus() {
                 SuggestListMaker suggestListMaker = new SuggestListMaker();
                 List<SearchSuggest> searchSuggestHistory;
-                // searchSuggestHistory = suggestListMaker.convertStringArrayToSuggest(discountsManager.getSuggestionsDiscounts(), newQuery);
+                searchSuggestHistory = suggestListMaker.convertStringsToSuggestions(searchHistory.getHistoryList());
 
-                // mSearchView.swapSuggestions(mLastSuggestList);
+                mSearchView.swapSuggestions(searchSuggestHistory);
             }
 
             @Override
             public void onFocusCleared() {
-                mSearchView.setSearchBarTitle("");
             }
         });
 

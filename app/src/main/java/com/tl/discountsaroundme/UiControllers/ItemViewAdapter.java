@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.tl.discountsaroundme.Entities.Item;
-import com.tl.discountsaroundme.ItemDetailsActivity;
 import com.tl.discountsaroundme.R;
 
 import java.util.ArrayList;
@@ -74,8 +73,6 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(context,tvItemName.getText(), Toast.LENGTH_LONG).show();
-                    ItemDetails();
 
                 }
             });
@@ -86,9 +83,6 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
             tvStoreName = itemView.findViewById(R.id.tvStoreName);
         }
     }
-    public void ItemDetails(){
-        Intent newact=new Intent(context, ItemDetailsActivity.class);
-        context.startActivity(newact);
-    }
+
 }
 

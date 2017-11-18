@@ -1,6 +1,9 @@
 package com.tl.discountsaroundme.Fragments;
 
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.google.firebase.auth.FirebaseAuth;
 import com.tl.discountsaroundme.AddCategoryToLayout;
 import com.tl.discountsaroundme.Discounts.SearchSuggest;
 import com.tl.discountsaroundme.Discounts.SuggestListMaker;
@@ -29,7 +33,7 @@ import java.util.List;
 public class DiscountsTab extends Fragment {
     public static int discountValue = 30;
     FloatingSearchView mSearchView;
-
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.grid_layout, container, false);
@@ -107,4 +111,6 @@ public class DiscountsTab extends Fragment {
 
         return rootView;
     }
+
+
 }

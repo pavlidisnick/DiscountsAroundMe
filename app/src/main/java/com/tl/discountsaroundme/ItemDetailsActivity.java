@@ -38,8 +38,8 @@ public class ItemDetailsActivity extends Activity {
         TextView discount = findViewById(R.id.correctPrice);
 
         price.setText(dataPrice);
-        discount.setText(getFinalPrice(dataPrice, dataDiscount));
         price.setPaintFlags(price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        discount.setText(getFinalPrice(dataPrice, dataDiscount));
         itemDetails.append(dataItemDetails);
         itemName.setText(dataItemName);
         storeName.append(dataStoreName);
@@ -54,6 +54,6 @@ public class ItemDetailsActivity extends Activity {
         double price = Double.parseDouble(priceString);
         double discount = Double.parseDouble(discountString);
         BigDecimal finalPrice = BigDecimal.valueOf(price - (price * discount / 100)).setScale(2, RoundingMode.HALF_UP);
-        return String.valueOf(finalPrice);
+        return String.valueOf(finalPrice).concat("$");
     }
 }

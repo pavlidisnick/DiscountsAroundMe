@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,30 +11,59 @@
         android:id="@+id/imgItem"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="8dp"
+        android:text="ItemName"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp"
         android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp">
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="8dp"
+        android:text="Type: " />
 
-        <TextView
-            android:id="@+id/item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ItemName"
-            android:textSize="30sp"/>
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="8dp"
+        android:text="Description: " />
+
+    <TextView
+        android:id="@+id/store"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="8dp"
+        android:text="Store: " />
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/price"
-            android:text="$"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:text="$"
+            android:textAlignment="center"
             android:textColor="#0f0f0f"
             android:textSize="30sp" />
 
@@ -49,59 +77,30 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Type: "
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"/>
-
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Description: "
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"/>
-
-    <TextView
-        android:id="@+id/store"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Store: "
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"/>
-
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="55dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="12dp">
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="8dp">
 
         <Button
             android:id="@+id/favoritesButton"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:textColor="@color/colorPrimaryWhite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add to favorites" />
+            android:text="Add to favorites"
+            android:textColor="@color/colorPrimaryWhite" />
 
         <Button
             android:id="@+id/cartButton"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:textColor="@color/colorPrimaryWhite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_shoping_cart"
-            android:text="Add to cart" />
+            android:text="Add to cart"
+            android:textColor="@color/colorPrimaryWhite" />
 
     </LinearLayout>
-
 
 </LinearLayout>

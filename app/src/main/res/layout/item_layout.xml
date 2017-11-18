@@ -19,6 +19,32 @@
         />
 
     <TextView
+        android:id="@+id/imgString"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="left"
+        android:padding="8dp"
+        android:visibility="invisible"
+        android:textSize="32px" />
+    <TextView
+        android:id="@+id/type"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="left"
+        android:padding="8dp"
+        android:visibility="invisible"
+        android:textSize="32px" />
+    <TextView
+        android:id="@+id/itemDiscount"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="left"
+        android:padding="8dp"
+        android:visibility="invisible"
+        android:textSize="32px" />
+
+
+    <TextView
         android:id="@+id/tvItemName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

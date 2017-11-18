@@ -53,7 +53,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Activities.Register"></activity>
+        <activity android:name=".Activities.Register" />
+      
         <activity android:name=".Activities.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,10 +62,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+      
         <activity
             android:name=".Activities.MainActivity"
             android:theme="@style/AppTheme"
-            tools:ignore="InnerclassSeparator"></activity>
+            tools:ignore="InnerclassSeparator" />
+        <activity android:name=".ItemDetailsActivity"></activity>
+      
         <activity android:name=".Activities.UserProfileActivity"></activity>
     </application>
 

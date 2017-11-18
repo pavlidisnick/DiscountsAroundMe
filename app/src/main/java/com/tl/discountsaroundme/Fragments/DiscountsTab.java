@@ -93,6 +93,21 @@ public class DiscountsTab extends Fragment {
             }
 
         });
+        mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
+            @Override
+            public void onFocus() {
+                SuggestListMaker suggestListMaker = new SuggestListMaker();
+                List<SearchSuggest> searchSuggestHistory;
+                // searchSuggestHistory = suggestListMaker.convertStringArrayToSuggest(discountsManager.getSuggestionsDiscounts(), newQuery);
+
+                // mSearchView.swapSuggestions(mLastSuggestList);
+            }
+
+            @Override
+            public void onFocusCleared() {
+                mSearchView.setSearchBarTitle("");
+            }
+        });
 
         return rootView;
     }

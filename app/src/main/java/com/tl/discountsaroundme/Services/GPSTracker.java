@@ -83,13 +83,10 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     // Function to get latitude
-
     public double getLatitude() {
         if (location != null) {
             latitude = location.getLatitude();
         }
-
-        // return latitude
         return latitude;
     }
 
@@ -98,8 +95,6 @@ public class GPSTracker extends Service implements LocationListener {
         if (location != null) {
             longitude = location.getLongitude();
         }
-
-        // return longitude
         return longitude;
     }
 

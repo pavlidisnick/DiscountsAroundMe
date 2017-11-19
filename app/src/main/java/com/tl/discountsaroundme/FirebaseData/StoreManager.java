@@ -37,6 +37,26 @@ public class StoreManager {
     }
 
     /**
+     * Gets a String Array filled with Store names
+     *
+     * @return storeStrings
+     */
+    public ArrayList<String> getStoreStrings() {
+        ArrayList<String> storeStrings = new ArrayList<>();
+        for (Store store : storeArrayList)
+            storeStrings.add(store.getName());
+        return storeStrings;
+    }
+
+    public Store getStoreFromName(String name) {
+        for (Store store : storeArrayList) {
+            if (store.getName().equals(name))
+                return store;
+        }
+        return null;
+    }
+
+    /**
      * Gets all the stores that are within a radius of maxDistance
      *
      * @param lat         user's current latitude

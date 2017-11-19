@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.tl.discountsaroundme.Entities.Item;
-import com.tl.discountsaroundme.ItemDetailsActivity;
 import com.tl.discountsaroundme.R;
 
 import java.util.ArrayList;
@@ -76,6 +75,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
 
         public ItemView(final View itemView) {
             super(itemView);
+          
             imageView = itemView.findViewById(R.id.img);
             tvItemName = itemView.findViewById(R.id.tvItemName);
             tvItemDetails = itemView.findViewById(R.id.tvItemDetail);
@@ -108,9 +108,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
                     context.startActivity(itemDetailsActivity);
                 }
             });
-
         }
-
     }
 }
 

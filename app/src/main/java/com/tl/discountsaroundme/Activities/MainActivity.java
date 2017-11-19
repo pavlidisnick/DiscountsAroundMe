@@ -22,12 +22,18 @@ import com.tl.discountsaroundme.UiControllers.ZoomOutPageTransformer;
 
 public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
+    public static String USER_TYPE;
+    public static String USER_ID;
+  
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        USER_TYPE = getIntent().getStringExtra("USER_TYPE");
+        USER_ID = getIntent().getStringExtra("USER_ID");
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 

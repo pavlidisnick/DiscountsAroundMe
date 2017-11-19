@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -20,6 +21,8 @@ import com.tl.discountsaroundme.UiControllers.ZoomOutPageTransformer;
 
 public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
+    private String userT;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,11 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+
+        Intent i = getIntent();
+        userT = i.getExtras().getString("Type");
+        System.out.println(userT);
+        DiscountsTab.userType= userT;
     }
   
     /**

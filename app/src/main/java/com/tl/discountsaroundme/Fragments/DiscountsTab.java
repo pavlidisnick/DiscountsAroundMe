@@ -1,14 +1,19 @@
 package com.tl.discountsaroundme.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,7 +25,8 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.tl.discountsaroundme.Activities.AddDiscounts;
+import com.tl.discountsaroundme.Activities.Login;
 import com.tl.discountsaroundme.AddCategoryToLayout;
 import com.tl.discountsaroundme.Discounts.SearchSuggest;
 import com.tl.discountsaroundme.Discounts.SuggestListMaker;
@@ -32,16 +38,15 @@ import com.tl.discountsaroundme.CategoryListener;
 
 import java.util.List;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 public class DiscountsTab extends Fragment {
     public static int discountValue = 30;
     FloatingSearchView mSearchView;
-
     DrawerLayout mDrawerLayout;
 
+    public static String userType;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.grid_layout, container, false);
 
         final DiscountsManager discountsManager = new DiscountsManager();
@@ -100,21 +105,75 @@ public class DiscountsTab extends Fragment {
 
         });
 
-        mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+        setDrawer();
 
 
-        mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
-
-        /*
-        TextView userN = (TextView) mDrawerLayout.findViewById(R.id.textView);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        System.out.println(user);
-        if(user!=null){
-            userN.setText(user.toString());
-        } */
-
+        System.out.println("discounts" +userType);
 
         return rootView;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        //TextView text = (TextView) view.findViewById(R.id.textViewUserType);
+        //text.setText("user");
+        //text.getText();
+        //System.out.println(text.getText()+"get text");
+
+        View v = View.inflate(getContext(),R.layout.nav_header_main,null);
+        View innerView = v.findViewById(R.id.textViewUserType);
+        TextView txt = innerView.findViewById(R.id.textViewUserType);
+        txt.setText("user");
+
+
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    public void setDrawer(){
+        mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+
+        mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
+
+        //Add option "Add Discount" to drawer if customer type is owner
+        if (userType=="owner"){ //change it later to "user"
+            NavigationView navigationView = mDrawerLayout.findViewById(R.id.nav_view);
+            Menu menu =navigationView.getMenu();
+            MenuItem target = menu.findItem(R.id.nav_insert_item);
+            target.setVisible(false);
+        }
+
+
+        NavigationView nav = mDrawerLayout.findViewById(R.id.nav_view);
+        nav.bringToFront();
+        nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+
+                if (id == R.id.nav_insert_item) {
+                    Intent addDiscount = new Intent(getContext(), AddDiscounts.class);
+                    startActivity(addDiscount);
+                } else if (id == R.id.temp) {
+                    Toast.makeText(getContext(), "temp", Toast.LENGTH_LONG).show();
+
+                } else if (id == R.id.nav_info) {
+                    Toast.makeText(getContext(), "info", Toast.LENGTH_LONG).show();
+                } else if (id == R.id.nav_logout) {
+                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                    mAuth.signOut();
+
+                    Intent login = new Intent(getContext(), Login.class);
+                    login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(login);
+                }else if (id == R.id.nav_profile){
+                    Toast.makeText(getContext(), "profile", Toast.LENGTH_LONG).show();
+                }
+
+
+                DrawerLayout drawer = (DrawerLayout) mDrawerLayout.findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                return false;
+            }
+        });
+    }
 }

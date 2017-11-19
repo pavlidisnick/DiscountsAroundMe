@@ -230,6 +230,7 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
         toast.show();
         Intent MainActivity = new Intent(Login.this, MainActivity.class);
 
+        MainActivity.putExtra("Type",Type);
         startActivity(MainActivity);
     }
 

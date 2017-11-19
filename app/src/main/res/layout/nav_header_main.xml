@@ -18,18 +18,18 @@
         android:layout_width="80dp"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/textView6"
+        android:layout_toEndOf="@+id/textViewUserType"
         android:paddingTop="10dp"
-        app:srcCompat="@android:drawable/sym_def_app_icon"
+        app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
         tools:layout_editor_absoluteX="50dp"
         tools:layout_editor_absoluteY="0dp" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/textViewUserType"
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/textViewEmail"
         android:paddingTop="5dp"
         android:text="Android Studio"
         android:textAlignment="viewStart"
@@ -39,7 +39,7 @@
         tools:layout_editor_absoluteY="50dp" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewEmail"
         android:layout_width="wrap_content"
         android:layout_height="23dp"
         android:layout_alignParentEnd="true"

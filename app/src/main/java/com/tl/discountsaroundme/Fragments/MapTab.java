@@ -295,6 +295,7 @@ public class MapTab extends Fragment {
         // hide the notification after its selected
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
+        notification.defaults |= Notification.DEFAULT_SOUND;
         notification.defaults |= Notification.DEFAULT_VIBRATE;
         notificationManager.notify(0, notification);
     }

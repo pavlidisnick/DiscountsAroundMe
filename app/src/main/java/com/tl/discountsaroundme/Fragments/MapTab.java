@@ -274,8 +274,8 @@ public class MapTab extends Fragment {
     public void createNotification(View v) {
         // Prepare intent which is triggered if the
         // notification is selected
-        Intent myIntent = new Intent(MapTab.this.getActivity(), NotificationReceiverActivity.class);
-        PendingIntent pIntent = PendingIntent.getActivity(getContext(), (int) System.currentTimeMillis(), myIntent, 0);
+        /*Intent myIntent = new Intent(MapTab.this.getActivity(), NotificationReceiverActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(getContext(), (int) System.currentTimeMillis(), myIntent, 0);*/
 
         // Build notification
         // Actions are just fake
@@ -287,12 +287,15 @@ public class MapTab extends Fragment {
 */
                 .setContentText("Cool content!")
                 .setSmallIcon(R.mipmap.icon_circle)
+/*
                 .setContentIntent(pIntent)
+*/
                 .build();
         NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
         // hide the notification after its selected
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
+        notification.defaults |= Notification.DEFAULT_VIBRATE;
         notificationManager.notify(0, notification);
     }
 

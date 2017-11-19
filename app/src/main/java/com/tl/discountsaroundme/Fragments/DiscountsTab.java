@@ -113,21 +113,6 @@ public class DiscountsTab extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        //TextView text = (TextView) view.findViewById(R.id.textViewUserType);
-        //text.setText("user");
-        //text.getText();
-        //System.out.println(text.getText()+"get text");
-
-        View v = View.inflate(getContext(),R.layout.nav_header_main,null);
-        View innerView = v.findViewById(R.id.textViewUserType);
-        TextView txt = innerView.findViewById(R.id.textViewUserType);
-        txt.setText("user");
-
-
-        super.onViewCreated(view, savedInstanceState);
-    }
 
     public void setDrawer(){
         mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);

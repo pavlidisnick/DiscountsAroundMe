@@ -1,9 +1,6 @@
 package com.tl.discountsaroundme.Activities;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -13,7 +10,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.tl.discountsaroundme.Fragments.DiscountsTab;
 import com.tl.discountsaroundme.Fragments.MapTab;
 import com.tl.discountsaroundme.Fragments.UserTab;
@@ -21,11 +17,9 @@ import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.UiControllers.ZoomOutPageTransformer;
 
 public class MainActivity extends AppCompatActivity {
-    private ViewPager mViewPager;
     public static String USER_TYPE;
     public static String USER_ID;
-  
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,15 +97,6 @@ public class MainActivity extends AppCompatActivity {
                     return "USER TAB";
             }
             return null;
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mAuth.getCurrentUser() == null){
-            Intent LoginActivity = new Intent(this, Login.class);
-            startActivity(LoginActivity);
         }
     }
 }

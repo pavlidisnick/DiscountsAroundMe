@@ -82,8 +82,8 @@ public class ProfileTest {
     public void DeleteAccountButtonClickLayoutDisplayTest() {
         getUserOptionView();
         onView(withId(R.id.btDeleteAccount)).perform(click());
-        onView(withId(R.id.btYes)).check(matches(isDisplayed()));
-        onView(withId(R.id.btNo)).check(matches(isDisplayed()));
+        onView(withId(R.id.confirmButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.cancelButton)).check(matches(isDisplayed()));
         onView(withId(R.id.etPassword)).check(matches(isDisplayed()));
     }
 

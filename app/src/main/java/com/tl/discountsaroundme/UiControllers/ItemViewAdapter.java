@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.tl.discountsaroundme.Entities.Item;
+import com.tl.discountsaroundme.ItemDetailsActivity;
 import com.tl.discountsaroundme.R;
 
 import java.util.ArrayList;

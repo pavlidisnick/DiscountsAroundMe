@@ -1,6 +1,5 @@
 package com.tl.discountsaroundme.Fragments;
 
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,13 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.Switch;
-import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.tl.discountsaroundme.Activities.Login;
 import com.tl.discountsaroundme.Activities.MainActivity;
 import com.tl.discountsaroundme.Activities.UserProfileActivity;
 import com.tl.discountsaroundme.FirebaseData.UserInfoManager;
@@ -25,39 +19,34 @@ import com.tl.discountsaroundme.R;
 
 public class UserTab extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
     public static Boolean LogoutOnStop;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private FirebaseUser user;
     Switch swLogout;
     Button btEditUser;
     Button btApply;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        final View rootview = inflater.inflate(R.layout.tab_user_options, container, false);
-        UserInfoManager.UserInformation(mAuth.getCurrentUser().getUid(), rootview);
-        /**
-         * #47 Set a switch on changed variable to be stored in the SharedPreferences regarding the  user's preference on logout option.
-         */
-        swLogout = rootview.findViewById(R.id.sLogoutOptions);
-        SharedPreferences mSharedprefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        swLogout.setChecked(mSharedprefs.getBoolean("logoutKey", false));
-        btEditUser = rootview.findViewById(R.id.btEditUser);
-        btApply = rootview.findViewById(R.id.btApply);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.tab_user_options, container, false);
+
+        // #47 Set a switch on changed variable to be stored in the SharedPreferences regarding the  user's preference on logout option.
+        swLogout = rootView.findViewById(R.id.sLogoutOptions);
+        SharedPreferences mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        swLogout.setChecked(mSharedPrefs.getBoolean("logoutKey", false));
+        btEditUser = rootView.findViewById(R.id.btEditUser);
+        btApply = rootView.findViewById(R.id.btApply);
+
         btEditUser.setOnClickListener(this);
         btApply.setOnClickListener(this);
         swLogout.setOnCheckedChangeListener(this);
-        return rootview;
+
+        return rootView;
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        /**
-         * TODO:Make it work properly.
-         */
-        SharedPreferences mSharedprefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        // TODO: make it work properly
+        SharedPreferences mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         LogoutOnStop = isChecked;
-        SharedPreferences.Editor editor = mSharedprefs.edit();
+        SharedPreferences.Editor editor = mSharedPrefs.edit();
         editor.putBoolean("logoutKey", LogoutOnStop);
         editor.commit();
     }

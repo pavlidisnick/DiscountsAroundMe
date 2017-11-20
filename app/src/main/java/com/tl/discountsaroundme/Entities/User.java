@@ -1,8 +1,6 @@
 package com.tl.discountsaroundme.Entities;
 
-/**
- * Created by rezu on 10/11/2017.
- */
+
 
 public class User {
     private String name;
@@ -10,7 +8,7 @@ public class User {
     private String userType;
     private String image;
 
-    public User(){};
+    public User(){}
 
     public User (String name , String email, String userType,String image){
         this.name = name;

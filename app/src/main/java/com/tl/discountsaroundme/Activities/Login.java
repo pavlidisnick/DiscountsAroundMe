@@ -1,9 +1,7 @@
 package com.tl.discountsaroundme.Activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -26,18 +24,14 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.tl.discountsaroundme.FirebaseData.UserInfoManager;
-import com.tl.discountsaroundme.Fragments.UserTab;
 import com.tl.discountsaroundme.R;
 
 public class Login extends FragmentActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
@@ -113,7 +107,7 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            CheckUserType(); //And login
+            checkUserType(); //And login
         }
     }
   
@@ -148,7 +142,7 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    CheckUserType();
+                    checkUserType();
                 } else {
                     Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
                 }
@@ -209,7 +203,7 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
         startActivity(mainActivity);
     }
 
-    private void CheckUserType() {
+    private void checkUserType() {
         user = mAuth.getCurrentUser();
         mDbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

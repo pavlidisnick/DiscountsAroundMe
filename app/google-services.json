@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "13303654686-gakmqkegr1pvjt98gi8v05n47vvp3m91.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tl.discountsaroundme",
+            "certificate_hash": "c3e13ec3ac4bf3041e9ac094fecc2a304c1a32dd"
+          }
+        },
+        {
           "client_id": "13303654686-jgghagv04uc0c3g9bcq55ha8sgbur27q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -196,7 +196,7 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
     //After a successful login start the main activity
     private void loginSuccessful(String userType, String userId) {
         Toast.makeText(getApplicationContext(), userType, Toast.LENGTH_LONG).show();
-
+      
         Intent mainActivity = new Intent(Login.this, MainActivity.class);
         mainActivity.putExtra("USER_TYPE", userType);
         mainActivity.putExtra("USER_ID", userId);

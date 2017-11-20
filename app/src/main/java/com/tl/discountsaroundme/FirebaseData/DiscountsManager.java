@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.Entities.Item;
+import com.tl.discountsaroundme.Entities.Store;
 import com.tl.discountsaroundme.Fragments.DiscountsTab;
 import com.tl.discountsaroundme.UiControllers.ItemViewAdapter;
 
@@ -17,6 +18,7 @@ public class DiscountsManager {
     private ArrayList<Item> discountItems = new ArrayList<>();
     private ArrayList<Item> unchangedList = new ArrayList<>();
     private ItemViewAdapter adapter;
+    private StoreManager storeManager = new StoreManager();
 
     public void setAdapter(ItemViewAdapter adapter) {
         this.adapter = adapter;
@@ -88,6 +90,17 @@ public class DiscountsManager {
         for (Item item : unchangedList) {
             String type = item.getType().toUpperCase();
             if (type.contains(category))
+                discountItems.add(item);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    public void getDiscountsByStore (String store){
+        discountItems.clear();
+
+        for (Item item : unchangedList) {
+            String type = item.getStore().toUpperCase();
+            if (type.contains())
                 discountItems.add(item);
         }
         adapter.notifyDataSetChanged();

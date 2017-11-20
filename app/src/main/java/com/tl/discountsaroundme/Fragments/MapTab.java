@@ -3,13 +3,10 @@ package com.tl.discountsaroundme.Fragments;
 
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,11 +34,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.tl.discountsaroundme.Discounts.SearchSuggest;
 import com.tl.discountsaroundme.Discounts.SuggestListMaker;
+import com.tl.discountsaroundme.Entities.Item;
 import com.tl.discountsaroundme.Entities.Store;
+import com.tl.discountsaroundme.FirebaseData.DiscountsManager;
 import com.tl.discountsaroundme.FirebaseData.StoreManager;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.Services.GPSTracker;
-import com.tl.discountsaroundme.Services.Notifications.NotificationReceiverActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +52,7 @@ public class MapTab extends Fragment {
     private GPSTracker gps;
     private GoogleMap googleMap;
     private StoreManager storeManager = new StoreManager();
+    private DiscountsManager discountsManager = new DiscountsManager();
     private double distance = 1; // in km
 
     @Override
@@ -279,13 +278,15 @@ public class MapTab extends Fragment {
 
         // Build notification
         // Actions are just fake
+        ArrayList<Item> items = discountsManager.getNearbyDiscounts();
+        for (Item item : items) {
         Notification notification = new Notification.Builder(getContext())
                 .setSmallIcon(R.mipmap.icon_circle)
-                .setContentTitle("Awesome Title!")
+                .setContentTitle(store.getName())
 /*
                 .setColor(ContextCompat.getColor(context, colorRes))
 */
-                .setContentText("Cool content!")
+                .setContentText(item.getName())
                 .setSmallIcon(R.mipmap.icon_circle)
 /*
                 .setContentIntent(pIntent)
@@ -298,7 +299,7 @@ public class MapTab extends Fragment {
         notification.defaults |= Notification.DEFAULT_SOUND;
         notification.defaults |= Notification.DEFAULT_VIBRATE;
         notificationManager.notify(0, notification);
-    }
+    }}
 
     @Override
     public void onResume() {

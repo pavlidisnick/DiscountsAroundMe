@@ -20,6 +20,8 @@ import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.UiControllers.ZoomOutPageTransformer;
 
 public class MainActivity extends AppCompatActivity {
+    public static String USER_TYPE;
+    public static String USER_ID;
     private ViewPager mViewPager;
     private String userT;
 
@@ -28,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        USER_TYPE = getIntent().getStringExtra("USER_TYPE");
+        USER_ID = getIntent().getStringExtra("USER_ID");
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -58,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(userT);
         DiscountsTab.userType= userT;
     }
-  
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.

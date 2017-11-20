@@ -61,6 +61,7 @@ public class AddCategoryTest {
         PowerMockito.mockStatic(LayoutInflater.class);
         Mockito.when(LayoutInflater.from(activity)).thenReturn(layoutInflater);
 
+
         DiscountsManager mockDiscountManager = mock(DiscountsManager.class);
         addCategoryToLayout1.addCategory("ok", mockDiscountManager);
         assertNotNull(addCategoryToLayout);

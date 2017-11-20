@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/gps_fixed"
+        android:enabled="true"
+        android:icon="@drawable/ic_gps_fixed"
+        android:title="Gps"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/map_options"
+        android:enabled="true"
+        android:icon="@drawable/ic_more_vert_black_24dp"
+        android:title="Options"
+        app:showAsAction="always" />
+</menu>

@@ -35,17 +35,17 @@ public class MainActivityTest {
     }
 
     @Test
-    public void DiscountsTest() {
+    public void discountsTest() {
         Espresso.onView(withId(R.id.menu_discounts)).perform(click()).check(matches(isDisplayed()));
     }
 
     @Test
-    public void MapTest() {
+    public void mapTest() {
         Espresso.onView(withId(R.id.menu_map)).perform(click()).check(matches(isDisplayed()));
     }
 
     @Test
-    public void ClothesTest() {
+    public void userTest() {
         Espresso.onView(withId(R.id.menu_user_options)).perform(click()).check(matches(isDisplayed()));
     }
 }

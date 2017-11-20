@@ -1,6 +1,5 @@
 package com.tl.discountsaroundme.Activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,7 +9,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -18,6 +16,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
@@ -51,52 +50,49 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
     private DatabaseReference mDbRef = FirebaseDatabase.getInstance().getReference("/shops");
     private FirebaseUser user;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if(isLoggedIn()==true || (mGoogleApiClient != null && mGoogleApiClient.isConnected())) {
-            Toast.makeText(getApplicationContext(), "Already connected", Toast.LENGTH_LONG).show();
-            loginSuccessful("user");
-        }else{
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.web_client_id))
                 .requestEmail()
                 .build();
+      
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .enableAutoManage(this, this)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+            //Facebook login
+            FacebookSdk.sdkInitialize(getApplicationContext());
 
-        //Facebook login
-        FacebookSdk.sdkInitialize(getApplicationContext());
+            signInButton = findViewById(R.id.sign_in_btgoogle);
+            signInButton.setOnClickListener(this);
 
-        signInButton = findViewById(R.id.sign_in_btgoogle);
-        signInButton.setOnClickListener(this);
+            login = findViewById(R.id.login);
+            login.setOnClickListener(this);
 
-        login = findViewById(R.id.login);
-        login.setOnClickListener(this);
+            register = findViewById(R.id.register);
+            register.setOnClickListener(this);
 
-        register = findViewById(R.id.register);
-        register.setOnClickListener(this);
-
-        loginFacebook = findViewById(R.id.login_facebook);
-        loginFacebook.setReadPermissions("email", "public_profile");
+            loginFacebook = findViewById(R.id.login_facebook);
+            loginFacebook.setReadPermissions("email", "public_profile");
 
         callbackManager = CallbackManager.Factory.create();
         loginFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
-                loginSuccessful("user");
+                user = mAuth.getCurrentUser();
+                loginSuccessful("user", user.getUid().toString());
             }
-
+          
             @Override
             public void onCancel() {
-                Toast.makeText(getApplicationContext(), "Login Cancelled", Toast.LENGTH_LONG).show();
+                  Toast.makeText(getApplicationContext(), "Login Cancelled", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -104,7 +100,6 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
                 Toast.makeText(getApplicationContext(), "####Error-facebook####", Toast.LENGTH_LONG).show();
             }
         });
-        }
     }
 
     @Override
@@ -112,27 +107,17 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            CheckUserType(); //And login
+            checkUserType(); //And login
         }
     }
-
-    /**
-     * Added a signout way thus the login tests will be able to run
-     */
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mAuth.signOut();
-    }
-
+  
     @Override
     public void onClick(View view) {
         if (view.equals(login)) {
             if (isFormFilled())
                 signIn(email, password);
-            else {
+            else
                 Toast.makeText(getApplicationContext(), "Please fill the form", Toast.LENGTH_LONG).show();
-            }
         } else if (view.equals(signInButton)) {
             signIn();
         } else if (view.equals(register)) {
@@ -157,19 +142,9 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
-
-                    CheckUserType();
-
-
+                    checkUserType();
                 } else {
-                    // If sign in fails, display a message to the user.
-
-                    Context context = getApplicationContext();
-                    CharSequence text = "Login fail.";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
+                    Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -199,7 +174,8 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
-            loginSuccessful("user");
+            GoogleSignInAccount account = result.getSignInAccount();
+            loginSuccessful("user", account.getId());
         } else {
             Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
         }
@@ -218,38 +194,32 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
     }
 
     //After a successful login start the main activity
-    private void loginSuccessful(String Type) {
-
-        //TODO: change the main activity according to the user TYPE
-        CharSequence text= "";
-        text = Type;
-        Context context = getApplicationContext();
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast;
-        toast = Toast.makeText(context, text, duration);
-        toast.show();
-        Intent MainActivity = new Intent(Login.this, MainActivity.class);
-
-        MainActivity.putExtra("Type",Type);
-        startActivity(MainActivity);
+    private void loginSuccessful(String userType, String userId) {
+        Toast.makeText(getApplicationContext(), userType, Toast.LENGTH_LONG).show();
+      
+        Intent mainActivity = new Intent(Login.this, MainActivity.class);
+        mainActivity.putExtra("USER_TYPE", userType);
+        mainActivity.putExtra("USER_ID", userId);
+        startActivity(mainActivity);
     }
 
-    private void CheckUserType (){
+    private void checkUserType() {
         user = mAuth.getCurrentUser();
-        String Username = user.getEmail();
         mDbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String usertype = null;
-                String UserUID = user.getUid().toString();
+                String userType = null;
+                String userId = user.getUid().toString();
                 String dbUID;
-                for (DataSnapshot child : dataSnapshot.getChildren()){
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
                     dbUID = child.child("ownerUID").getValue().toString();
-                    if (  dbUID.equals(UserUID)){
-                        usertype="owner";
-                    }else {usertype = "user";}
+                    if (dbUID.equals(userId)) {
+                        userType = "owner";
+                    } else {
+                        userType = "user";
+                    }
                 }
-                loginSuccessful(usertype);
+                loginSuccessful(userType, userId);
             }
 
             @Override
@@ -258,12 +228,5 @@ public class Login extends FragmentActivity implements View.OnClickListener, Goo
             }
         });
 
-    }
-    public boolean isLoggedIn() {
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        if(accessToken == null)
-            return false;
-        else
-            return  true;
     }
 }

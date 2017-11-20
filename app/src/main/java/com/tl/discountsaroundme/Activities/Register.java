@@ -30,7 +30,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.Activities.Login;
 import com.tl.discountsaroundme.Entities.Store;
+import com.tl.discountsaroundme.Entities.User;
 import com.tl.discountsaroundme.R;
+
+import java.security.Key;
 
 import static android.content.ContentValues.TAG;
 
@@ -59,10 +62,10 @@ public class Register extends Activity implements View.OnClickListener, Compound
         register = findViewById(R.id.register_button);
         login = findViewById(R.id.login_button);
         etShopName = findViewById(R.id.etShopName);
-        cbBusinessAccount =  findViewById(R.id.cbBusinessAccount);
+        cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
         tvShopLocation = findViewById(R.id.tvShopLocation);
         sShopType = findViewById(R.id.sShopType);
-        ArrayAdapter<CharSequence> spineradapter = ArrayAdapter.createFromResource(this,R.array.shopTypeSpinner,R.layout.spinner_dropdown_list);
+        ArrayAdapter<CharSequence> spineradapter = ArrayAdapter.createFromResource(this, R.array.shopTypeSpinner, R.layout.spinner_dropdown_list);
         spineradapter.setDropDownViewResource(R.layout.spinner_dropdown_list);
         sShopType.setAdapter(spineradapter);
 
@@ -120,16 +123,16 @@ public class Register extends Activity implements View.OnClickListener, Compound
 
                 if (task.isSuccessful()) {
                     //Issue 8  in case the user is a shop owner
-                    if (cbBusinessAccount.isChecked()){
-                        OnBusinessAccountCreation(task);}
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "createUserWithEmail:success");
-                    text = "Register successful! Welcome";
+                    if (cbBusinessAccount.isChecked()) {
+                        OnBusinessAccountCreation(task);
+                    }
+                    StoreAccountIntoDB(task);
+                    // Sign in success, update UI with the signed-in user's information and store the user in the database
+                    text = "Register successful! Welcome " + task.getResult().getUser().getEmail();
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
                     text = "Register Failed";
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
@@ -137,6 +140,7 @@ public class Register extends Activity implements View.OnClickListener, Compound
             }
         });
     }
+
     /**
      * Checks if all fields are filled and the user is ready to be created
      */
@@ -144,22 +148,23 @@ public class Register extends Activity implements View.OnClickListener, Compound
         //Issue 8 changes need when the buisiness account cb is checked
         CheckBox cbBuisnessAccount = findViewById(R.id.cbBusinessAccount);
         EditText etShopName = findViewById(R.id.etShopName);
-        Spinner  sShopType = findViewById(R.id.sShopType);
+        Spinner sShopType = findViewById(R.id.sShopType);
 
         TextView email = findViewById(R.id.email);
         TextView password = findViewById(R.id.password);
 
-        if (cbBuisnessAccount.isChecked()){
+        if (cbBuisnessAccount.isChecked()) {
             this.ShopName = etShopName.getText().toString();
             this.email = email.getText().toString();
             this.password = password.getText().toString();
             Boolean itemSelected = sShopType.getSelectedItemPosition() != 0;
-            return !this.email.isEmpty() && !this.password.isEmpty() && !this.ShopName.isEmpty() && itemSelected  ;
-        }else{
+            return !this.email.isEmpty() && !this.password.isEmpty() && !this.ShopName.isEmpty() && itemSelected;
+        } else {
             this.email = email.getText().toString();
             this.password = password.getText().toString();
 
-            return !this.email.isEmpty() && !this.password.isEmpty();}
+            return !this.email.isEmpty() && !this.password.isEmpty();
+        }
     }
 
     /**
@@ -175,16 +180,16 @@ public class Register extends Activity implements View.OnClickListener, Compound
 
     /**
      * Issue 8
-     *If user Checks the box more options become visible
+     * If user Checks the box more options become visible
      */
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked){
+        if (isChecked) {
             etShopName.setVisibility(View.VISIBLE);
             sShopType.setVisibility(View.VISIBLE);
             tvShopLocation.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             etShopName.setVisibility(View.GONE);
             sShopType.setVisibility(View.GONE);
             tvShopLocation.setVisibility(View.GONE);
@@ -196,14 +201,12 @@ public class Register extends Activity implements View.OnClickListener, Compound
      * On creation of a business account the Shop is stored into the database with its details and the account owner's UID
      * Currently the location of the shop is on default value
      * TODO Give the  owner the option to set the shop's location
-     * */
+     */
 
-    public void OnBusinessAccountCreation(Task<AuthResult> task){
-
+    public void OnBusinessAccountCreation(Task<AuthResult> task) {
         FirebaseUser user = task.getResult().getUser();
         String BAuserUID = user.getUid();
         Store Shop = new Store();
-
         Shop.setDescription("Details");
         Shop.setName(etShopName.getText().toString());
         Shop.setImage("");
@@ -211,8 +214,19 @@ public class Register extends Activity implements View.OnClickListener, Compound
         Shop.setLng(0);
         Shop.setType(sShopType.getSelectedItem().toString());
         Shop.setOwnerUID(BAuserUID);
+        /**
+         * Now Shops are stored under their owner's UID
+         * */
+        mDbRef.child("shops").child(user.getUid()).setValue(Shop);
+    }
 
-        String Key = mDbRef.child("shops").push().getKey();
-        mDbRef.child("shops").child(Key).setValue(Shop);
+    public void StoreAccountIntoDB(Task<AuthResult> task) {
+        FirebaseUser user = task.getResult().getUser();
+        String userType = "Customer";
+        if (cbBusinessAccount.isChecked()) {
+            userType = "Store owner";
+        }
+        User newUser = new User(user.getEmail(), user.getEmail(), userType, "imgURL");
+        mDbRef.child("users").child(user.getUid()).setValue(newUser);
     }
 }

@@ -2,12 +2,9 @@ package com.tl.discountsaroundme.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
-import android.os.Build;
-import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,7 +28,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.tl.discountsaroundme.Activities.AddDiscounts;
 import com.tl.discountsaroundme.Activities.Login;
 import com.tl.discountsaroundme.Activities.MainActivity;
-import com.google.firebase.auth.FirebaseAuth;
 import com.tl.discountsaroundme.AddCategoryToLayout;
 import com.tl.discountsaroundme.CategoryListener;
 import com.tl.discountsaroundme.Discounts.SearchSuggest;
@@ -45,17 +40,14 @@ import com.tl.discountsaroundme.UiControllers.ItemViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 import static android.app.Activity.RESULT_OK;
 
 public class DiscountsTab extends Fragment {
+    public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
     public static int discountValue = 30;
     FloatingSearchView mSearchView;
     DrawerLayout mDrawerLayout;
-  
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
     DiscountsManager discountsManager;
 
     @Override
@@ -126,7 +118,7 @@ public class DiscountsTab extends Fragment {
         });
 
         setDrawer();
-      
+
         mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
             @Override
             public void onFocus() {
@@ -152,21 +144,20 @@ public class DiscountsTab extends Fragment {
         return rootView;
     }
 
-    public void setDrawer(){
-        mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+    public void setDrawer() {
+        mDrawerLayout = getActivity().findViewById(R.id.drawer_layout);
 
         mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
 
+        NavigationView nav = mDrawerLayout.findViewById(R.id.nav_view);
+
         //Add option "Add Discount" to drawer if customer type is owner
-        if (userType=="owner"){ //change it later to "user"
-            NavigationView navigationView = mDrawerLayout.findViewById(R.id.nav_view);
-            Menu menu =navigationView.getMenu();
+        if (MainActivity.USER_TYPE.equals("user")) {
+            Menu menu = nav.getMenu();
             MenuItem target = menu.findItem(R.id.nav_insert_item);
             target.setVisible(false);
         }
 
-
-        NavigationView nav = mDrawerLayout.findViewById(R.id.nav_view);
         nav.bringToFront();
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -188,17 +179,18 @@ public class DiscountsTab extends Fragment {
                     Intent login = new Intent(getContext(), Login.class);
                     login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(login);
-                }else if (id == R.id.nav_profile){
-                    Toast.makeText(getContext(), "profile", Toast.LENGTH_LONG).show();
+                } else if (id == R.id.nav_profile) {
+                    Intent UserProfileActivity = new Intent(getActivity(), com.tl.discountsaroundme.Activities.UserProfileActivity.class);
+                    startActivity(UserProfileActivity);
                 }
 
-
-                DrawerLayout drawer = (DrawerLayout) mDrawerLayout.findViewById(R.id.drawer_layout);
+                DrawerLayout drawer = mDrawerLayout.findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
                 return false;
             }
         });
-  
+    }
+
     public void startVoiceRecognitionActivity() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,

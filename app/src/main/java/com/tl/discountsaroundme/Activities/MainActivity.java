@@ -1,6 +1,5 @@
 package com.tl.discountsaroundme.Activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -12,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
 import com.tl.discountsaroundme.Fragments.DiscountsTab;
 import com.tl.discountsaroundme.Fragments.MapTab;
 import com.tl.discountsaroundme.Fragments.UserTab;
@@ -56,11 +56,16 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+    }
 
-        Intent i = getIntent();
-        userT = i.getExtras().getString("Type");
-        System.out.println(userT);
-        DiscountsTab.userType= userT;
+    @Override
+    public void onBackPressed() {
+        DrawerLayout mDrawerLayout = findViewById(R.id.drawer_layout);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     /**
@@ -106,16 +111,6 @@ public class MainActivity extends AppCompatActivity {
                     return "USER TAB";
             }
             return null;
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout mDrawerLayout = findViewById(R.id.drawer_layout);
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
         }
     }
 }

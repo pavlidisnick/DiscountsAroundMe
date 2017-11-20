@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.Fragments;
 
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,10 +9,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Switch;
+import android.widget.CompoundButton;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
-
 import com.tl.discountsaroundme.Activities.MainActivity;
 import com.tl.discountsaroundme.Activities.UserProfileActivity;
 import com.tl.discountsaroundme.FirebaseData.UserInfoManager;

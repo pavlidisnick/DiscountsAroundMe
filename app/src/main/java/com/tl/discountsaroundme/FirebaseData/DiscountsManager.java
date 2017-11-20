@@ -43,6 +43,27 @@ public class DiscountsManager {
         });
     }
 
+    public void getDiscounts(){
+        mDBDiscountItems.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                discountItems.clear();
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Item item = child.getValue(Item.class);
+                    if (item.getDiscount() >= DiscountsTab.discountValue)
+                        discountItems.add(item);
+                }
+
+                unchangedList.clear();
+                unchangedList.addAll(discountItems);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
     /**
      * Invoked on search, based on the searchQuery it changes the list
      *
@@ -91,5 +112,28 @@ public class DiscountsManager {
                 discountItems.add(item);
         }
         adapter.notifyDataSetChanged();
+    }
+
+    public ArrayList<Item> getTopDiscountsByStore(String store) {
+        store = store.toUpperCase().trim();
+        ArrayList<Item> storeItems = new ArrayList<>();
+        for (Item item : unchangedList) {
+            String storeName = item.getStore().toUpperCase().trim();
+            if (store.equals(storeName) && item.getDiscount() >= DiscountsTab.discountValue)
+                storeItems.add(item);
+        }
+        return storeItems;
+    }
+
+    public Item getTopItemByStore(String store) {
+        double max = 0;
+        Item topItem = null;
+        for (Item item : unchangedList) {
+            if (store.equals(item.getStore()) && item.getDiscount() >= max) {
+                max = item.getDiscount();
+                topItem = item;
+            }
+        }
+        return topItem;
     }
 }

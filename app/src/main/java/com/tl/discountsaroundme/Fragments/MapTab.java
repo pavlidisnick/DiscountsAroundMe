@@ -1,9 +1,11 @@
 package com.tl.discountsaroundme.Fragments;
 
-
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -35,7 +37,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.tl.discountsaroundme.Discounts.SearchSuggest;
 import com.tl.discountsaroundme.Discounts.SuggestListMaker;
+import com.tl.discountsaroundme.Entities.Item;
 import com.tl.discountsaroundme.Entities.Store;
+import com.tl.discountsaroundme.FirebaseData.DiscountsManager;
 import com.tl.discountsaroundme.FirebaseData.StoreManager;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.Services.GPSTracker;
@@ -44,11 +48,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
+
 public class MapTab extends Fragment {
     private MapView mMapView;
     private GPSTracker gps;
     private GoogleMap googleMap;
     private StoreManager storeManager = new StoreManager();
+    private DiscountsManager discountsManager = new DiscountsManager();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private double distance = 1; // in km
 
@@ -56,6 +63,7 @@ public class MapTab extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.tab_map, container, false);
 
+        discountsManager.getDiscounts();
         mMapView = rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
@@ -83,11 +91,9 @@ public class MapTab extends Fragment {
 
         Button shopsButton = rootView.findViewById(R.id.shopsButton);
         Button nearbyButton = rootView.findViewById(R.id.nearbyButton);
-
         AtomicReference<LocationManager> locationManager;
         locationManager = new AtomicReference<>((LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE));
         gps = new GPSTracker(locationManager.get());
-
         shopsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,7 +161,7 @@ public class MapTab extends Fragment {
         offersSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // TODO: offer value needs implementation
+                DiscountsTab.discountValue = progress;
                 String displayText = "Offers above " + progress + "0%";
                 offersTextView.setText(displayText);
             }
@@ -177,6 +183,17 @@ public class MapTab extends Fragment {
                     offersSeekBar.setEnabled(false);
                 else
                     offersSeekBar.setEnabled(true);
+            }
+        });
+
+        CheckBox nearbyOffersCheck = rootView.findViewById(R.id.nearbyOffers_check);
+        nearbyOffersCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    createNotification();
+                }
+
             }
         });
 
@@ -248,6 +265,45 @@ public class MapTab extends Fragment {
         return rootView;
     }
 
+    public void createNotification() {
+        ArrayList<Store> stores = storeManager.getNearbyStores(gps.getLatitude(), gps.getLongitude(), distance * 1000);
+        ArrayList<Store> topStores = new ArrayList<>();
+
+        for (Store store : stores) {
+            ArrayList<Item> items = discountsManager.getTopDiscountsByStore(store.getName());
+            if (!items.isEmpty())
+                topStores.add(store);
+        }
+
+        googleMap.clear();
+
+        for (Store store : topStores) {
+            Item item = discountsManager.getTopItemByStore(store.getName());
+            String contentText = item.getName() + " " + item.getDiscount();
+
+            MarkerOptions marker = new MarkerOptions()
+                    .position(new LatLng(store.getLat(), store.getLng()))
+                    .title(store.getName())
+                    .snippet(contentText)
+                    .flat(true)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_woman_shoe));
+            googleMap.addMarker(marker);
+
+            Notification notification = new Notification.Builder(getContext())
+                    .setSmallIcon(R.drawable.ic_woman_shoe)
+                    .setContentTitle(store.getName())
+                    .setContentText(contentText)
+                    .build();
+            NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
+            // hide the notification after its selected
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
+            notification.defaults |= Notification.DEFAULT_SOUND;
+            notification.defaults |= Notification.DEFAULT_VIBRATE;
+            notificationManager.notify(0, notification);
+        }
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -271,6 +327,7 @@ public class MapTab extends Fragment {
         super.onLowMemory();
         mMapView.onLowMemory();
     }
+  
     @Override
     public void onStop() {
         super.onStop();

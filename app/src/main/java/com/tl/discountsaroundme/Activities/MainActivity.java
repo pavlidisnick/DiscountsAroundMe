@@ -12,7 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-
 import com.tl.discountsaroundme.Fragments.DiscountsTab;
 import com.tl.discountsaroundme.Fragments.MapTab;
 import com.tl.discountsaroundme.Fragments.UserTab;

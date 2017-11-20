@@ -113,11 +113,20 @@
         <CheckBox
             android:id="@+id/topOffers_check"
             style="@style/Widget.AppCompat.CompoundButton.CheckBox"
-            android:checked="true"
-            android:layout_width="wrap_content"
+            android:layout_width="185dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:checked="true"
             android:text="Show only top offers" />
+
+        <CheckBox
+            android:id="@+id/nearbyOffers_check"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+            android:layout_width="185dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:checked="false"
+            android:text="Notify me for offers" />
 
         <TextView
             android:id="@+id/offers_textView"

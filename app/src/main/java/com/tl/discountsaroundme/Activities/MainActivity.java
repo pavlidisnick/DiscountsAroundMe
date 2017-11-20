@@ -1,12 +1,15 @@
 package com.tl.discountsaroundme.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import com.tl.discountsaroundme.Fragments.DiscountsTab;
@@ -16,12 +19,19 @@ import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.UiControllers.ZoomOutPageTransformer;
 
 public class MainActivity extends AppCompatActivity {
+    public static String USER_TYPE;
+    public static String USER_ID;
     private ViewPager mViewPager;
+    private String userT;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        USER_TYPE = getIntent().getStringExtra("USER_TYPE");
+        USER_ID = getIntent().getStringExtra("USER_ID");
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -46,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+
+        Intent i = getIntent();
+        userT = i.getExtras().getString("Type");
+        System.out.println(userT);
+        DiscountsTab.userType= userT;
     }
 
     /**
@@ -91,6 +106,16 @@ public class MainActivity extends AppCompatActivity {
                     return "USER TAB";
             }
             return null;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout mDrawerLayout = findViewById(R.id.drawer_layout);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
     }
 }

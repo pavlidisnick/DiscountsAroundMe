@@ -126,7 +126,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:checked="false"
-            android:text="Show only nearby offers" />
+            android:text="Notify me for offers" />
 
         <TextView
             android:id="@+id/offers_textView"

@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
@@ -38,9 +40,11 @@ import com.tl.discountsaroundme.FirebaseData.DiscountsManager;
 import com.tl.discountsaroundme.FirebaseData.StoreManager;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.Services.GPSTracker;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class MapTab extends Fragment {
@@ -123,7 +127,6 @@ public class MapTab extends Fragment {
             }
         });
 
-
         SeekBar radiusSeekBar = rootView.findViewById(R.id.radius_seekBar);
         final TextView radiusTextView = rootView.findViewById(R.id.radius_textView);
         radiusSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -154,7 +157,7 @@ public class MapTab extends Fragment {
         offersSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // TODO: offer value needs implementation
+                DiscountsTab.discountValue = progress;
                 String displayText = "Offers above " + progress + "0%";
                 offersTextView.setText(displayText);
             }
@@ -184,13 +187,7 @@ public class MapTab extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    googleMap.clear();
-                    ArrayList<Store> stores = storeManager.getNearbyStores(gps.getLatitude(), gps.getLongitude(), distance * 1000);
-                    if (stores.isEmpty())
-                        Toast.makeText(getContext(), "There are no discounts nearby", Toast.LENGTH_LONG).show();
-                    else {
-                        createNotification(rootView);
-                    }
+                    createNotification();
                 }
 
             }
@@ -264,43 +261,43 @@ public class MapTab extends Fragment {
         return rootView;
     }
 
-    public void createNotification(View v) {
-        // Prepare intent which is triggered if the
-        // notification is selected
-        /*Intent myIntent = new Intent(MapTab.this.getActivity(), NotificationReceiverActivity.class);
-        PendingIntent pIntent = PendingIntent.getActivity(getContext(), (int) System.currentTimeMillis(), myIntent, 0);*/
-        // Build notification
+    public void createNotification() {
         ArrayList<Store> stores = storeManager.getNearbyStores(gps.getLatitude(), gps.getLongitude(), distance * 1000);
         ArrayList<Store> topStores = new ArrayList<>();
+
         for (Store store : stores) {
             ArrayList<Item> items = discountsManager.getTopDiscountsByStore(store.getName());
-            if (items.isEmpty())
+            if (!items.isEmpty())
                 topStores.add(store);
         }
+
+        googleMap.clear();
+
         for (Store store : topStores) {
-
             Item item = discountsManager.getTopItemByStore(store.getName());
-                Notification notification = new Notification.Builder(getContext())
-                        .setSmallIcon(R.mipmap.icon_circle)
-                        .setContentTitle(store.getName())
-                        .setContentText(item.getName())
-                        .setSmallIcon(R.mipmap.icon_circle)
-/*
-                .setContentIntent(pIntent)
-*/
-                        .build();
-                NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
-                // hide the notification after its selected
-                notification.flags |= Notification.FLAG_AUTO_CANCEL;
+            String contentText = item.getName() + " " + item.getDiscount();
 
-                notification.defaults |= Notification.DEFAULT_SOUND;
-                notification.defaults |= Notification.DEFAULT_VIBRATE;
-                notificationManager.notify(0, notification);
+            MarkerOptions marker = new MarkerOptions()
+                    .position(new LatLng(store.getLat(), store.getLng()))
+                    .title(store.getName())
+                    .snippet(contentText)
+                    .flat(true)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_woman_shoe));
+            googleMap.addMarker(marker);
 
-            }
+            Notification notification = new Notification.Builder(getContext())
+                    .setSmallIcon(R.drawable.ic_woman_shoe)
+                    .setContentTitle(store.getName())
+                    .setContentText(contentText)
+                    .build();
+            NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
+            // hide the notification after its selected
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
+            notification.defaults |= Notification.DEFAULT_SOUND;
+            notification.defaults |= Notification.DEFAULT_VIBRATE;
+            notificationManager.notify(0, notification);
         }
-
-
+    }
 
 
     @Override

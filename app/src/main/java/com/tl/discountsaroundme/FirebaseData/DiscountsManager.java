@@ -115,9 +115,11 @@ public class DiscountsManager {
     }
 
     public ArrayList<Item> getTopDiscountsByStore(String store) {
+        store = store.toUpperCase().trim();
         ArrayList<Item> storeItems = new ArrayList<>();
         for (Item item : unchangedList) {
-            if (store.equals(item.getStore()) && item.getDiscount() >= DiscountsTab.discountValue)
+            String storeName = item.getStore().toUpperCase().trim();
+            if (store.equals(storeName) && item.getDiscount() >= DiscountsTab.discountValue)
                 storeItems.add(item);
         }
         return storeItems;

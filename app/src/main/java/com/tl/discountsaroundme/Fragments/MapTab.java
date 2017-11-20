@@ -1,6 +1,5 @@
 package com.tl.discountsaroundme.Fragments;
 
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -20,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
@@ -40,11 +38,9 @@ import com.tl.discountsaroundme.FirebaseData.DiscountsManager;
 import com.tl.discountsaroundme.FirebaseData.StoreManager;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.Services.GPSTracker;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class MapTab extends Fragment {
@@ -59,6 +55,7 @@ public class MapTab extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.tab_map, container, false);
 
+        discountsManager.getDiscounts();
         mMapView = rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
@@ -86,11 +83,9 @@ public class MapTab extends Fragment {
 
         Button shopsButton = rootView.findViewById(R.id.shopsButton);
         Button nearbyButton = rootView.findViewById(R.id.nearbyButton);
-
         AtomicReference<LocationManager> locationManager;
         locationManager = new AtomicReference<>((LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE));
         gps = new GPSTracker(locationManager.get());
-
         shopsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,7 +122,6 @@ public class MapTab extends Fragment {
                 }
             }
         });
-
 
 
         SeekBar radiusSeekBar = rootView.findViewById(R.id.radius_seekBar);
@@ -275,31 +269,39 @@ public class MapTab extends Fragment {
         // notification is selected
         /*Intent myIntent = new Intent(MapTab.this.getActivity(), NotificationReceiverActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(getContext(), (int) System.currentTimeMillis(), myIntent, 0);*/
-
         // Build notification
-        // Actions are just fake
-        ArrayList<Item> items = discountsManager.getNearbyDiscounts();
-        for (Item item : items) {
-        Notification notification = new Notification.Builder(getContext())
-                .setSmallIcon(R.mipmap.icon_circle)
-                .setContentTitle(store.getName())
-/*
-                .setColor(ContextCompat.getColor(context, colorRes))
-*/
-                .setContentText(item.getName())
-                .setSmallIcon(R.mipmap.icon_circle)
+        ArrayList<Store> stores = storeManager.getNearbyStores(gps.getLatitude(), gps.getLongitude(), distance * 1000);
+        ArrayList<Store> topStores = new ArrayList<>();
+        for (Store store : stores) {
+            ArrayList<Item> items = discountsManager.getTopDiscountsByStore(store.getName());
+            if (items.isEmpty())
+                topStores.add(store);
+        }
+        for (Store store : topStores) {
+
+            Item item = discountsManager.getTopItemByStore(store.getName());
+                Notification notification = new Notification.Builder(getContext())
+                        .setSmallIcon(R.mipmap.icon_circle)
+                        .setContentTitle(store.getName())
+                        .setContentText(item.getName())
+                        .setSmallIcon(R.mipmap.icon_circle)
 /*
                 .setContentIntent(pIntent)
 */
-                .build();
-        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
-        // hide the notification after its selected
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+                        .build();
+                NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
+                // hide the notification after its selected
+                notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
-        notification.defaults |= Notification.DEFAULT_SOUND;
-        notification.defaults |= Notification.DEFAULT_VIBRATE;
-        notificationManager.notify(0, notification);
-    }}
+                notification.defaults |= Notification.DEFAULT_SOUND;
+                notification.defaults |= Notification.DEFAULT_VIBRATE;
+                notificationManager.notify(0, notification);
+
+            }
+        }
+
+
+
 
     @Override
     public void onResume() {

@@ -7,7 +7,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.Entities.Item;
-import com.tl.discountsaroundme.Entities.Store;
 import com.tl.discountsaroundme.Fragments.DiscountsTab;
 import com.tl.discountsaroundme.UiControllers.ItemViewAdapter;
 
@@ -18,7 +17,6 @@ public class DiscountsManager {
     private ArrayList<Item> discountItems = new ArrayList<>();
     private ArrayList<Item> unchangedList = new ArrayList<>();
     private ItemViewAdapter adapter;
-    private StoreManager storeManager = new StoreManager();
 
     public void setAdapter(ItemViewAdapter adapter) {
         this.adapter = adapter;
@@ -35,6 +33,27 @@ public class DiscountsManager {
                         discountItems.add(item);
                 }
                 adapter.notifyDataSetChanged();
+                unchangedList.clear();
+                unchangedList.addAll(discountItems);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    public void getDiscounts(){
+        mDBDiscountItems.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                discountItems.clear();
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Item item = child.getValue(Item.class);
+                    if (item.getDiscount() >= DiscountsTab.discountValue)
+                        discountItems.add(item);
+                }
+
                 unchangedList.clear();
                 unchangedList.addAll(discountItems);
             }
@@ -95,14 +114,24 @@ public class DiscountsManager {
         adapter.notifyDataSetChanged();
     }
 
-    public void getDiscountsByStore (String store){
-        discountItems.clear();
-
+    public ArrayList<Item> getTopDiscountsByStore(String store) {
+        ArrayList<Item> storeItems = new ArrayList<>();
         for (Item item : unchangedList) {
-            String type = item.getStore().toUpperCase();
-            if (type.contains())
-                discountItems.add(item);
+            if (store.equals(item.getStore()) && item.getDiscount() >= DiscountsTab.discountValue)
+                storeItems.add(item);
         }
-        adapter.notifyDataSetChanged();
+        return storeItems;
+    }
+
+    public Item getTopItemByStore(String store) {
+        double max = 0;
+        Item topItem = null;
+        for (Item item : unchangedList) {
+            if (store.equals(item.getStore()) && item.getDiscount() >= max) {
+                max = item.getDiscount();
+                topItem = item;
+            }
+        }
+        return topItem;
     }
 }

@@ -14,22 +14,21 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imProfilePic"
         android:layout_width="80dp"
         android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/textViewUserType"
-        android:paddingTop="10dp"
+        android:layout_gravity="center"
+        android:layout_toEndOf="@+id/tvDisplayName"
         app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
         tools:layout_editor_absoluteX="50dp"
         tools:layout_editor_absoluteY="0dp" />
 
     <TextView
-        android:id="@+id/textViewUserType"
-        android:layout_width="match_parent"
+        android:id="@+id/tvDisplayName"
+        android:layout_width="184dp"
         android:layout_height="25dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textViewEmail"
+        android:layout_below="@+id/tvEmail"
         android:paddingTop="5dp"
         android:text="Android Studio"
         android:textAlignment="viewStart"
@@ -39,12 +38,21 @@
         tools:layout_editor_absoluteY="50dp" />
 
     <TextView
-        android:id="@+id/textViewEmail"
+        android:id="@+id/tvEmail"
         android:layout_width="wrap_content"
         android:layout_height="23dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:text="android.studio@android.com"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="84dp" />
+    <TextView
+        android:id="@+id/tvUserType"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:text="Usertype"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="84dp" />
 

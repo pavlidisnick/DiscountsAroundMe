@@ -12,6 +12,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.tl.discountsaroundme.Entities.User;
+import com.tl.discountsaroundme.FirebaseData.UserInfoManager;
 import com.tl.discountsaroundme.Fragments.DiscountsTab;
 import com.tl.discountsaroundme.Fragments.MapTab;
 import com.tl.discountsaroundme.Fragments.UserTab;
@@ -24,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private String userT;
 
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private DatabaseReference mDbRef = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         mViewPager.setOffscreenPageLimit(2);
+
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -66,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void getUserProfile() {
+
     }
 
     /**

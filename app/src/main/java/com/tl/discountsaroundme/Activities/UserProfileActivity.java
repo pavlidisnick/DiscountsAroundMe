@@ -24,6 +24,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     UserInfoManager userInfoManager;
     String[] userInput = new String[2];
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

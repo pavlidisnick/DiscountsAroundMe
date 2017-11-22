@@ -21,14 +21,17 @@ import com.tl.discountsaroundme.Entities.User;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class UserInfoManager {
-    private User currentUser;
     private DatabaseReference dbRef;
     private FirebaseUser user;
+    public static User currentUser;
 
     public UserInfoManager(FirebaseUser user, DatabaseReference dbRef) {
         this.user = user;
         this.dbRef = dbRef;
     }
+
+
+
 
     public void loadImage(final ImageView imageView) {
         dbRef.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
@@ -116,7 +119,6 @@ public class UserInfoManager {
         user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-
             }
         });
     }

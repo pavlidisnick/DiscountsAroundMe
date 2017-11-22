@@ -25,6 +25,7 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.Activities.AddDiscounts;
 import com.tl.discountsaroundme.Activities.Login;
 import com.tl.discountsaroundme.Activities.MainActivity;
@@ -34,6 +35,7 @@ import com.tl.discountsaroundme.Discounts.SearchSuggest;
 import com.tl.discountsaroundme.Discounts.SuggestListMaker;
 import com.tl.discountsaroundme.FirebaseData.DiscountsManager;
 import com.tl.discountsaroundme.FirebaseData.SearchHistory;
+import com.tl.discountsaroundme.FirebaseData.UserInfoManager;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.UiControllers.ItemSpaceDecoration;
 import com.tl.discountsaroundme.UiControllers.ItemViewAdapter;
@@ -49,6 +51,7 @@ public class DiscountsTab extends Fragment {
     FloatingSearchView mSearchView;
     DrawerLayout mDrawerLayout;
     DiscountsManager discountsManager;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -144,6 +147,11 @@ public class DiscountsTab extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     public void setDrawer() {
         mDrawerLayout = getActivity().findViewById(R.id.drawer_layout);
 
@@ -159,6 +167,16 @@ public class DiscountsTab extends Fragment {
         }
 
         nav.bringToFront();
+        View header = nav.getHeaderView(0);
+        TextView tvUsername  = header.findViewById(R.id.tvDisplayName);
+        TextView tvEmail = header.findViewById(R.id.tvEmail);
+        TextView tvUserType = header.findViewById(R.id.tvUserType);
+        tvUsername.setText(UserInfoManager.currentUser.getName());
+        tvEmail.setText(UserInfoManager.currentUser.getEmail());
+        tvUserType.setText(UserInfoManager.currentUser.getUserType());
+        ImageView image = header.findViewById(R.id.imProfilePic);
+        UserInfoManager userInfoManager = new UserInfoManager(mAuth.getCurrentUser(), FirebaseDatabase.getInstance().getReference());
+        userInfoManager.loadImage(image);
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -207,5 +225,8 @@ public class DiscountsTab extends Fragment {
             discountsManager.getDiscountsByName(matches.get(0));
             mSearchView.setSearchText(matches.get(0));
         }
+    }
+    public void setDrawerHeader () {
+
     }
 }

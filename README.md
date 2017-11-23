@@ -1,4 +1,4 @@
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/pavlidisnick/DiscountsAroundMe.svg?columns=all)](https://waffle.io/pavlidisnick/DiscountsAroundMe)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/pavlidisnick/DiscountsAroundMe.svg?columns=Done)](https://waffle.io/pavlidisnick/DiscountsAroundMe)
 [![Build Status](https://travis-ci.org/pavlidisnick/DiscountsAroundMe.svg?branch=master)](https://travis-ci.org/pavlidisnick/DiscountsAroundMe)
 [![codecov](https://codecov.io/gh/pavlidisnick/DiscountsAroundMe/branch/master/graph/badge.svg)](https://codecov.io/gh/pavlidisnick/DiscountsAroundMe/branch/master)
 [![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=59fa449914e70700019b5de2&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/59fa449914e70700019b5de2/build/latest?branch=master)
@@ -32,41 +32,10 @@ The only thing you need is Android Studio - Get Android Studio from the official
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
+1. Clone the repo.
+2. Import project to Android Studio
 
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
+That's it
 
 ## Versioning
 We use Semantic Versioning:
@@ -98,5 +67,4 @@ Note: Must enable the option for unknown sources.
 * **Nikos Karanikolas**
 * **Nikos Pavlidis**
 * **Kostas Sigas**
-* **Dimitris Tsaousidis**
 * **Anastasios Cholopoulos**

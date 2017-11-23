@@ -27,9 +27,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.entities.User;
-import com.tl.discountsaroundme.R;
 
 public class RegisterActivity extends Activity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -46,7 +46,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
 
     private String email;
     private String password;
-    private String ShopName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,20 +138,20 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
      * Checks if all fields are filled and the user is ready to be created
      */
     private boolean isFormFilled() {
-        //Issue 8 changes need when the buisiness account cb is checked
-        CheckBox cbBuisnessAccount = findViewById(R.id.cbBusinessAccount);
+        //Issue 8 changes need when the business account cb is checked
+        CheckBox cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
         EditText etShopName = findViewById(R.id.etShopName);
         Spinner sShopType = findViewById(R.id.sShopType);
 
         TextView email = findViewById(R.id.email);
         TextView password = findViewById(R.id.password);
 
-        if (cbBuisnessAccount.isChecked()) {
-            this.ShopName = etShopName.getText().toString();
+        if (cbBusinessAccount.isChecked()) {
+            String shopName = etShopName.getText().toString();
             this.email = email.getText().toString();
             this.password = password.getText().toString();
             Boolean itemSelected = sShopType.getSelectedItemPosition() != 0;
-            return !this.email.isEmpty() && !this.password.isEmpty() && !this.ShopName.isEmpty() && itemSelected;
+            return !this.email.isEmpty() && !this.password.isEmpty() && !shopName.isEmpty() && itemSelected;
         } else {
             this.email = email.getText().toString();
             this.password = password.getText().toString();
@@ -176,7 +175,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
      * Issue 8
      * If user Checks the box more options become visible
      */
-
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
@@ -199,7 +197,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
 
     public void OnBusinessAccountCreation(Task<AuthResult> task) {
         FirebaseUser user = task.getResult().getUser();
-        String BAuserUID = user.getUid();
+        String BAUserUID = user.getUid();
         Store Shop = new Store();
         Shop.setDescription("Details");
         Shop.setName(etShopName.getText().toString());
@@ -207,10 +205,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         Shop.setLat(0);
         Shop.setLng(0);
         Shop.setType(sShopType.getSelectedItem().toString());
-        Shop.setOwnerUID(BAuserUID);
-        /**
-         * Now Shops are stored under their owner's UID
-         * */
+        Shop.setOwnerUID(BAUserUID);
+        // Now Shops are stored under their owner's UID
         mDbRef.child("shops").child(user.getUid()).setValue(Shop);
     }
 

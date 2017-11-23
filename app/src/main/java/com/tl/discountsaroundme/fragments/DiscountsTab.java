@@ -25,6 +25,7 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.google.firebase.auth.FirebaseAuth;
+import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
@@ -34,7 +35,6 @@ import com.tl.discountsaroundme.discounts.SearchSuggest;
 import com.tl.discountsaroundme.discounts.SuggestListMaker;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.SearchHistory;
-import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.ui_controllers.ItemSpaceDecoration;
 import com.tl.discountsaroundme.ui_controllers.ItemViewAdapter;
 

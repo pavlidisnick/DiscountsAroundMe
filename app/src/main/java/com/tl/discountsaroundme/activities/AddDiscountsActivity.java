@@ -25,8 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.entities.Item;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -152,7 +152,7 @@ public class AddDiscountsActivity extends AppCompatActivity {
         try {
             price = Double.parseDouble(pr.getText().toString());
             discount = Double.parseDouble(disc.getText().toString());
-            if (image == false && correctData == true) {
+            if (!image && correctData) {
                 Toast.makeText(getApplicationContext(), "Select Image", Toast.LENGTH_LONG).show();
                 System.out.println("Select Image");
                 correctData = false;

@@ -1,7 +1,15 @@
 package com.tl.discountsaroundme.tools;
 
 
-        import static java.lang.Math.*;
+import static java.lang.Math.PI;
+import static java.lang.Math.asin;
+import static java.lang.Math.atan;
+import static java.lang.Math.cos;
+import static java.lang.Math.exp;
+import static java.lang.Math.log;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+import static java.lang.Math.tan;
 
 /**
  * Utility functions that are used my both PolyUtil and SphericalUtil.
@@ -22,6 +30,7 @@ class MathUtil {
 
     /**
      * Wraps the given value into the inclusive-exclusive interval between min and max.
+     *
      * @param n   The value to wrap.
      * @param min The minimum.
      * @param max The maximum.
@@ -32,6 +41,7 @@ class MathUtil {
 
     /**
      * Returns the non-negative remainder of x / m.
+     *
      * @param x The operand.
      * @param m The modulus.
      */
@@ -44,7 +54,7 @@ class MathUtil {
      * See http://en.wikipedia.org/wiki/Mercator_projection .
      */
     static double mercator(double lat) {
-        return log(tan(lat * 0.5 + PI/4));
+        return log(tan(lat * 0.5 + PI / 4));
     }
 
     /**

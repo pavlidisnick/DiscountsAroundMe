@@ -12,18 +12,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.fragments.DiscountsTab;
 import com.tl.discountsaroundme.fragments.MapTab;
 import com.tl.discountsaroundme.fragments.UserTab;
-import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.ui_controllers.ZoomOutPageTransformer;
 
 public class MainActivity extends AppCompatActivity {
     public static String USER_TYPE;
     public static String USER_ID;
     private ViewPager mViewPager;
-    private String userT;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         private Fragment map = new MapTab();
         private Fragment userTab = new UserTab();
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        private SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

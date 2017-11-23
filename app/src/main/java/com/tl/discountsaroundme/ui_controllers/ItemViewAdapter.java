@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.tl.discountsaroundme.entities.Item;
-import com.tl.discountsaroundme.activities.ItemDetailsActivity;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.activities.ItemDetailsActivity;
+import com.tl.discountsaroundme.entities.Item;
 
 import java.util.ArrayList;
 
@@ -28,7 +28,6 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
     public final static String DATA_DISCOUNT = "DISCOUNT";
     private Context context;
     private ArrayList<Item> items;
-
 
 
     public ItemViewAdapter(Context context, ArrayList<Item> items) {
@@ -76,7 +75,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
 
         public ItemView(final View itemView) {
             super(itemView);
-          
+
             imageView = itemView.findViewById(R.id.img);
             tvItemName = itemView.findViewById(R.id.tvItemName);
             tvItemDetails = itemView.findViewById(R.id.tvItemDetail);

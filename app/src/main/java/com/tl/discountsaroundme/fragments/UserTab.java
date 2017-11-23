@@ -9,12 +9,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Switch;
-import android.widget.CompoundButton;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
-import com.tl.discountsaroundme.activities.UserProfileActivity;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.activities.UserProfileActivity;
 
 public class UserTab extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
     public static Boolean LogoutOnStop;

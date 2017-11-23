@@ -43,7 +43,7 @@ public class DiscountsManager {
         });
     }
 
-    public void getDiscounts(){
+    public void getDiscounts() {
         mDBDiscountItems.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

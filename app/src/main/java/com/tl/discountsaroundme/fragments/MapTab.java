@@ -31,13 +31,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.discounts.SearchSuggest;
 import com.tl.discountsaroundme.discounts.SuggestListMaker;
 import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;
-import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.services.GPSTracker;
 
 import java.util.ArrayList;
@@ -322,7 +322,7 @@ public class MapTab extends Fragment {
         super.onLowMemory();
         mMapView.onLowMemory();
     }
-  
+
     @Override
     public void onStop() {
         super.onStop();

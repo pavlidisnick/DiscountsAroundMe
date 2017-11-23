@@ -6,7 +6,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.tl.discountsaroundme.discounts.AddCategoryToLayout;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 
 public class CategoryListener {
@@ -24,7 +23,8 @@ public class CategoryListener {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
     }
 }

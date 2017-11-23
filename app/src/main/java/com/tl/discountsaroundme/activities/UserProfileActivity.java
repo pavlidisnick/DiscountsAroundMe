@@ -14,8 +14,8 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
-import com.tl.discountsaroundme.firebase_data.UserInfoManager;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.firebase_data.UserInfoManager;
 
 public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener {
     Button btMailChange, btPassChange, btImageChange, btDisplayName, btDeleteAcc;

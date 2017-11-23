@@ -12,13 +12,12 @@ public class Store {
     private String description;
 
 
-
     private String ownerUID;
 
     public Store() {
     }
 
-    public Store(String name, String type, double lat, double lng, String image, String description , String OwnerUID) {
+    public Store(String name, String type, double lat, double lng, String image, String description, String OwnerUID) {
         this.description = description;
         this.image = image;
         this.name = name;
@@ -32,39 +31,57 @@ public class Store {
         return type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getName() {
         return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getLat() {
         return lat;
     }
 
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
     public double getLng() {
         return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
     }
 
     public String getImage() {
         return image;
     }
 
-    public String Description() {return description;}
+    public void setImage(String image) {
+        this.image = image;
+    }
 
-    public String getOwnerUID(){return ownerUID;}
+    public String Description() {
+        return description;
+    }
 
-    public void setOwnerUID(String ownerUID) {this.ownerUID = ownerUID;}
+    public String getOwnerUID() {
+        return ownerUID;
+    }
 
-    public void setName(String name) {this.name = name;}
+    public void setOwnerUID(String ownerUID) {
+        this.ownerUID = ownerUID;
+    }
 
-    public void setType(String type) {this.type = type;}
-
-    public void setLat(double lat) {this.lat = lat;}
-
-    public void setLng(double lng) {this.lng = lng;}
-
-    public void setImage(String image) {this.image = image;}
-
-    public void setDescription(String description) {this.description = description;}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
 
 }

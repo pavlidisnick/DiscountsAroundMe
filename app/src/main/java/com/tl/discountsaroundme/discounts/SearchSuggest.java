@@ -1,10 +1,11 @@
 package com.tl.discountsaroundme.discounts;
 
 import android.os.Parcel;
+
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 
 
-public class SearchSuggest implements SearchSuggestion{
+public class SearchSuggest implements SearchSuggestion {
     private static Creator CREATOR;
     private String searchBody;
 

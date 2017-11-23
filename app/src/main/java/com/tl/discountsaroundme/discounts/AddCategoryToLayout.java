@@ -59,6 +59,7 @@ public class AddCategoryToLayout {
 
     /**
      * Converts dp to pixels
+     *
      * @return pixels
      */
     private int getPixelsFromDp(int dp) {

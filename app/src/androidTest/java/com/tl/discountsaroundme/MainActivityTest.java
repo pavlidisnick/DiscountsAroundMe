@@ -7,7 +7,7 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.tl.discountsaroundme.Activities.MainActivity;
+import com.tl.discountsaroundme.activities.MainActivity;
 
 import org.junit.Rule;
 import org.junit.Test;

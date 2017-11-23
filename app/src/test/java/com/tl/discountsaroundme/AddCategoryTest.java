@@ -8,7 +8,8 @@ import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.tl.discountsaroundme.FirebaseData.DiscountsManager;
+import com.tl.discountsaroundme.discounts.AddCategoryToLayout;
+import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 
 import org.junit.Before;
 import org.junit.Rule;

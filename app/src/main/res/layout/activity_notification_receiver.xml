@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.tl.discountsaroundme.Services.Notifications.NotificationReceiverActivity">
+    tools:context="com.tl.discountsaroundme.services.Notifications.NotificationReceiverActivity">
 
 </android.support.constraint.ConstraintLayout>

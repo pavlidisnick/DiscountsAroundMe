@@ -1,6 +1,6 @@
 package com.tl.discountsaroundme;
 
-import com.tl.discountsaroundme.FirebaseData.StoreManager;
+import com.tl.discountsaroundme.firebase_data.StoreManager;
 
 import org.junit.Test;
 

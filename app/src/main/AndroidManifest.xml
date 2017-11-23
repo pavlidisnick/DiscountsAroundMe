@@ -53,21 +53,21 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".Services.MyFirebaseMessagingService">
+        <service android:name=".services.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <activity android:name=".Services.Notifications.NotificationReceiverActivity"></activity>
+        <activity android:name=".services.Notifications.NotificationReceiverActivity"></activity>
   
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
       
-        <activity android:name=".Activities.Register" />
+        <activity android:name=".activities.RegisterActivity" />
       
-        <activity android:name=".Activities.Login">
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -76,16 +76,16 @@
         </activity>
       
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:theme="@style/AppTheme"
             tools:ignore="InnerclassSeparator">
         </activity>
       
-        <activity android:name=".Activities.AddDiscounts"></activity>
+        <activity android:name=".activities.AddDiscountsActivity"></activity>
       
-        <activity android:name=".ItemDetailsActivity"></activity>
+        <activity android:name=".activities.ItemDetailsActivity"></activity>
       
-        <activity android:name=".Activities.UserProfileActivity"></activity>
+        <activity android:name=".activities.UserProfileActivity"></activity>
   
     </application>
 

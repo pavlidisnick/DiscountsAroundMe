@@ -33,14 +33,8 @@ public class GPSTracker extends Service implements LocationListener {
     private void getLocation() {
         try {
 
-
-
-
-
             // getting GPS status
             enabledLocation = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-
             // getting network status
             boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
              this.enabledLocation = true;
@@ -49,27 +43,16 @@ public class GPSTracker extends Service implements LocationListener {
                     Log.d("Network", "Network");
                     if (locationManager != null) {
                         location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        if (location == null) {
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                        Log.d("GPS Enabled", "GPS Enabled");
                         if (location != null) {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
                         }
-                    }
-                    // if GPS Enabled get lat/long using GPS Services
-                    if (enabledLocation) {
-                        if (location == null) {
-                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                            Log.d("GPS Enabled", "GPS Enabled");
-                            if (locationManager != null) {
-                                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                                if (location != null) {
-                                    latitude = location.getLatitude();
-                                    longitude = location.getLongitude();
-                                }
-                            }
                         }
                     }
                 }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.tl.discountsaroundme.controllers.CheckController;
 
 public class GPSTracker extends Service implements LocationListener {
 
@@ -33,16 +32,18 @@ public class GPSTracker extends Service implements LocationListener {
     @SuppressLint("MissingPermission")
     private void getLocation() {
         try {
-            CheckController GpsEnable = new CheckController();
+
+
+
+
 
             // getting GPS status
             enabledLocation = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
+
             // getting network status
             boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-            if (GpsEnable.areGPSandNetworkEnabled(locationManager)) {
-                this.enabledLocation = true;
+             this.enabledLocation = true;
                 if (isNetworkEnabled) {
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                     Log.d("Network", "Network");
@@ -68,7 +69,7 @@ public class GPSTracker extends Service implements LocationListener {
                         }
                     }
                 }
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

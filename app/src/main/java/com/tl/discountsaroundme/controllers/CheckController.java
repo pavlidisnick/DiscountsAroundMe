@@ -4,13 +4,13 @@ import android.location.LocationManager;
 
 public class CheckController implements CheckInterface {
     public boolean areGPSandNetworkEnabled(LocationManager lm) {
-        boolean gps_enabled = false;
-        boolean network_enabled = false;
+        boolean gpsEnabled = false;
+        boolean networkEnabled = false;
         try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         } catch (Exception ignored) {
         }
-        return (gps_enabled && network_enabled);
+        return (gpsEnabled && networkEnabled);
     }
 }

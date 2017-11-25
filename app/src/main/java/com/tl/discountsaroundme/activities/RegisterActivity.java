@@ -87,15 +87,12 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    //Issue 8  in case the user is a shop owner
                     if (cbBusinessAccount.isChecked()) {
                         onBusinessAccountCreation(task);
                     }
                     storeAccountIntoDB(task);
-                    // Sign in success, update UI with the signed-in user's information and store the user in the database
                     toastMessage("Register successful. Welcome" + task.getResult().getUser().getEmail());
                 } else {
-                    // If sign in fails, display a message to the user.
                     toastMessage("Register Failed!");
                 }
             }
@@ -124,7 +121,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
      * Checks if all fields are filled and the user is ready to be created
      */
     private boolean isFormFilled() {
-        //Issue 8 changes need when the business account cb is checked
         CheckBox cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
         EditText etShopName = findViewById(R.id.etShopName);
         Spinner sShopType = findViewById(R.id.sShopType);
@@ -189,7 +185,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         Shop.setLng(0);
         Shop.setType(sShopType.getSelectedItem().toString());
         Shop.setOwnerUID(BAUserUID);
-        // Now Shops are stored under their owner's UID
         mDbRef.child("shops").child(user.getUid()).setValue(Shop);
     }
 

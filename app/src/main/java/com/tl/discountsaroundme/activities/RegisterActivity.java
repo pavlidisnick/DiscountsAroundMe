@@ -32,18 +32,14 @@ import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.entities.User;
 
 public class RegisterActivity extends Activity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private Button register;
     private Button login;
-    //Issue 8 params
-    private DatabaseReference mDbRef = FirebaseDatabase.getInstance().getReference();
+    private final DatabaseReference mDbRef = FirebaseDatabase.getInstance().getReference();
     private CheckBox cbBusinessAccount;
     private EditText etShopName;
     private TextView tvShopLocation;
     private Spinner sShopType;
-
     private String email;
     private String password;
 
@@ -58,10 +54,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
         tvShopLocation = findViewById(R.id.tvShopLocation);
         sShopType = findViewById(R.id.sShopType);
-        ArrayAdapter<CharSequence> spineradapter = ArrayAdapter.createFromResource(this, R.array.shopTypeSpinner, R.layout.spinner_dropdown_list);
-        spineradapter.setDropDownViewResource(R.layout.spinner_dropdown_list);
-        sShopType.setAdapter(spineradapter);
-
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.shopTypeSpinner, R.layout.spinner_dropdown_list);
+        spinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_list);
+        sShopType.setAdapter(spinnerAdapter);
         cbBusinessAccount.setOnCheckedChangeListener(this);
         register.setOnClickListener(this);
         login.setOnClickListener(this);
@@ -70,7 +65,44 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
     @Override
     protected void onStart() {
         super.onStart();
+        checkOnlineStatus();
+    }
 
+    @Override
+    public void onClick(View view) {
+        if (view.equals(register)) {
+            if (isFormFilled())
+                signUp(email, password);
+            else {
+                toastMessage("Please fill the form");
+            }
+        } else if (view.equals(login)) {
+            Intent LoginActivity = new Intent(this, com.tl.discountsaroundme.activities.LoginActivity.class);
+            startActivity(LoginActivity);
+        }
+    }
+
+    private void signUp(String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    //Issue 8  in case the user is a shop owner
+                    if (cbBusinessAccount.isChecked()) {
+                        onBusinessAccountCreation(task);
+                    }
+                    storeAccountIntoDB(task);
+                    // Sign in success, update UI with the signed-in user's information and store the user in the database
+                    toastMessage("Register successful. Welcome" + task.getResult().getUser().getEmail());
+                } else {
+                    // If sign in fails, display a message to the user.
+                    toastMessage("Register Failed!");
+                }
+            }
+        });
+    }
+
+    private void checkOnlineStatus() {
         if (!isOnline()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("No internet connection")
@@ -88,52 +120,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        if (view.equals(register)) {
-            if (isFormFilled())
-                signUp(email, password);
-            else {
-                Context context = getApplicationContext();
-                CharSequence text = "Please fill the form";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-            }
-        } else if (view.equals(login)) {
-            Intent LoginActivity = new Intent(this, com.tl.discountsaroundme.activities.LoginActivity.class);
-            startActivity(LoginActivity);
-        }
-    }
-
-    private void signUp(String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                Context context = getApplicationContext();
-                CharSequence text;
-                int duration = Toast.LENGTH_SHORT;
-
-                if (task.isSuccessful()) {
-                    //Issue 8  in case the user is a shop owner
-                    if (cbBusinessAccount.isChecked()) {
-                        OnBusinessAccountCreation(task);
-                    }
-                    StoreAccountIntoDB(task);
-                    // Sign in success, update UI with the signed-in user's information and store the user in the database
-                    text = "RegisterActivity successful! Welcome " + task.getResult().getUser().getEmail();
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                } else {
-                    // If sign in fails, display a message to the user.
-                    text = "RegisterActivity Failed";
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                }
-            }
-        });
-    }
-
     /**
      * Checks if all fields are filled and the user is ready to be created
      */
@@ -142,10 +128,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         CheckBox cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
         EditText etShopName = findViewById(R.id.etShopName);
         Spinner sShopType = findViewById(R.id.sShopType);
-
         TextView email = findViewById(R.id.email);
         TextView password = findViewById(R.id.password);
-
         if (cbBusinessAccount.isChecked()) {
             String shopName = etShopName.getText().toString();
             this.email = email.getText().toString();
@@ -155,7 +139,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         } else {
             this.email = email.getText().toString();
             this.password = password.getText().toString();
-
             return !this.email.isEmpty() && !this.password.isEmpty();
         }
     }
@@ -195,7 +178,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
      * TODO Give the  owner the option to set the shop's location
      */
 
-    public void OnBusinessAccountCreation(Task<AuthResult> task) {
+    private void onBusinessAccountCreation(Task<AuthResult> task) {
         FirebaseUser user = task.getResult().getUser();
         String BAUserUID = user.getUid();
         Store Shop = new Store();
@@ -210,7 +193,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         mDbRef.child("shops").child(user.getUid()).setValue(Shop);
     }
 
-    public void StoreAccountIntoDB(Task<AuthResult> task) {
+    private void storeAccountIntoDB(Task<AuthResult> task) {
         FirebaseUser user = task.getResult().getUser();
         String userType = "Customer";
         if (cbBusinessAccount.isChecked()) {
@@ -218,5 +201,12 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         }
         User newUser = new User(user.getEmail(), user.getEmail(), userType, "imgURL");
         mDbRef.child("users").child(user.getUid()).setValue(newUser);
+    }
+
+    private void toastMessage(String Message) {
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, Message, duration);
+        toast.show();
     }
 }

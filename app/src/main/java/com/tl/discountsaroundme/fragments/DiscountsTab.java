@@ -80,8 +80,8 @@ public class DiscountsTab extends Fragment {
 
         // FloatingSearchView actions
         SearchHistory searchHistory = new SearchHistory(MainActivity.USER_ID);
-        search = new Search(mSearchView, searchHistory, discountsManager);
         mSearchView = rootView.findViewById(R.id.floating_search_view);
+        search = new Search(mSearchView, searchHistory, discountsManager);
         mSearchView.setOnQueryChangeListener(search);
         mSearchView.setOnBindSuggestionCallback(search);
         mSearchView.setOnFocusChangeListener(search);

@@ -21,6 +21,12 @@ public class SuggestionMaker {
         return suggestStrings;
     }
 
+    /**
+     * Convert a list of strings to a list of suggestions
+     *
+     * @param suggestionStrings list of strings
+     * @return Suggestion list
+     */
     public List<SearchSuggest> stringsToSuggestions(List<String> suggestionStrings) {
         List<SearchSuggest> searchSuggestList = new ArrayList<>();
 

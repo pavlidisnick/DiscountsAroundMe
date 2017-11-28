@@ -10,6 +10,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.entities.Store;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class StoreManager {
     private static ArrayList<Store> storeArrayList = new ArrayList<>();
@@ -41,8 +42,8 @@ public class StoreManager {
      *
      * @return storeStrings
      */
-    public ArrayList<String> getStoreStrings() {
-        ArrayList<String> storeStrings = new ArrayList<>();
+    public List<String> getStoreStrings() {
+        List<String> storeStrings = new ArrayList<>();
         for (Store store : storeArrayList)
             storeStrings.add(store.getName());
         return storeStrings;

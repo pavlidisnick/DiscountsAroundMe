@@ -16,14 +16,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
-import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
-import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.google.firebase.auth.FirebaseAuth;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
@@ -31,15 +27,13 @@ import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.discounts.AddCategoryToLayout;
 import com.tl.discountsaroundme.discounts.CategoryListener;
-import com.tl.discountsaroundme.discounts.SearchSuggest;
-import com.tl.discountsaroundme.discounts.SuggestListMaker;
+import com.tl.discountsaroundme.discounts.Search;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.SearchHistory;
 import com.tl.discountsaroundme.ui_controllers.ItemSpaceDecoration;
 import com.tl.discountsaroundme.ui_controllers.ItemViewAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -49,6 +43,8 @@ public class DiscountsTab extends Fragment {
     FloatingSearchView mSearchView;
     DrawerLayout mDrawerLayout;
     DiscountsManager discountsManager;
+
+    private Search search;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,64 +78,21 @@ public class DiscountsTab extends Fragment {
 
         discountsManager.getTopDiscounts();
 
+        // FloatingSearchView actions
+        SearchHistory searchHistory = new SearchHistory(MainActivity.USER_ID);
         mSearchView = rootView.findViewById(R.id.floating_search_view);
-        mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
-            @Override
-            public void onSearchTextChanged(String oldQuery, final String newQuery) {
-                SuggestListMaker suggestListMaker = new SuggestListMaker();
-                List<SearchSuggest> searchSuggestList;
-                searchSuggestList = suggestListMaker.convertStringsToSuggestions(discountsManager.getSuggestionsDiscounts(), newQuery);
-
-                //pass them on to the search view
-                mSearchView.swapSuggestions(searchSuggestList);
-            }
-        });
-
-        final SearchHistory searchHistory = new SearchHistory(MainActivity.USER_ID);
-
-        mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
-            @Override
-            public void onBindSuggestion(View suggestionView, ImageView leftIcon, final TextView textView, final SearchSuggestion item, int itemPosition) {
-                final String suggestion = item.getBody();
-                if (searchHistory.getHistoryList().contains(suggestion))
-                    leftIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_history));
-
-                suggestionView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        searchHistory.newSearchAdd(suggestion);
-                        discountsManager.getDiscountsByName(suggestion);
-                        mSearchView.setSearchBarTitle(suggestion);
-                        mSearchView.clearFocus();
-                    }
-                });
-            }
-
-        });
-
-        setDrawer();
-
-        mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
-            @Override
-            public void onFocus() {
-                SuggestListMaker suggestListMaker = new SuggestListMaker();
-                List<SearchSuggest> searchSuggestHistory;
-                searchSuggestHistory = suggestListMaker.convertStringsToSuggestions(searchHistory.getHistoryList());
-
-                mSearchView.swapSuggestions(searchSuggestHistory);
-            }
-
-            @Override
-            public void onFocusCleared() {
-            }
-        });
-
+        search = new Search(mSearchView, searchHistory, discountsManager);
+        mSearchView.setOnQueryChangeListener(search);
+        mSearchView.setOnBindSuggestionCallback(search);
+        mSearchView.setOnFocusChangeListener(search);
         mSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
             @Override
             public void onActionMenuItemSelected(MenuItem item) {
                 startVoiceRecognitionActivity();
             }
         });
+
+        setDrawer();
 
         return rootView;
     }
@@ -204,8 +157,7 @@ public class DiscountsTab extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
             ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            discountsManager.getDiscountsByName(matches.get(0));
-            mSearchView.setSearchText(matches.get(0));
+            search.voiceSearch(matches);
         }
     }
 }

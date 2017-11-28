@@ -90,7 +90,7 @@ public class DiscountsManager {
         return discountItems;
     }
 
-    public ArrayList<String> getSuggestionsDiscounts() {
+    public ArrayList<String> getDiscountNames() {
         ArrayList<String> discountNamesList = new ArrayList<>();
         for (Item item : unchangedList)
             discountNamesList.add(item.getName());

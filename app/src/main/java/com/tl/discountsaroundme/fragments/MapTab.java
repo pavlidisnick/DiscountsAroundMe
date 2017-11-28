@@ -33,7 +33,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.discounts.SearchSuggest;
-import com.tl.discountsaroundme.discounts.SuggestListMaker;
+import com.tl.discountsaroundme.discounts.SuggestionMaker;
 import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
@@ -223,11 +223,10 @@ public class MapTab extends Fragment {
         mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
-                SuggestListMaker suggestListMaker = new SuggestListMaker();
-                List<SearchSuggest> searchSuggestList;
-                searchSuggestList = suggestListMaker.convertStringsToSuggestions(storeManager.getStoreStrings(), newQuery);
+                SuggestionMaker suggestionMaker = new SuggestionMaker();
+                List<String> suggestions = suggestionMaker.getSuggestionsWithQuery(storeManager.getStoreStrings(), newQuery);
 
-                mSearchView.swapSuggestions(searchSuggestList);
+                mSearchView.swapSuggestions(suggestionMaker.stringsToSuggestions(suggestions));
             }
         });
 

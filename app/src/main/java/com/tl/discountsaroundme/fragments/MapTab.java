@@ -94,13 +94,33 @@ public class MapTab extends Fragment {
             public void onClick(View view) {
                 googleMap.clear();
                 for (Store store : storeManager.getStores()) {
-                    MarkerOptions marker = new MarkerOptions()
-                            .position(new LatLng(store.getLat(), store.getLng()))
-                            .title(store.getName())
-                            .snippet(store.getType())
-                            .flat(true)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_coffee));
-                    googleMap.addMarker(marker);
+                    if (store.getType().contentEquals("Technology")){
+                        MarkerOptions marker = new MarkerOptions()
+                                .position(new LatLng(store.getLat(), store.getLng()))
+                                .title(store.getName())
+                                .snippet(store.getType())
+                                .flat(true)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_phone));
+                        googleMap.addMarker(marker);
+                    }
+                    else if (store.getType().contentEquals("Clothing")){
+                        MarkerOptions marker = new MarkerOptions()
+                                .position(new LatLng(store.getLat(), store.getLng()))
+                                .title(store.getName())
+                                .snippet(store.getType())
+                                .flat(true)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_dresses));
+                        googleMap.addMarker(marker);
+                    }
+                    else{
+                        MarkerOptions marker = new MarkerOptions()
+                                .position(new LatLng(store.getLat(), store.getLng()))
+                                .title(store.getName())
+                                .snippet(store.getType())
+                                .flat(true)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_store));
+                        googleMap.addMarker(marker);
+                    }
                 }
             }
         });
@@ -114,13 +134,33 @@ public class MapTab extends Fragment {
                     Toast.makeText(getContext(), "There are no shops nearby", Toast.LENGTH_LONG).show();
                 else {
                     for (Store store : stores) {
+                        if (store.getType().contentEquals("Technology")){
                         MarkerOptions marker = new MarkerOptions()
                                 .position(new LatLng(store.getLat(), store.getLng()))
                                 .title(store.getName())
                                 .snippet(store.getType())
                                 .flat(true)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_coffee));
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_phone));
                         googleMap.addMarker(marker);
+                        }
+                        else if (store.getType().contentEquals("Clothing")){
+                            MarkerOptions marker = new MarkerOptions()
+                                    .position(new LatLng(store.getLat(), store.getLng()))
+                                    .title(store.getName())
+                                    .snippet(store.getType())
+                                    .flat(true)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_dresses));
+                            googleMap.addMarker(marker);
+                        }
+                        else{
+                            MarkerOptions marker = new MarkerOptions()
+                                    .position(new LatLng(store.getLat(), store.getLng()))
+                                    .title(store.getName())
+                                    .snippet(store.getType())
+                                    .flat(true)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_store));
+                            googleMap.addMarker(marker);
+                        }
                     }
                 }
             }
@@ -281,11 +321,11 @@ public class MapTab extends Fragment {
                     .title(store.getName())
                     .snippet(contentText)
                     .flat(true)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_woman_shoe));
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.icon_circle));
             googleMap.addMarker(marker);
 
             Notification notification = new Notification.Builder(getContext())
-                    .setSmallIcon(R.drawable.ic_woman_shoe)
+                    .setSmallIcon(R.mipmap.icon_circle)
                     .setContentTitle(store.getName())
                     .setContentText(contentText)
                     .build();

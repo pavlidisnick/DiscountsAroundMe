@@ -7,7 +7,6 @@ public class Store {
     private String type;
     private double lat;
     private double lng;
-
     private String image;
     private String description;
 
@@ -82,6 +81,5 @@ public class Store {
     public void setDescription(String description) {
         this.description = description;
     }
-
 
 }

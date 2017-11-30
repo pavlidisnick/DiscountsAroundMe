@@ -13,15 +13,32 @@ import com.tl.discountsaroundme.ui_controllers.ItemViewAdapter;
 import java.util.ArrayList;
 
 public class DiscountsManager {
-    private DatabaseReference mDBDiscountItems = FirebaseDatabase.getInstance().getReference("/items");
-    private ArrayList<Item> discountItems = new ArrayList<>();
-    private ArrayList<Item> unchangedList = new ArrayList<>();
+    private DatabaseReference mDBDiscountItems;
     private ItemViewAdapter adapter;
 
+    private ArrayList<Item> discountItems = new ArrayList<>();
+    private ArrayList<Item> unchangedList = new ArrayList<>();
+
+    /**
+     * @param firebaseDatabase FirebaseDatabase instance
+     */
+    public DiscountsManager(FirebaseDatabase firebaseDatabase) {
+        mDBDiscountItems = firebaseDatabase.getReference("/items");
+    }
+
+    /**
+     * @param adapter ItemViewAdapter to notify the listView for data changes
+     */
     public void setAdapter(ItemViewAdapter adapter) {
         this.adapter = adapter;
     }
 
+    /**
+     * Fetches the items from the db and it checks if the discountValue is eq or qt than the user prefs
+     * Based on the results the discountItems list is filled
+     * Based on the results the unchangedList is filled
+     * The adapter is notified for data changes
+     */
     public void getTopDiscounts() {
         mDBDiscountItems.addValueEventListener(new ValueEventListener() {
             @Override
@@ -29,7 +46,7 @@ public class DiscountsManager {
                 discountItems.clear();
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Item item = child.getValue(Item.class);
-                    if (item.getDiscount() >= DiscountsTab.discountValue)
+                    if (item != null && item.getDiscount() >= DiscountsTab.discountValue)
                         discountItems.add(item);
                 }
                 adapter.notifyDataSetChanged();
@@ -43,6 +60,10 @@ public class DiscountsManager {
         });
     }
 
+    /**
+     * Sets the discountedItems list and the unchangedList based on the db it received
+     * But it doesn't notify the adapter for data changes
+     */
     public void getDiscounts() {
         mDBDiscountItems.addValueEventListener(new ValueEventListener() {
             @Override
@@ -50,7 +71,7 @@ public class DiscountsManager {
                 discountItems.clear();
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Item item = child.getValue(Item.class);
-                    if (item.getDiscount() >= DiscountsTab.discountValue)
+                    if (item != null && item.getDiscount() >= DiscountsTab.discountValue)
                         discountItems.add(item);
                 }
 
@@ -82,6 +103,9 @@ public class DiscountsManager {
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Empties the discountItems list
+     */
     public void clearTopDiscounts() {
         discountItems.clear();
     }
@@ -90,6 +114,9 @@ public class DiscountsManager {
         return discountItems;
     }
 
+    /**
+     * @return the names of the discounted items
+     */
     public ArrayList<String> getDiscountNames() {
         ArrayList<String> discountNamesList = new ArrayList<>();
         for (Item item : unchangedList)
@@ -114,6 +141,13 @@ public class DiscountsManager {
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Checks if all the items and returns a list of items based on the store they belong
+     * Also it checks if
+     *
+     * @param store the store you want to receive it's items
+     * @return an array of items belonging on the store
+     */
     public ArrayList<Item> getTopDiscountsByStore(String store) {
         store = store.toUpperCase().trim();
         ArrayList<Item> storeItems = new ArrayList<>();

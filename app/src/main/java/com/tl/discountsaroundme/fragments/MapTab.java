@@ -31,8 +31,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
-import com.tl.discountsaroundme.discounts.SearchSuggest;
 import com.tl.discountsaroundme.discounts.SuggestionMaker;
 import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.entities.Store;
@@ -51,7 +51,7 @@ public class MapTab extends Fragment {
     private GPSTracker gps;
     private GoogleMap googleMap;
     private StoreManager storeManager = new StoreManager();
-    private DiscountsManager discountsManager = new DiscountsManager();
+    private DiscountsManager discountsManager = new DiscountsManager(FirebaseDatabase.getInstance());
     private double distance = 1; // in km
 
     @Override
@@ -293,7 +293,9 @@ public class MapTab extends Fragment {
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
             notification.defaults |= Notification.DEFAULT_SOUND;
             notification.defaults |= Notification.DEFAULT_VIBRATE;
-            notificationManager.notify(0, notification);
+            if (notificationManager != null) {
+                notificationManager.notify(0, notification);
+            }
         }
     }
 

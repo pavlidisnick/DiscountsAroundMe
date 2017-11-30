@@ -6,10 +6,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 
-public class CategoryListener {
-    public CategoryListener(final AddCategoryToLayout addCategoryToLayout, final DiscountsManager discountsManager) {
+/**
+ * Retrieves all categories from the database and then adds the category buttons
+ */
+public class FetchCategories {
+    public FetchCategories(final AddCategoryToLayout addCategoryToLayout) {
         DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("/categories");
 
         categoryRef.addValueEventListener(new ValueEventListener() {
@@ -18,7 +20,7 @@ public class CategoryListener {
                 addCategoryToLayout.clearCategories();
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                     String category = itemSnapshot.child("name").getValue(String.class);
-                    addCategoryToLayout.addCategory(category, discountsManager);
+                    addCategoryToLayout.addCategory(category);
                 }
             }
 

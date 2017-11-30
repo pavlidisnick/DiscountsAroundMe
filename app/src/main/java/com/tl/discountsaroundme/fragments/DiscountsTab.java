@@ -49,20 +49,22 @@ public class DiscountsTab extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.grid_layout, container, false);
+        View rootView = inflater.inflate(R.layout.grid_layout, container, false);
 
         discountsManager = new DiscountsManager(FirebaseDatabase.getInstance());
 
         final RecyclerView mRecyclerView = rootView.findViewById(R.id.item_grid);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
-        final ItemViewAdapter adapter = new ItemViewAdapter(getActivity(), discountsManager.getDiscountItems());
+        ItemViewAdapter adapter = new ItemViewAdapter(getActivity(), discountsManager.getDiscountItems());
         discountsManager.setAdapter(adapter);
         mRecyclerView.setAdapter(adapter);
+
         //ItemDecoration for spacing between items
         ItemSpaceDecoration decoration = new ItemSpaceDecoration(16);
         mRecyclerView.addItemDecoration(decoration);
         mRecyclerView.setHasFixedSize(true);
+
         final SwipeRefreshLayout swipeRefreshLayout = rootView.findViewById(R.id.swiperefresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

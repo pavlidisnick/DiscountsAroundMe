@@ -27,7 +27,7 @@ import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.discounts.AddCategoryToLayout;
-import com.tl.discountsaroundme.discounts.CategoryListener;
+import com.tl.discountsaroundme.discounts.FetchCategories;
 import com.tl.discountsaroundme.discounts.Search;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.SearchHistory;
@@ -74,8 +74,8 @@ public class DiscountsTab extends Fragment {
         });
 
         LinearLayout linearLayout = rootView.findViewById(R.id.linear_layout);
-        AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, getActivity());
-        new CategoryListener(addCategoryToLayout, discountsManager);
+        AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, getActivity(), discountsManager);
+        new FetchCategories(addCategoryToLayout);
 
         discountsManager.getTopDiscounts();
 

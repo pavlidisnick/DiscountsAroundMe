@@ -1,9 +1,5 @@
 package com.tl.discountsaroundme.fragments;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -34,7 +30,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.discounts.SearchSuggest;
 import com.tl.discountsaroundme.discounts.SuggestListMaker;
-import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;
@@ -42,9 +37,7 @@ import com.tl.discountsaroundme.services.GPSTracker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class MapTab extends Fragment {
     private MapView mMapView;
@@ -52,7 +45,7 @@ public class MapTab extends Fragment {
     private GoogleMap googleMap;
     private StoreManager storeManager = new StoreManager();
     private DiscountsManager discountsManager = new DiscountsManager();
-    private double distance = 1; // in km
+    public static double distance = 1; // in km
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,41 +79,31 @@ public class MapTab extends Fragment {
 
         Button shopsButton = rootView.findViewById(R.id.shopsButton);
         Button nearbyButton = rootView.findViewById(R.id.nearbyButton);
-        AtomicReference<LocationManager> locationManager;
-        locationManager = new AtomicReference<>((LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE));
-        gps = new GPSTracker(locationManager.get());
+
+//        AtomicReference<LocationManager> locationManager;
+//        locationManager = new AtomicReference<>((LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE));
+
+        gps = new GPSTracker(getActivity(), storeManager, discountsManager, googleMap);
+
         shopsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 googleMap.clear();
                 for (Store store : storeManager.getStores()) {
-                    if (store.getType().contentEquals("Technology")){
-                        MarkerOptions marker = new MarkerOptions()
-                                .position(new LatLng(store.getLat(), store.getLng()))
-                                .title(store.getName())
-                                .snippet(store.getType())
-                                .flat(true)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_phone));
-                        googleMap.addMarker(marker);
+                    MarkerOptions marker = new MarkerOptions()
+                            .position(new LatLng(store.getLat(), store.getLng()))
+                            .title(store.getName())
+                            .snippet(store.getType())
+                            .flat(true);
+                    if (store.getType().contentEquals("Technology")) {
+                        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_phone));
+                    } else if (store.getType().contentEquals("Clothing")) {
+                        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_dresses));
+                    } else {
+                        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_store));
                     }
-                    else if (store.getType().contentEquals("Clothing")){
-                        MarkerOptions marker = new MarkerOptions()
-                                .position(new LatLng(store.getLat(), store.getLng()))
-                                .title(store.getName())
-                                .snippet(store.getType())
-                                .flat(true)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_dresses));
-                        googleMap.addMarker(marker);
-                    }
-                    else{
-                        MarkerOptions marker = new MarkerOptions()
-                                .position(new LatLng(store.getLat(), store.getLng()))
-                                .title(store.getName())
-                                .snippet(store.getType())
-                                .flat(true)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_store));
-                        googleMap.addMarker(marker);
-                    }
+                    googleMap.addMarker(marker);
+
                 }
             }
         });
@@ -129,38 +112,29 @@ public class MapTab extends Fragment {
             @Override
             public void onClick(View view) {
                 googleMap.clear();
-                ArrayList<Store> stores = storeManager.getNearbyStores(gps.getLatitude(), gps.getLongitude(), distance * 1000);
+                ArrayList<Store> stores = new ArrayList<>();
+                try {
+                    stores.addAll(storeManager.getNearbyStores(gps.getLatitude(), gps.getLongitude(), distance * 1000));
+                } catch (NullPointerException e) {
+                    Toast.makeText(getContext(), "GPS disabled", Toast.LENGTH_SHORT).show();
+                }
                 if (stores.isEmpty())
-                    Toast.makeText(getContext(), "There are no shops nearby", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "There are no shops nearby", Toast.LENGTH_SHORT).show();
                 else {
                     for (Store store : stores) {
-                        if (store.getType().contentEquals("Technology")){
                         MarkerOptions marker = new MarkerOptions()
                                 .position(new LatLng(store.getLat(), store.getLng()))
                                 .title(store.getName())
                                 .snippet(store.getType())
-                                .flat(true)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_phone));
+                                .flat(true);
+                        if (store.getType().contentEquals("Technology")) {
+                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_phone));
+                        } else if (store.getType().contentEquals("Clothing")) {
+                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_dresses));
+                        } else {
+                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_store));
+                        }
                         googleMap.addMarker(marker);
-                        }
-                        else if (store.getType().contentEquals("Clothing")){
-                            MarkerOptions marker = new MarkerOptions()
-                                    .position(new LatLng(store.getLat(), store.getLng()))
-                                    .title(store.getName())
-                                    .snippet(store.getType())
-                                    .flat(true)
-                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_dresses));
-                            googleMap.addMarker(marker);
-                        }
-                        else{
-                            MarkerOptions marker = new MarkerOptions()
-                                    .position(new LatLng(store.getLat(), store.getLng()))
-                                    .title(store.getName())
-                                    .snippet(store.getType())
-                                    .flat(true)
-                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_store));
-                            googleMap.addMarker(marker);
-                        }
                     }
                 }
             }
@@ -225,10 +199,7 @@ public class MapTab extends Fragment {
         nearbyOffersCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    createNotification();
-                }
-
+                gps.toggleNotifications(isChecked);
             }
         });
 
@@ -248,8 +219,14 @@ public class MapTab extends Fragment {
             public void onActionMenuItemSelected(MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.gps_fixed) {
-                    LatLng latLng = new LatLng(gps.getLatitude(), gps.getLongitude());
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16.29));
+                    try {
+                        gps.getLocation();
+                        LatLng latLng = new LatLng(gps.getLatitude(), gps.getLongitude());
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16.29));
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), "GPS disabled", Toast.LENGTH_LONG).show();
+                    }
                 } else if (itemId == R.id.map_options) {
                     int visibility = popupMenu.getVisibility();
                     if (visibility == View.VISIBLE)
@@ -298,44 +275,6 @@ public class MapTab extends Fragment {
         });
 
         return rootView;
-    }
-
-    public void createNotification() {
-        ArrayList<Store> stores = storeManager.getNearbyStores(gps.getLatitude(), gps.getLongitude(), distance * 1000);
-        ArrayList<Store> topStores = new ArrayList<>();
-
-        for (Store store : stores) {
-            ArrayList<Item> items = discountsManager.getTopDiscountsByStore(store.getName());
-            if (!items.isEmpty())
-                topStores.add(store);
-        }
-
-        googleMap.clear();
-
-        for (Store store : topStores) {
-            Item item = discountsManager.getTopItemByStore(store.getName());
-            String contentText = item.getName() + " " + item.getDiscount();
-
-            MarkerOptions marker = new MarkerOptions()
-                    .position(new LatLng(store.getLat(), store.getLng()))
-                    .title(store.getName())
-                    .snippet(contentText)
-                    .flat(true)
-                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.icon_circle));
-            googleMap.addMarker(marker);
-
-            Notification notification = new Notification.Builder(getContext())
-                    .setSmallIcon(R.mipmap.icon_circle)
-                    .setContentTitle(store.getName())
-                    .setContentText(contentText)
-                    .build();
-            NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
-            // hide the notification after its selected
-            notification.flags |= Notification.FLAG_AUTO_CANCEL;
-            notification.defaults |= Notification.DEFAULT_SOUND;
-            notification.defaults |= Notification.DEFAULT_VIBRATE;
-            notificationManager.notify(0, notification);
-        }
     }
 
 

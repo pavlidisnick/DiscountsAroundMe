@@ -5,7 +5,8 @@
     <color name="colorPrimaryWhite">#ffffff</color>
     <color name="colorAccent">#faa62c</color>
     <color name="colorTag">#e5e5e5</color>
-    <color name="colorPrice">#5187c6</color>
+    <color name="colorPrice">#0080ff</color>
     <color name="colorAlert">#e53c38</color>
     <color name="purple">#6c00f9</color>
+    <color name="description">#545454</color>
 </resources>

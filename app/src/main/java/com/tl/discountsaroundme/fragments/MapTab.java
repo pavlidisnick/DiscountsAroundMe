@@ -51,14 +51,16 @@ public class MapTab extends Fragment {
     private GPSTracker gps;
     private GoogleMap googleMap;
     private StoreManager storeManager = new StoreManager();
-    private DiscountsManager discountsManager = new DiscountsManager(FirebaseDatabase.getInstance());
+    private DiscountsManager discountsManager;
     private double distance = 1; // in km
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.tab_map, container, false);
 
-        discountsManager.getDiscounts();
+        discountsManager = new DiscountsManager();
+        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue);
+
         mMapView = rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
@@ -264,7 +266,7 @@ public class MapTab extends Fragment {
         ArrayList<Store> topStores = new ArrayList<>();
 
         for (Store store : stores) {
-            ArrayList<Item> items = discountsManager.getTopDiscountsByStore(store.getName());
+            ArrayList<Item> items = discountsManager.getTopDiscountsByStore(store.getName(), DiscountsTab.discountValue);
             if (!items.isEmpty())
                 topStores.add(store);
         }

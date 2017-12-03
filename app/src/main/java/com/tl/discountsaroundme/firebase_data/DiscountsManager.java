@@ -1,33 +1,32 @@
 package com.tl.discountsaroundme.firebase_data;
 
-
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.ui_controllers.ItemViewAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DiscountsManager {
     private ItemViewAdapter adapter;
+    private ArrayList<Item> allItems = new ArrayList<>();
+    private ArrayList<Item> showingItems = new ArrayList<>();
 
-    private ArrayList<Item> discountItems = new ArrayList<>();
-    private ArrayList<Item> showingList = new ArrayList<>();
-
-    /**
-     * @param adapter ItemViewAdapter to notify the listView for data changes
-     */
     public void setAdapter(ItemViewAdapter adapter) {
         this.adapter = adapter;
     }
 
-    public ArrayList<Item> getTopDiscounts(int discountThreshold) {
-        ArrayList<Item> matchingArray = new ArrayList<>();
+    public void getTopDiscounts(int discountThreshold) {
+        showingItems.clear();
 
-        for (Item item : discountItems) {
+        for (Item item : allItems) {
             if (item.getDiscount() >= discountThreshold)
-                matchingArray.add(item);
+                showingItems.add(item);
         }
-        return matchingArray;
+        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -35,33 +34,16 @@ public class DiscountsManager {
      *
      * @param searchQuery the search String for discounts
      */
-    public ArrayList<Item> getDiscountsByName(String searchQuery) {
+    public void getDiscountsByName(String searchQuery) {
         searchQuery = searchQuery.toUpperCase();
-        ArrayList<Item> matchingArray = new ArrayList<>();
+        showingItems.clear();
 
-        for (Item item : discountItems) {
+        for (Item item : allItems) {
             String name = item.getName().toUpperCase();
             if (name.contains(searchQuery))
-                matchingArray.add(item);
+                showingItems.add(item);
         }
-        return matchingArray;
-    }
-
-    private void fillListAndNotify(List<Item> itemList) {
-        discountItems.clear();
-        discountItems.addAll(itemList);
         adapter.notifyDataSetChanged();
-    }
-
-    /**
-     * Empties the discountItems list
-     */
-    public void clearTopDiscounts() {
-        discountItems.clear();
-    }
-
-    public ArrayList<Item> getDiscountItems() {
-        return discountItems;
     }
 
     /**
@@ -69,7 +51,7 @@ public class DiscountsManager {
      */
     public ArrayList<String> getDiscountNames() {
         ArrayList<String> discountNamesList = new ArrayList<>();
-        for (Item item : discountItems)
+        for (Item item : allItems)
             discountNamesList.add(item.getName());
         return discountNamesList;
     }
@@ -80,16 +62,16 @@ public class DiscountsManager {
      *
      * @param category the item category which is also the category button text
      */
-    public ArrayList<Item> getDiscountsByCategory(String category) {
+    public void getDiscountsByCategory(String category) {
         category = category.toUpperCase();
-        ArrayList<Item> categoryItems = new ArrayList<>();
+        showingItems.clear();
 
-        for (Item item : showingList) {
+        for (Item item : allItems) {
             String type = item.getType().toUpperCase();
             if (type.contains(category))
-                categoryItems.add(item);
+                showingItems.add(item);
         }
-        return categoryItems;
+        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -103,7 +85,7 @@ public class DiscountsManager {
         store = store.toUpperCase().trim();
         ArrayList<Item> storeItems = new ArrayList<>();
 
-        for (Item item : discountItems) {
+        for (Item item : allItems) {
             String storeName = item.getStore().toUpperCase().trim();
             if (store.equals(storeName) && item.getDiscount() >= discountThreshold)
                 storeItems.add(item);
@@ -115,12 +97,45 @@ public class DiscountsManager {
         double max = 0;
         Item topItem = null;
 
-        for (Item item : discountItems) {
+        for (Item item : allItems) {
             if (store.equals(item.getStore()) && item.getDiscount() >= max) {
                 max = item.getDiscount();
                 topItem = item;
             }
         }
         return topItem;
+    }
+
+    /**
+     * @param firebaseDatabase FirebaseDatabase instance
+     */
+    public void showTopDiscounts(FirebaseDatabase firebaseDatabase, final int discountThreshold) {
+        DatabaseReference mDBDiscountItems = firebaseDatabase.getReference("/items");
+
+        mDBDiscountItems.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                showingItems.clear();
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Item item = child.getValue(Item.class);
+                    if (item != null && item.getDiscount() >= discountThreshold)
+                        showingItems.add(item);
+                }
+                allItems.clear();
+                allItems.addAll(showingItems);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    void showTopDiscounts(ArrayList<Item> itemList) {
+        allItems = itemList;
+    }
+
+    public ArrayList<Item> getShowingItems() {
+        return showingItems;
     }
 }

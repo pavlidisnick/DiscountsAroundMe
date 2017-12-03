@@ -157,6 +157,7 @@ public class DrawerTest {
         pressBack();
 
         mAuth.signOut();
+        
     }
 
     @Test

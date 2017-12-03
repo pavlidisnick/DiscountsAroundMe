@@ -96,11 +96,11 @@ public class MapTab extends Fragment {
                             .snippet(store.getType())
                             .flat(true);
                     if (store.getType().contentEquals("Technology")) {
-                        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_phone));
+                        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.electronics_marker));
                     } else if (store.getType().contentEquals("Clothing")) {
-                        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_dresses));
+                        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.clothes_marker));
                     } else {
-                        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_store));
+                        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.shop_marker));
                     }
                     googleMap.addMarker(marker);
 
@@ -128,11 +128,11 @@ public class MapTab extends Fragment {
                                 .snippet(store.getType())
                                 .flat(true);
                         if (store.getType().contentEquals("Technology")) {
-                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_phone));
+                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.electronics_marker));
                         } else if (store.getType().contentEquals("Clothing")) {
-                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_dresses));
+                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.clothes_marker));
                         } else {
-                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_store));
+                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.shop_marker));
                         }
                         googleMap.addMarker(marker);
                     }

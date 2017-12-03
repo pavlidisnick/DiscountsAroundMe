@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -100,8 +101,10 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onProviderEnabled(String provider) {
-        if (LocationManager.NETWORK_PROVIDER.equals(provider))
+        if (LocationManager.NETWORK_PROVIDER.equals(provider)) {
             getLocation();
+            createNotification();
+        }
     }
 
     @Override
@@ -130,12 +133,14 @@ public class GPSTracker extends Service implements LocationListener {
             Item item = discountsManager.getTopItemByStore(store.getName());
             String contentText = item.getName() + " " + item.getDiscount();
 
+            BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.marker_shop);
+
             MarkerOptions marker = new MarkerOptions()
                     .position(new LatLng(store.getLat(), store.getLng()))
                     .title(store.getName())
                     .snippet(contentText)
                     .flat(true)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_store));
+                    .icon(icon);
             googleMap.addMarker(marker);
 
             Notification notification = new Notification.Builder(activity.getApplicationContext())

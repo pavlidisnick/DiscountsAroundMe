@@ -1,9 +1,6 @@
 package com.tl.discountsaroundme.fragments;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.location.LocationManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,39 +25,39 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.discounts.SuggestionMaker;
 import com.tl.discountsaroundme.entities.Item;
+import com.tl.discountsaroundme.discounts.SearchSuggest;
+import com.tl.discountsaroundme.discounts.SuggestListMaker;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;
 import com.tl.discountsaroundme.services.GPSTracker;
+import com.tl.discountsaroundme.services.MarkerHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class MapTab extends Fragment {
+    public static double distance = 1; // in km
     private MapView mMapView;
     private GPSTracker gps;
     private GoogleMap googleMap;
     private StoreManager storeManager = new StoreManager();
-    private DiscountsManager discountsManager;
-    private double distance = 1; // in km
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.tab_map, container, false);
 
-        discountsManager = new DiscountsManager();
-        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue);
-
+        DiscountsManager discountsManager = new DiscountsManager();
+        discountsManager.getDiscounts();
+      
         mMapView = rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
@@ -88,20 +85,30 @@ public class MapTab extends Fragment {
 
         Button shopsButton = rootView.findViewById(R.id.shopsButton);
         Button nearbyButton = rootView.findViewById(R.id.nearbyButton);
-        AtomicReference<LocationManager> locationManager;
-        locationManager = new AtomicReference<>((LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE));
-        gps = new GPSTracker(locationManager.get());
+
+//        AtomicReference<LocationManager> locationManager;
+//        locationManager = new AtomicReference<>((LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE));
+
+        gps = new GPSTracker(getActivity(), storeManager, discountsManager, googleMap);
+
+        final Fragment fragment = this;
+
         shopsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 googleMap.clear();
+                MarkerHelper markerHelper = new MarkerHelper();
+
                 for (Store store : storeManager.getStores()) {
+                    Drawable circleDrawable = markerHelper.getDrawableByType(fragment, store.getType().toUpperCase());
+                    BitmapDescriptor markerIcon = markerHelper.getMarkerIconFromDrawable(circleDrawable);
+
                     MarkerOptions marker = new MarkerOptions()
                             .position(new LatLng(store.getLat(), store.getLng()))
                             .title(store.getName())
                             .snippet(store.getType())
                             .flat(true)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_coffee));
+                            .icon(markerIcon);
                     googleMap.addMarker(marker);
                 }
             }
@@ -111,17 +118,21 @@ public class MapTab extends Fragment {
             @Override
             public void onClick(View view) {
                 googleMap.clear();
-                ArrayList<Store> stores = storeManager.getNearbyStores(gps.getLatitude(), gps.getLongitude(), distance * 1000);
+                ArrayList<Store> stores = new ArrayList<>();
+                try {
+                    stores.addAll(storeManager.getNearbyStores(gps.getLatitude(), gps.getLongitude(), distance * 1000));
+                } catch (NullPointerException e) {
+                    Toast.makeText(getContext(), "GPS disabled", Toast.LENGTH_SHORT).show();
+                }
                 if (stores.isEmpty())
-                    Toast.makeText(getContext(), "There are no shops nearby", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "There are no shops nearby", Toast.LENGTH_SHORT).show();
                 else {
                     for (Store store : stores) {
                         MarkerOptions marker = new MarkerOptions()
                                 .position(new LatLng(store.getLat(), store.getLng()))
                                 .title(store.getName())
                                 .snippet(store.getType())
-                                .flat(true)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_coffee));
+                                .flat(true);
                         googleMap.addMarker(marker);
                     }
                 }
@@ -187,10 +198,7 @@ public class MapTab extends Fragment {
         nearbyOffersCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    createNotification();
-                }
-
+                gps.toggleNotifications(isChecked);
             }
         });
 
@@ -210,8 +218,14 @@ public class MapTab extends Fragment {
             public void onActionMenuItemSelected(MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.gps_fixed) {
-                    LatLng latLng = new LatLng(gps.getLatitude(), gps.getLongitude());
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16.29));
+                    try {
+                        gps.getLocation();
+                        LatLng latLng = new LatLng(gps.getLatitude(), gps.getLongitude());
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16.29));
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), "GPS disabled", Toast.LENGTH_LONG).show();
+                    }
                 } else if (itemId == R.id.map_options) {
                     int visibility = popupMenu.getVisibility();
                     if (visibility == View.VISIBLE)
@@ -245,8 +259,7 @@ public class MapTab extends Fragment {
                                     .position(latLng)
                                     .title(store.getName())
                                     .snippet(store.getType())
-                                    .flat(true)
-                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_coffee));
+                                    .flat(true);
                             googleMap.addMarker(marker);
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16.29));
                         }
@@ -260,47 +273,6 @@ public class MapTab extends Fragment {
 
         return rootView;
     }
-
-    public void createNotification() {
-        ArrayList<Store> stores = storeManager.getNearbyStores(gps.getLatitude(), gps.getLongitude(), distance * 1000);
-        ArrayList<Store> topStores = new ArrayList<>();
-
-        for (Store store : stores) {
-            ArrayList<Item> items = discountsManager.getTopDiscountsByStore(store.getName(), DiscountsTab.discountValue);
-            if (!items.isEmpty())
-                topStores.add(store);
-        }
-
-        googleMap.clear();
-
-        for (Store store : topStores) {
-            Item item = discountsManager.getTopItemByStore(store.getName());
-            String contentText = item.getName() + " " + item.getDiscount();
-
-            MarkerOptions marker = new MarkerOptions()
-                    .position(new LatLng(store.getLat(), store.getLng()))
-                    .title(store.getName())
-                    .snippet(contentText)
-                    .flat(true)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_woman_shoe));
-            googleMap.addMarker(marker);
-
-            Notification notification = new Notification.Builder(getContext())
-                    .setSmallIcon(R.drawable.ic_woman_shoe)
-                    .setContentTitle(store.getName())
-                    .setContentText(contentText)
-                    .build();
-            NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
-            // hide the notification after its selected
-            notification.flags |= Notification.FLAG_AUTO_CANCEL;
-            notification.defaults |= Notification.DEFAULT_SOUND;
-            notification.defaults |= Notification.DEFAULT_VIBRATE;
-            if (notificationManager != null) {
-                notificationManager.notify(0, notification);
-            }
-        }
-    }
-
 
     @Override
     public void onResume() {

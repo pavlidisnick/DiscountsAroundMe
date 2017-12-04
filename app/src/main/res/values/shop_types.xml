@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--KEY-->
+    <string-array name="codes">
+        <item>CLOTHING</item>
+        <item>TECHNOLOGY</item>
+        <item>RESTAURANT</item>
+        <item>SHOP</item>
+        <item>SHOES</item>
+    </string-array>
+
+    <!--VALUE-->
+    <string-array name="names">
+        <item>marker_clothing</item>
+        <item>marker_electronics</item>
+        <item>marker_restaurant</item>
+        <item>marker_shop</item>
+        <item>marker_woman_shoe</item>
+    </string-array>
+</resources>

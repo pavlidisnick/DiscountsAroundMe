@@ -17,10 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.LoginActivity;
@@ -122,7 +124,6 @@ public class DiscountsTab extends Fragment {
                     startActivity(addDiscount);
                 } else if (id == R.id.temp) {
                     Toast.makeText(getContext(), "temp", Toast.LENGTH_LONG).show();
-
                 } else if (id == R.id.nav_info) {
                     Toast.makeText(getContext(), "info", Toast.LENGTH_LONG).show();
                 } else if (id == R.id.nav_logout) {
@@ -142,6 +143,7 @@ public class DiscountsTab extends Fragment {
                 return false;
             }
         });
+        drawerInformations();
     }
 
     public void startVoiceRecognitionActivity() {
@@ -159,5 +161,25 @@ public class DiscountsTab extends Fragment {
             ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             search.voiceSearch(matches);
         }
+    }
+
+    public void drawerInformations(){
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        mDrawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                if (user != null) {
+                    final String email = user.getEmail();
+
+                    TextView ut = (TextView) mDrawerLayout.findViewById(R.id.drawerUserType);
+                    ut.setText(MainActivity.USER_TYPE);
+
+                    TextView userEmail = (TextView) mDrawerLayout.findViewById(R.id.drawerEmail);
+                    userEmail.setText(email);
+                }
+                super.onDrawerOpened(drawerView);
+            }
+        });
     }
 }

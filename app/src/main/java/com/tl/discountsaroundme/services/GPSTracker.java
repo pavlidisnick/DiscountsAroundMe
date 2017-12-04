@@ -23,6 +23,7 @@ import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;
+import com.tl.discountsaroundme.fragments.DiscountsTab;
 import com.tl.discountsaroundme.fragments.MapTab;
 
 import java.util.ArrayList;
@@ -121,7 +122,7 @@ public class GPSTracker extends Service implements LocationListener {
         ArrayList<Store> topStores = new ArrayList<>();
 
         for (Store store : stores) {
-            ArrayList<Item> items = discountsManager.getTopDiscountsByStore(store.getName());
+            ArrayList<Item> items = discountsManager.getTopDiscountsByStore(store.getName(), DiscountsTab.discountValue);
             if (!items.isEmpty())
                 topStores.add(store);
         }

@@ -97,7 +97,6 @@ public class GPSTracker extends Service implements LocationListener {
     public void onProviderEnabled(String provider) {
         if (LocationManager.NETWORK_PROVIDER.equals(provider)) {
             getLocation();
-            showNearbyAndNotify();
         }
     }
 

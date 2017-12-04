@@ -27,9 +27,12 @@ public class MarkerHelper {
         this.googleMap = googleMap;
     }
 
-    private Drawable getDrawableByType(String code) {
+    public Drawable getDrawableByType(String code) {
+        return fragment.getResources().getDrawable(getDrawableId(code));
+    }
+
+    public int getDrawableId(String code) {
         int i = -1;
-        int id;
         for (String cc : fragment.getResources().getStringArray(R.array.codes)) {
             i++;
             if (cc.equals(code))
@@ -37,20 +40,23 @@ public class MarkerHelper {
         }
         try {
             String resource = fragment.getResources().getStringArray(R.array.names)[i];
-            id = fragment.getResources().getIdentifier(resource, "drawable", fragment.getActivity().getPackageName());
-            return fragment.getResources().getDrawable(id);
+            return fragment.getResources().getIdentifier(resource, "drawable", fragment.getActivity().getPackageName());
         } catch (Exception e) {
-            return fragment.getResources().getDrawable(R.drawable.marker_shop);
+            return R.drawable.marker_shop;
         }
     }
 
     private BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
         Canvas canvas = new Canvas();
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = getBitmapByDrawable(drawable);
         canvas.setBitmap(bitmap);
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         drawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    public Bitmap getBitmapByDrawable(Drawable drawable) {
+        return Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
     }
 
     void addStoreMarker(Store store) {

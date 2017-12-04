@@ -47,7 +47,7 @@ public class MapTab extends Fragment {
 
         final StoreManager storeManager = new StoreManager();
 
-        DiscountsManager discountsManager = new DiscountsManager();
+        final DiscountsManager discountsManager = new DiscountsManager();
         discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue);
 
         mMapView = rootView.findViewById(R.id.map);
@@ -72,6 +72,8 @@ public class MapTab extends Fragment {
                 mSearchView.setOnQueryChangeListener(setSearchBar);
                 mSearchView.setOnBindSuggestionCallback(setSearchBar);
 
+                gps = new GPSTracker(getActivity(), storeManager, discountsManager, markerHelper);
+
                 try {
                     googleMap.setMyLocationEnabled(true);
                     googleMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -80,11 +82,6 @@ public class MapTab extends Fragment {
                 }
             }
         });
-
-//        AtomicReference<LocationManager> locationManager;
-//        locationManager = new AtomicReference<>((LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE));
-
-        gps = new GPSTracker(getActivity(), storeManager, discountsManager, googleMap);
 
         Button shopsButton = rootView.findViewById(R.id.shopsButton);
         Button nearbyButton = rootView.findViewById(R.id.nearbyButton);

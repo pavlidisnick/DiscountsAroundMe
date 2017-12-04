@@ -16,135 +16,97 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
-import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
-import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.discounts.AddCategoryToLayout;
-import com.tl.discountsaroundme.discounts.CategoryListener;
-import com.tl.discountsaroundme.discounts.SearchSuggest;
-import com.tl.discountsaroundme.discounts.SuggestListMaker;
+import com.tl.discountsaroundme.discounts.FetchCategories;
+import com.tl.discountsaroundme.discounts.Search;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.SearchHistory;
 import com.tl.discountsaroundme.ui_controllers.ItemSpaceDecoration;
 import com.tl.discountsaroundme.ui_controllers.ItemViewAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
 public class DiscountsTab extends Fragment {
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
+
+    //
     public static int discountValue = 30;
-    FloatingSearchView mSearchView;
     DrawerLayout mDrawerLayout;
-    DiscountsManager discountsManager;
+    DiscountsManager discountsManager = new DiscountsManager();
+    private Search search;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.grid_layout, container, false);
+        View rootView = inflater.inflate(R.layout.grid_layout, container, false);
 
-        discountsManager = new DiscountsManager();
-
-        final RecyclerView mRecyclerView = rootView.findViewById(R.id.item_grid);
+        RecyclerView mRecyclerView = rootView.findViewById(R.id.item_grid);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
-        final ItemViewAdapter adapter = new ItemViewAdapter(getActivity(), discountsManager.getDiscountItems());
+        ItemViewAdapter adapter = new ItemViewAdapter(getActivity(), discountsManager.getShowingItems());
         discountsManager.setAdapter(adapter);
         mRecyclerView.setAdapter(adapter);
+
         //ItemDecoration for spacing between items
-        ItemSpaceDecoration decoration = new ItemSpaceDecoration(16);
-        mRecyclerView.addItemDecoration(decoration);
-        mRecyclerView.setHasFixedSize(true);
+        decorate(mRecyclerView);
+
         final SwipeRefreshLayout swipeRefreshLayout = rootView.findViewById(R.id.swiperefresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                discountsManager.clearTopDiscounts();
-                discountsManager.getTopDiscounts();
+                discountsManager.getTopDiscounts(discountValue);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
 
         LinearLayout linearLayout = rootView.findViewById(R.id.linear_layout);
-        AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, getActivity());
-        new CategoryListener(addCategoryToLayout, discountsManager);
+        AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, getActivity(), discountsManager);
+        new FetchCategories(addCategoryToLayout);
 
-        discountsManager.getTopDiscounts();
+        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), discountValue);
 
-        mSearchView = rootView.findViewById(R.id.floating_search_view);
-        mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
-            @Override
-            public void onSearchTextChanged(String oldQuery, final String newQuery) {
-                SuggestListMaker suggestListMaker = new SuggestListMaker();
-                List<SearchSuggest> searchSuggestList;
-                searchSuggestList = suggestListMaker.convertStringsToSuggestions(discountsManager.getSuggestionsDiscounts(), newQuery);
+        // FloatingSearchView actions
+        FloatingSearchView mSearchView = rootView.findViewById(R.id.floating_search_view);
+        setSearchBar(mSearchView);
 
-                //pass them on to the search view
-                mSearchView.swapSuggestions(searchSuggestList);
-            }
-        });
+        setDrawer(mSearchView);
 
-        final SearchHistory searchHistory = new SearchHistory(MainActivity.USER_ID);
+        return rootView;
+    }
 
-        mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
-            @Override
-            public void onBindSuggestion(View suggestionView, ImageView leftIcon, final TextView textView, final SearchSuggestion item, int itemPosition) {
-                final String suggestion = item.getBody();
-                if (searchHistory.getHistoryList().contains(suggestion))
-                    leftIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_history));
+    private void setSearchBar(FloatingSearchView mSearchView) {
+        SearchHistory searchHistory = new SearchHistory(MainActivity.USER_ID);
 
-                suggestionView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        searchHistory.newSearchAdd(suggestion);
-                        discountsManager.getDiscountsByName(suggestion);
-                        mSearchView.setSearchBarTitle(suggestion);
-                        mSearchView.clearFocus();
-                    }
-                });
-            }
-
-        });
-
-        setDrawer();
-
-        mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
-            @Override
-            public void onFocus() {
-                SuggestListMaker suggestListMaker = new SuggestListMaker();
-                List<SearchSuggest> searchSuggestHistory;
-                searchSuggestHistory = suggestListMaker.convertStringsToSuggestions(searchHistory.getHistoryList());
-
-                mSearchView.swapSuggestions(searchSuggestHistory);
-            }
-
-            @Override
-            public void onFocusCleared() {
-            }
-        });
-
+        search = new Search(mSearchView, searchHistory, discountsManager);
+        mSearchView.setOnQueryChangeListener(search);
+        mSearchView.setOnBindSuggestionCallback(search);
+        mSearchView.setOnFocusChangeListener(search);
         mSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
             @Override
             public void onActionMenuItemSelected(MenuItem item) {
                 startVoiceRecognitionActivity();
             }
         });
-
-        return rootView;
     }
 
-    public void setDrawer() {
+    private void decorate(RecyclerView recyclerView) {
+        ItemSpaceDecoration decoration = new ItemSpaceDecoration(16);
+        recyclerView.addItemDecoration(decoration);
+        recyclerView.setHasFixedSize(true);
+    }
+
+    public void setDrawer(FloatingSearchView mSearchView) {
         mDrawerLayout = getActivity().findViewById(R.id.drawer_layout);
 
         mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
@@ -204,8 +166,7 @@ public class DiscountsTab extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK) {
             ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            discountsManager.getDiscountsByName(matches.get(0));
-            mSearchView.setSearchText(matches.get(0));
+            search.voiceSearch(matches);
         }
     }
 }

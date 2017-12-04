@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.discounts;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.support.v4.widget.Space;
 import android.util.DisplayMetrics;
@@ -15,26 +16,33 @@ import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 public class AddCategoryToLayout {
     private LinearLayout linearLayout;
     private Activity activity;
+    private DiscountsManager discountsManager;
 
     private int spaceWidth;
     private int buttonHeight;
+    private int padding;
 
-    public AddCategoryToLayout(LinearLayout linearLayout, Activity activity) {
+    public AddCategoryToLayout(LinearLayout linearLayout, Activity activity, DiscountsManager discountsManager) {
         this.linearLayout = linearLayout;
         this.activity = activity;
-        buttonHeight = getPixelsFromDp(28);
+        this.discountsManager = discountsManager;
+        buttonHeight = getPixelsFromDp(34);
         spaceWidth = getPixelsFromDp(6);
+        padding = getPixelsFromDp(16);
     }
 
     /**
      * Add a button to the linearLayout you just passed to the constructor
      * Adds a space before adding the button
      */
-    public void addCategory(final String buttonText, final DiscountsManager discountsManager) {
+    public void addCategory(final String buttonText) {
         LayoutInflater inflater = LayoutInflater.from(activity);
 
+        @SuppressLint("InflateParams")
         Button button = (Button) inflater.inflate(R.layout.button_category_tag, null, false);
+
         button.setText(buttonText);
+        button.setPadding(padding, 0, padding, 0);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,7 +61,7 @@ public class AddCategoryToLayout {
         linearLayout.addView(space, linearLayout.getChildCount());
     }
 
-    public void clearCategories() {
+    void clearCategories() {
         linearLayout.removeAllViews();
     }
 

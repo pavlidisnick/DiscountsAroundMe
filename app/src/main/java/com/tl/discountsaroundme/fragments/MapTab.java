@@ -28,7 +28,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.discounts.SuggestionMaker;
+import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.discounts.SearchSuggest;
 import com.tl.discountsaroundme.discounts.SuggestListMaker;
 import com.tl.discountsaroundme.entities.Store;
@@ -54,6 +57,7 @@ public class MapTab extends Fragment {
 
         DiscountsManager discountsManager = new DiscountsManager();
         discountsManager.getDiscounts();
+      
         mMapView = rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
@@ -235,11 +239,10 @@ public class MapTab extends Fragment {
         mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
-                SuggestListMaker suggestListMaker = new SuggestListMaker();
-                List<SearchSuggest> searchSuggestList;
-                searchSuggestList = suggestListMaker.convertStringsToSuggestions(storeManager.getStoreStrings(), newQuery);
+                SuggestionMaker suggestionMaker = new SuggestionMaker();
+                List<String> suggestions = suggestionMaker.getSuggestionsWithQuery(storeManager.getStoreStrings(), newQuery);
 
-                mSearchView.swapSuggestions(searchSuggestList);
+                mSearchView.swapSuggestions(suggestionMaker.stringsToSuggestions(suggestions));
             }
         });
 
@@ -270,7 +273,6 @@ public class MapTab extends Fragment {
 
         return rootView;
     }
-
 
     @Override
     public void onResume() {

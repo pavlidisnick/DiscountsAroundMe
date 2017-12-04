@@ -43,6 +43,7 @@ public class AddCategoryTest {
     public void createObject() throws Exception {
         Activity activity = mock(Activity.class);
         LinearLayout linearLayout = mock(LinearLayout.class);
+        DiscountsManager discountsManager = mock(DiscountsManager.class);
 
         PowerMockito.mockStatic(TypedValue.class);
         PowerMockito.spy(TypedValue.applyDimension(1, 28, null));
@@ -51,7 +52,7 @@ public class AddCategoryTest {
         when(activity.getResources()).thenReturn(mock(Resources.class));
         when(activity.getResources().getDisplayMetrics()).thenReturn(mock(DisplayMetrics.class));
 
-        AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, activity);
+        AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, activity, discountsManager);
 
         AddCategoryToLayout addCategoryToLayout1 = PowerMockito.spy(addCategoryToLayout);
         PowerMockito.doNothing().when(addCategoryToLayout1, "addSpace");
@@ -63,8 +64,7 @@ public class AddCategoryTest {
         Mockito.when(LayoutInflater.from(activity)).thenReturn(layoutInflater);
 
 
-        DiscountsManager mockDiscountManager = mock(DiscountsManager.class);
-        addCategoryToLayout1.addCategory("ok", mockDiscountManager);
+        addCategoryToLayout1.addCategory("ok");
         assertNotNull(addCategoryToLayout);
     }
 }

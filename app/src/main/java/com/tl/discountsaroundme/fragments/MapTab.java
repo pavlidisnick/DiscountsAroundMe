@@ -31,9 +31,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.discounts.SuggestionMaker;
-import com.tl.discountsaroundme.entities.Item;
-import com.tl.discountsaroundme.discounts.SearchSuggest;
-import com.tl.discountsaroundme.discounts.SuggestListMaker;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;
@@ -56,8 +53,8 @@ public class MapTab extends Fragment {
         final View rootView = inflater.inflate(R.layout.tab_map, container, false);
 
         DiscountsManager discountsManager = new DiscountsManager();
-        discountsManager.getDiscounts();
-      
+        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue);
+
         mMapView = rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately

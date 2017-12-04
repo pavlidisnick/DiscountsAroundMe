@@ -24,6 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.discounts.SuggestionMaker;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;

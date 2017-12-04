@@ -18,6 +18,7 @@ import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;
+import com.tl.discountsaroundme.fragments.DiscountsTab;
 import com.tl.discountsaroundme.fragments.MapTab;
 import com.tl.discountsaroundme.map.MarkerHelper;
 

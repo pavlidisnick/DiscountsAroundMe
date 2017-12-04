@@ -1,6 +1,5 @@
 package com.tl.discountsaroundme.fragments;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,34 +10,29 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
-import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
-import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.discounts.SuggestionMaker;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;
+import com.tl.discountsaroundme.map.MarkerHelper;
+import com.tl.discountsaroundme.map.SetSearchBar;
 import com.tl.discountsaroundme.services.GPSTracker;
-import com.tl.discountsaroundme.services.MarkerHelper;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MapTab extends Fragment {
@@ -46,18 +40,22 @@ public class MapTab extends Fragment {
     private MapView mMapView;
     private GPSTracker gps;
     private GoogleMap googleMap;
-    private StoreManager storeManager = new StoreManager();
+    private MarkerHelper markerHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.tab_map, container, false);
 
-        DiscountsManager discountsManager = new DiscountsManager();
+        final StoreManager storeManager = new StoreManager();
+
+        final DiscountsManager discountsManager = new DiscountsManager();
         discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue);
 
         mMapView = rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
+
+        final FloatingSearchView mSearchView = rootView.findViewById(R.id.map_floating_search);
 
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
@@ -70,7 +68,13 @@ public class MapTab extends Fragment {
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
-                // For showing a move to my location button
+                markerHelper = new MarkerHelper(MapTab.this, googleMap);
+                SetSearchBar setSearchBar = new SetSearchBar(mSearchView, storeManager, markerHelper);
+                mSearchView.setOnQueryChangeListener(setSearchBar);
+                mSearchView.setOnBindSuggestionCallback(setSearchBar);
+
+                gps = new GPSTracker(getActivity(), storeManager, discountsManager, markerHelper);
+
                 try {
                     googleMap.setMyLocationEnabled(true);
                     googleMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -83,56 +87,28 @@ public class MapTab extends Fragment {
         Button shopsButton = rootView.findViewById(R.id.shopsButton);
         Button nearbyButton = rootView.findViewById(R.id.nearbyButton);
 
-//        AtomicReference<LocationManager> locationManager;
-//        locationManager = new AtomicReference<>((LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE));
-
-        gps = new GPSTracker(getActivity(), storeManager, discountsManager, googleMap);
-
-        final Fragment fragment = this;
-
         shopsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                googleMap.clear();
-                MarkerHelper markerHelper = new MarkerHelper();
-
-                for (Store store : storeManager.getStores()) {
-                    Drawable circleDrawable = markerHelper.getDrawableByType(fragment, store.getType().toUpperCase());
-                    BitmapDescriptor markerIcon = markerHelper.getMarkerIconFromDrawable(circleDrawable);
-
-                    MarkerOptions marker = new MarkerOptions()
-                            .position(new LatLng(store.getLat(), store.getLng()))
-                            .title(store.getName())
-                            .snippet(store.getType())
-                            .flat(true)
-                            .icon(markerIcon);
-                    googleMap.addMarker(marker);
-                }
+                ArrayList<Store> stores = storeManager.getStores();
+                markerHelper.addMarkersFromList(stores);
             }
         });
 
         nearbyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                googleMap.clear();
                 ArrayList<Store> stores = new ArrayList<>();
                 try {
                     stores.addAll(storeManager.getNearbyStores(gps.getLatitude(), gps.getLongitude(), distance * 1000));
                 } catch (NullPointerException e) {
                     Toast.makeText(getContext(), "GPS disabled", Toast.LENGTH_SHORT).show();
                 }
+
                 if (stores.isEmpty())
                     Toast.makeText(getContext(), "There are no shops nearby", Toast.LENGTH_SHORT).show();
-                else {
-                    for (Store store : stores) {
-                        MarkerOptions marker = new MarkerOptions()
-                                .position(new LatLng(store.getLat(), store.getLng()))
-                                .title(store.getName())
-                                .snippet(store.getType())
-                                .flat(true);
-                        googleMap.addMarker(marker);
-                    }
-                }
+                else
+                    markerHelper.addMarkersFromList(stores);
             }
         });
 
@@ -209,7 +185,6 @@ public class MapTab extends Fragment {
             }
         });
 
-        final FloatingSearchView mSearchView = rootView.findViewById(R.id.map_floating_search);
         mSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
             @Override
             public void onActionMenuItemSelected(MenuItem item) {
@@ -224,48 +199,10 @@ public class MapTab extends Fragment {
                         Toast.makeText(getContext(), "GPS disabled", Toast.LENGTH_LONG).show();
                     }
                 } else if (itemId == R.id.map_options) {
-                    int visibility = popupMenu.getVisibility();
-                    if (visibility == View.VISIBLE)
-                        popupMenu.setVisibility(View.INVISIBLE);
-                    else
-                        popupMenu.setVisibility(View.VISIBLE);
+                    int visibility = (popupMenu.getVisibility() == View.VISIBLE) ? View.INVISIBLE : View.VISIBLE;
+                    popupMenu.setVisibility(visibility);
                 }
             }
-        });
-
-        mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
-            @Override
-            public void onSearchTextChanged(String oldQuery, final String newQuery) {
-                SuggestionMaker suggestionMaker = new SuggestionMaker();
-                List<String> suggestions = suggestionMaker.getSuggestionsWithQuery(storeManager.getStoreStrings(), newQuery);
-
-                mSearchView.swapSuggestions(suggestionMaker.stringsToSuggestions(suggestions));
-            }
-        });
-
-        mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
-            @Override
-            public void onBindSuggestion(View suggestionView, ImageView leftIcon, final TextView textView, final SearchSuggestion item, int itemPosition) {
-                suggestionView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Store store = storeManager.getStoreFromName(item.getBody());
-                        if (store != null) {
-                            LatLng latLng = new LatLng(store.getLat(), store.getLng());
-                            MarkerOptions marker = new MarkerOptions()
-                                    .position(latLng)
-                                    .title(store.getName())
-                                    .snippet(store.getType())
-                                    .flat(true);
-                            googleMap.addMarker(marker);
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16.29));
-                        }
-                        mSearchView.setSearchBarTitle(item.getBody());
-                        mSearchView.clearFocus();
-                    }
-                });
-            }
-
         });
 
         return rootView;

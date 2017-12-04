@@ -1,6 +1,8 @@
 package com.tl.discountsaroundme.firebase_data;
 
 
+import android.location.Location;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -70,8 +72,11 @@ public class StoreManager {
 
         for (Store store : storeArrayList) {
             LatLng latLng = new LatLng(store.getLat(), store.getLng());
-            double distance = measure(latLng.latitude, latLng.longitude, lat, lng);
-            if (distance <= maxDistance)
+
+            float[] results = new float[1];
+            Location.distanceBetween(latLng.latitude, latLng.longitude, lat, lng, results);
+
+            if (results[0] <= maxDistance)
                 nearbyStores.add(store);
         }
         return nearbyStores;
@@ -80,26 +85,4 @@ public class StoreManager {
     public ArrayList<Store> getStores() {
         return storeArrayList;
     }
-
-    /**
-     * Measures the distance between 2 locations in meters
-     *
-     * @param lat1 first location latitude
-     * @param lng1 first location longitude
-     * @param lat2 second location latitude
-     * @param lng2 second location longitude
-     * @return the distance in meters
-     */
-    public double measure(double lat1, double lng1, double lat2, double lng2) {
-        double earthRadius = 6371000; //meters
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLng = Math.toRadians(lng2 - lng1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-                        Math.sin(dLng / 2) * Math.sin(dLng / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return (float) (earthRadius * c);
-    }
-
-
 }

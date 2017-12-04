@@ -13,11 +13,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.entities.Store;
@@ -25,6 +20,7 @@ import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;
 import com.tl.discountsaroundme.fragments.DiscountsTab;
 import com.tl.discountsaroundme.fragments.MapTab;
+import com.tl.discountsaroundme.map.MarkerHelper;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
@@ -38,19 +34,18 @@ public class GPSTracker extends Service implements LocationListener {
     private static final long MIN_TIME_BW_UPDATES = 1000 * 2;
     // GPS status
     private Location location;
-
     private Activity activity;
     private StoreManager storeManager;
     private DiscountsManager discountsManager;
-    private GoogleMap googleMap;
+    private MarkerHelper markerHelper;
+    private boolean isNotificationsEnabled = false;
 
-    private boolean isNotificationsEnabled = true;
-
-    public GPSTracker(Activity activity, StoreManager storeManager, DiscountsManager discountsManager, GoogleMap googleMap) {
+    public GPSTracker(Activity activity, StoreManager storeManager,
+                      DiscountsManager discountsManager, MarkerHelper markerHelper) {
+        this.activity = activity;
         this.storeManager = storeManager;
         this.discountsManager = discountsManager;
-        this.googleMap = googleMap;
-        this.activity = activity;
+        this.markerHelper = markerHelper;
         getLocation();
     }
 
@@ -83,12 +78,11 @@ public class GPSTracker extends Service implements LocationListener {
         return location.getLongitude();
     }
 
-
     @Override
     public void onLocationChanged(Location location) {
         if (isNotificationsEnabled) {
             try {
-                createNotification();
+                showNearbyAndNotify();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -104,7 +98,7 @@ public class GPSTracker extends Service implements LocationListener {
     public void onProviderEnabled(String provider) {
         if (LocationManager.NETWORK_PROVIDER.equals(provider)) {
             getLocation();
-            createNotification();
+            showNearbyAndNotify();
         }
     }
 
@@ -117,35 +111,19 @@ public class GPSTracker extends Service implements LocationListener {
         return null;
     }
 
-    public void createNotification() {
+    public void showNearbyAndNotify() {
         ArrayList<Store> stores = storeManager.getNearbyStores(getLatitude(), getLongitude(), MapTab.distance * 1000);
-        ArrayList<Store> topStores = new ArrayList<>();
 
-        for (Store store : stores) {
-            ArrayList<Item> items = discountsManager.getTopDiscountsByStore(store.getName(), DiscountsTab.discountValue);
-            if (!items.isEmpty())
-                topStores.add(store);
-        }
-
-        googleMap.clear();
+        markerHelper.addMarkersFromList(stores);
 
         int identifier = 0;
-        for (Store store : topStores) {
+        for (Store store : stores) {
             Item item = discountsManager.getTopItemByStore(store.getName());
-            String contentText = item.getName() + " " + item.getDiscount();
-
-            BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.marker_shop);
-
-            MarkerOptions marker = new MarkerOptions()
-                    .position(new LatLng(store.getLat(), store.getLng()))
-                    .title(store.getName())
-                    .snippet(contentText)
-                    .flat(true)
-                    .icon(icon);
-            googleMap.addMarker(marker);
+            String contentText = item.getName() + " " + (int) item.getDiscount() + "%";
 
             Notification notification = new Notification.Builder(activity.getApplicationContext())
-                    .setSmallIcon(R.mipmap.icon_circle)
+                    .setSmallIcon(R.mipmap.mini_icon)
+                    .setColor(activity.getResources().getColor(R.color.colorAccent))
                     .setContentTitle(store.getName())
                     .setContentText(contentText)
                     .build();

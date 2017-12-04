@@ -215,6 +215,7 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
                     dbUID = child.child("ownerUID").getValue().toString();
                     if (dbUID.equals(userId)) {
                         userType = "owner";
+                        break;
                     } else {
                         userType = "user";
                     }

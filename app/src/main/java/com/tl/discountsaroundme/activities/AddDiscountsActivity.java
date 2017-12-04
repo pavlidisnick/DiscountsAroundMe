@@ -23,8 +23,13 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -54,11 +59,14 @@ public class AddDiscountsActivity extends AppCompatActivity {
 
     int MaxUploadTime = 40000; //set Max time for uploading to 40 seconds
 
+    String ShopName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_discount);
+
+        getShopName();
 
         imageView = findViewById(R.id.imageView);
         selectImg = findViewById(R.id.buttonSelectImage);
@@ -199,7 +207,7 @@ public class AddDiscountsActivity extends AppCompatActivity {
 
                 pd.dismiss();
 
-                Item item = new Item(name, category, price, discount, description, link, "temp");
+                Item item = new Item(name, category, price, discount, description, link, ShopName);
 
                 String id = databaseItem.push().getKey();
                 databaseItem.child(id).setValue(item);
@@ -223,5 +231,30 @@ public class AddDiscountsActivity extends AppCompatActivity {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    public void getShopName(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("/shops");
+        if (user != null) {
+            final String uid = user.getUid();
+
+            categoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                        String ID = itemSnapshot.child("ownerUID").getValue(String.class);
+                        if(ID.matches(uid)){
+                            ShopName = itemSnapshot.child("name").getValue(String.class);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 }

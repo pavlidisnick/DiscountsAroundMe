@@ -34,6 +34,8 @@
             android:typeface="sans" />
 
         <EditText
+            android:layout_marginLeft="10dp"
+
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,6 +45,7 @@
             android:textColor="@color/colorAccent" />
 
         <EditText
+            android:layout_marginLeft="10dp"
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,6 +59,7 @@
             android:layout_weight="0.08" />
 
         <CheckBox
+            android:layout_marginLeft="10dp"
             android:id="@+id/cbBusinessAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,6 +76,7 @@
             android:layout_weight="0.10" />
 
         <EditText
+            android:layout_marginLeft="10dp"
             android:id="@+id/etShopName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,9 +93,10 @@
             android:id="@+id/tvShopLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="15"
+            android:layout_marginLeft="10dp"
+            android:ems="10"
             android:text="LATLANG"
-            android:visibility="gone" />
+            android:visibility="visible" />
         <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -113,6 +119,7 @@
             android:layout_weight="0.10" />
 
         <Button
+            android:layout_marginLeft="10dp"
             android:id="@+id/register_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -127,6 +134,7 @@
             android:layout_weight="0.10" />
 
         <Button
+            android:layout_marginLeft="10dp"
             android:id="@+id/login_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

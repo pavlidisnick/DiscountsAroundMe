@@ -30,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.entities.User;
+import com.tl.discountsaroundme.firebase_data.StoreManager;
+import com.tl.discountsaroundme.firebase_data.UserInfoManager;
 
 public class RegisterActivity extends Activity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -70,28 +72,40 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
 
     @Override
     public void onClick(View view) {
-        if (view.equals(register)) {
-            if (isFormFilled())
-                signUp(email, password);
-            else {
-                toastMessage("Please fill the form");
-            }
-        } else if (view.equals(login)) {
-            Intent LoginActivity = new Intent(this, com.tl.discountsaroundme.activities.LoginActivity.class);
-            startActivity(LoginActivity);
+        switch (view.getId()) {
+            case R.id.register:
+                if (isFormFilled()) {
+                    signUp(email, password);
+                } else {
+                    toastMessage("Please fill the form");
+                }
+                break;
+            case R.id.login:
+                Intent LoginActivity = new Intent(this, com.tl.discountsaroundme.activities.LoginActivity.class);
+                startActivity(LoginActivity);
+                break;
         }
     }
 
+    /**
+     * On a Successful register Store the user inside the database.
+     * if the user is a Shop owner then also store the shop into the database, the key
+     * of the store is the user's UID
+     */
     private void signUp(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     if (cbBusinessAccount.isChecked()) {
-                        onBusinessAccountCreation(task);
+                        StoreManager.StoreShopOnDb(
+                                mDbRef,
+                                task.getResult().getUser(),
+                                etShopName.getText().toString(),
+                                sShopType.getSelectedItem().toString());
                     }
-                    storeAccountIntoDB(task);
-                    toastMessage("Register successful. Welcome" + task.getResult().getUser().getEmail());
+                    UserInfoManager userInfoManager = new UserInfoManager(mAuth.getCurrentUser(), mDbRef);
+                    userInfoManager.StoreUserToDB(cbBusinessAccount.isChecked());
                 } else {
                     toastMessage("Register Failed!");
                 }
@@ -150,10 +164,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    /**
-     * Issue 8
-     * If user Checks the box more options become visible
-     */
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
@@ -165,37 +175,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
             sShopType.setVisibility(View.GONE);
             tvShopLocation.setVisibility(View.GONE);
         }
-    }
-
-    /**
-     * Issue 8
-     * On creation of a business account the Shop is stored into the database with its details and the account owner's UID
-     * Currently the location of the shop is on default value
-     * TODO Give the  owner the option to set the shop's location
-     */
-
-    private void onBusinessAccountCreation(Task<AuthResult> task) {
-        FirebaseUser user = task.getResult().getUser();
-        String BAUserUID = user.getUid();
-        Store Shop = new Store();
-        Shop.setDescription("Details");
-        Shop.setName(etShopName.getText().toString());
-        Shop.setImage("");
-        Shop.setLat(0);
-        Shop.setLng(0);
-        Shop.setType(sShopType.getSelectedItem().toString());
-        Shop.setOwnerUID(BAUserUID);
-        mDbRef.child("shops").child(user.getUid()).setValue(Shop);
-    }
-
-    private void storeAccountIntoDB(Task<AuthResult> task) {
-        FirebaseUser user = task.getResult().getUser();
-        String userType = "Customer";
-        if (cbBusinessAccount.isChecked()) {
-            userType = "Store owner";
-        }
-        User newUser = new User(user.getEmail(), user.getEmail(), userType, "imgURL");
-        mDbRef.child("users").child(user.getUid()).setValue(newUser);
     }
 
     private void toastMessage(String Message) {

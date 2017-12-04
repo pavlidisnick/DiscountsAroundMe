@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -15,6 +16,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.entities.User;
 
@@ -24,6 +26,7 @@ public class UserInfoManager {
     private User currentUser;
     private DatabaseReference dbRef;
     private FirebaseUser user;
+    private DatabaseReference DbReference = FirebaseDatabase.getInstance().getReference();
 
     public UserInfoManager(FirebaseUser user, DatabaseReference dbRef) {
         this.user = user;
@@ -127,5 +130,14 @@ public class UserInfoManager {
 
     public void changeUserPicture(String imageString) {
         dbRef.child("users").child(user.getUid()).child("image").setValue(imageString);
+    }
+    public void StoreUserToDB(boolean isOwner){
+        String userType = "Customer";
+        if (isOwner) {
+            userType = "Store owner";
+        }
+        User newUser = new User(user.getEmail(), user.getEmail(), userType, "imgURL");
+        dbRef.child("users").child(user.getUid()).setValue(newUser);
+        toastMessage("Register successful. Welcome " + user.getEmail());
     }
 }

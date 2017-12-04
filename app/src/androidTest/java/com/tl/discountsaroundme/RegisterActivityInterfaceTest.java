@@ -53,101 +53,101 @@ public class RegisterActivityInterfaceTest {
     }
 
     @Test
-    public void EmailTypeTest() {
+    public void emailTypeTest() {
         onView(withId(R.id.email)).perform(typeText("Email@mail.com")).check(matches(isDisplayed()));
     }
 
     @Test
-    public void PasswordTypeTest() {
+    public void passwordTypeTest() {
         onView(withId(R.id.password)).perform(typeText("Pass")).check(matches(isDisplayed()));
     }
 
     @Test
-    public void RegisterButtonClickTest() {
+    public void registerButtonClickTest() {
         onView(withId(R.id.register_button)).perform(click());
     }
 
     @Test
-    public void LoginButtonClickTest() {
+    public void loginButtonClickTest() {
         onView(withId(R.id.login_button)).perform(click());
     }
     /**
      * ADDED more tests, because of business account  addition changes
      */
     @Test
-    public void EmailTypeTest2(){
+    public void emailTypeTest2(){
         onView(withId(R.id.email)).perform(typeText("EMAIL@EMAIL.COM")).check(matches(withText("EMAIL@EMAIL.COM")));
     }
     @Test
-    public void PassTypeTest2(){
+    public void passTypeTest2(){
         onView(withId(R.id.password)).perform(typeText("pass")).check(matches(withText("pass")));
     }
     @Test
-    public void CheckBoxClickTest() {
+    public void checkBoxClickTest() {
         onView(withId(R.id.cbBusinessAccount)).perform(click()).check(matches(isChecked()));
     }
 
     @Test
-    public void CheckBoxIsUncheckedTest() {
+    public void checkBoxIsUncheckedTest() {
         onView(withId(R.id.cbBusinessAccount)).check(matches(isNotChecked()));
     }
 
     @Test
-    public void CheckBoxClickAndDisplayShopNameTest() {
+    public void checkBoxClickAndDisplayShopNameTest() {
         onView(withId(R.id.cbBusinessAccount)).perform(click()).check(matches(isChecked()));
         onView(withId(R.id.etShopName)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void CheckBoxClickAndDisplayShopLocationTest() {
+    public void checkBoxClickAndDisplayShopLocationTest() {
         onView(withId(R.id.cbBusinessAccount)).perform(click()).check(matches(isChecked()));
         onView(withId(R.id.tvShopLocation)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void CheckBoxClickAndDisplayShopTypeTest() {
+    public void checkBoxClickAndDisplayShopTypeTest() {
         onView(withId(R.id.cbBusinessAccount)).perform(click()).check(matches(isChecked()));
         onView(withId(R.id.sShopType)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void CheckBoxClickAndDisplayAllTest() {
+    public void checkBoxClickAndDisplayAllTest() {
         onView(withId(R.id.cbBusinessAccount)).perform(click()).check(matches(isChecked()));
         onView(withId(R.id.etShopName)).check(matches(isDisplayed()));
         onView(withId(R.id.tvShopLocation)).check(matches(isDisplayed()));
         onView(withId(R.id.sShopType)).check(matches(isDisplayed()));
     }
     @Test
-    public void CheckBoxNotCheckedDisplayShopNameTest() {
+    public void checkBoxNotCheckedDisplayShopNameTest() {
         onView(withId(R.id.cbBusinessAccount)).check(matches( isNotChecked()));
         onView(withId(R.id.etShopName)).check(matches(not(isDisplayed())));
     }
     @Test
-    public void CheckBoxNotCheckedDisplayShopLocationTest() {
+    public void checkBoxNotCheckedDisplayShopLocationTest() {
         onView(withId(R.id.cbBusinessAccount)).check(matches( isNotChecked()));
         onView(withId(R.id.tvShopLocation)).check(matches(not(isDisplayed())));
     }
     @Test
-    public void CheckBoxNotCheckedDisplayShopTypeTest() {
+    public void checkBoxNotCheckedDisplayShopTypeTest() {
         onView(withId(R.id.cbBusinessAccount)).check(matches(isNotChecked()));
         onView(withId(R.id.sShopType)).check(matches(not(isDisplayed())));
     }
     @Test
-    public void CheckBoxNotCheckedDisplayAllTest() {
+    public void checkBoxNotCheckedDisplayAllTest() {
         onView(withId(R.id.cbBusinessAccount)).check(matches(isNotChecked()));
         onView(withId(R.id.etShopName)).check(matches(not(isDisplayed())));
         onView(withId(R.id.tvShopLocation)).check(matches(not(isDisplayed())));
         onView(withId(R.id.sShopType)).check(matches(not(isDisplayed())));
     }
     @Test
-    public void ShopNameTypeTest() {
+    public void shopNameTypeTest() {
         onView(withId(R.id.cbBusinessAccount)).perform(click()).check(matches(isChecked()));
         onView(withId(R.id.etShopName)).check(matches(isDisplayed()));
         onView(withId(R.id.etShopName)).perform(typeText("SHOPNAME")).check(matches(withText("SHOPNAME")));
     }
 
     @Test
-    public void ShopLocationTextViewTest() {
+    public void shopLocationTextViewTest() {
         /**
          TODO: In case location is added test the location using mocks
          */
@@ -156,46 +156,42 @@ public class RegisterActivityInterfaceTest {
         onView(withId(R.id.tvShopLocation)).check(matches(withText("LATLANG")));
     }
     @Test
-    public void ShopTypeTest() {
+    public void shopTypeTest() {
         onView(withId(R.id.cbBusinessAccount)).perform(click()).check(matches( isChecked()));
         onView(withId(R.id.sShopType)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void SpinnerChoiceTest1(){
+    public void spinnerChoiceTest1(){
         onView(withId(R.id.cbBusinessAccount)).perform(click()).check(matches( isChecked()));
         onView(withId(R.id.sShopType)).perform(click());
         onData(allOf(is(instanceOf(String.class)),is("Choose a type"))).perform(click());
         onView(withId(R.id.tvSpinnerItem)).check(matches(withText("Choose a type")));
     }
     @Test
-    public void SpinnerChoiceTest2(){
+    public void spinnerChoiceTest2(){
         onView(withId(R.id.cbBusinessAccount)).perform(click()).check(matches( isChecked()));
         onView(withId(R.id.sShopType)).perform(click());
         onData(allOf(is(instanceOf(String.class)),is("Clothing"))).perform(click());
         onView(withId(R.id.tvSpinnerItem)).check(matches(withText("Clothing")));
     }
     @Test
-    public void SpinnerChoiceTest3(){
+    public void spinnerChoiceTest3(){
         onView(withId(R.id.cbBusinessAccount)).perform(click()).check(matches( isChecked()));
         onView(withId(R.id.sShopType)).perform(click());
         onData(allOf(is(instanceOf(String.class)),is("Technology"))).perform(click());
         onView(withId(R.id.tvSpinnerItem)).check(matches(withText("Technology")));
     }
     @Test
-    public void SpinnerChoiceTest4(){
+    public void spinnerChoiceTest4(){
         onView(withId(R.id.cbBusinessAccount)).perform(click()).check(matches( isChecked()));
         onView(withId(R.id.sShopType)).perform(click());
         onData(allOf(is(instanceOf(String.class)),is("Sport"))).perform(click());
         onView(withId(R.id.tvSpinnerItem)).check(matches(withText("Sport")));
     }
 
-    /**
-     * TODO: ADD some intent Tests
-     */
-
     @Test
-    public void LoginActivityIntentTest() throws Exception{
+    public void loginActivityIntentTest() throws Exception{
         Intents.init();
         mActivityRule.launchActivity(new Intent());
         onView(withId(R.id.login_button)).perform(click());

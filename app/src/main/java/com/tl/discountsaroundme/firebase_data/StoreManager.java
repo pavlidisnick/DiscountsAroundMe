@@ -2,6 +2,7 @@ package com.tl.discountsaroundme.firebase_data;
 
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -100,5 +101,17 @@ public class StoreManager {
         return (float) (earthRadius * c);
     }
 
+    public static void StoreShopOnDb(DatabaseReference DbRef, FirebaseUser user, String ShopName, String ShopType){
+        String BAUserUID = user.getUid();
+        Store Shop = new Store();
+        Shop.setDescription("Details");
+        Shop.setName(ShopName);
+        Shop.setImage("");
+        Shop.setLat(0);
+        Shop.setLng(0);
+        Shop.setType(ShopType);
+        Shop.setOwnerUID(BAUserUID);
+        DbRef.child("shops").child(user.getUid()).setValue(Shop);
+    }
 
 }

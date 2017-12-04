@@ -22,7 +22,7 @@ android {
             versionProps.store(versionPropsFile.newWriter(), null)
 
             versionCode code
-            versionName "1.0." + code
+            versionName "1.11." + code
         } else {
             throw new GradleException("Could not read version.properties!")
         }

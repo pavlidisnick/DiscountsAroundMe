@@ -27,11 +27,11 @@ public class MarkerHelper {
         this.googleMap = googleMap;
     }
 
-    public Drawable getDrawableByType(String code) {
+    private Drawable getDrawableByType(String code) {
         return fragment.getResources().getDrawable(getDrawableId(code));
     }
 
-    public int getDrawableId(String code) {
+    private int getDrawableId(String code) {
         int i = -1;
         for (String cc : fragment.getResources().getStringArray(R.array.codes)) {
             i++;
@@ -55,7 +55,7 @@ public class MarkerHelper {
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-    public Bitmap getBitmapByDrawable(Drawable drawable) {
+    private Bitmap getBitmapByDrawable(Drawable drawable) {
         return Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
     }
 

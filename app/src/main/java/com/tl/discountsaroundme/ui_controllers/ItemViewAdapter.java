@@ -56,7 +56,6 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
         holder.itemDiscount.setText(String.valueOf(discount));
 
 
-
         GlideApp.with(context)
                 .load(items.get(position).getPicture())
                 .encodeQuality(10)

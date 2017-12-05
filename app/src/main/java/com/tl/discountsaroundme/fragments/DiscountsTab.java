@@ -23,12 +23,13 @@ import android.widget.Toast;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.discounts.AddCategoryToLayout;
-import com.tl.discountsaroundme.discounts.CategoryListener;
+import com.tl.discountsaroundme.discounts.FetchCategories;
 import com.tl.discountsaroundme.discounts.Search;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.SearchHistory;
@@ -41,48 +42,54 @@ import static android.app.Activity.RESULT_OK;
 
 public class DiscountsTab extends Fragment {
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
-    public static int discountValue = 30;
-    FloatingSearchView mSearchView;
-    DrawerLayout mDrawerLayout;
-    DiscountsManager discountsManager;
 
+    //
+    public static int discountValue = 30;
+    DrawerLayout mDrawerLayout;
+    DiscountsManager discountsManager = new DiscountsManager();
     private Search search;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.grid_layout, container, false);
+        View rootView = inflater.inflate(R.layout.grid_layout, container, false);
 
-        discountsManager = new DiscountsManager();
-
-        final RecyclerView mRecyclerView = rootView.findViewById(R.id.item_grid);
+        RecyclerView mRecyclerView = rootView.findViewById(R.id.item_grid);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
-        final ItemViewAdapter adapter = new ItemViewAdapter(getActivity(), discountsManager.getDiscountItems());
+        ItemViewAdapter adapter = new ItemViewAdapter(getActivity(), discountsManager.getShowingItems());
         discountsManager.setAdapter(adapter);
         mRecyclerView.setAdapter(adapter);
+
         //ItemDecoration for spacing between items
-        ItemSpaceDecoration decoration = new ItemSpaceDecoration(16);
-        mRecyclerView.addItemDecoration(decoration);
-        mRecyclerView.setHasFixedSize(true);
+        decorate(mRecyclerView);
+
         final SwipeRefreshLayout swipeRefreshLayout = rootView.findViewById(R.id.swiperefresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                discountsManager.clearTopDiscounts();
-                discountsManager.getTopDiscounts();
+                discountsManager.getTopDiscounts(discountValue);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
 
         LinearLayout linearLayout = rootView.findViewById(R.id.linear_layout);
-        AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, getActivity());
-        new CategoryListener(addCategoryToLayout, discountsManager);
+        AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, getActivity(), discountsManager);
+        new FetchCategories(addCategoryToLayout);
 
-        discountsManager.getTopDiscounts();
+        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), discountValue);
 
         // FloatingSearchView actions
+        FloatingSearchView mSearchView = rootView.findViewById(R.id.floating_search_view);
+        setSearchBar(mSearchView);
+
+        setDrawer(mSearchView);
+
+        return rootView;
+    }
+
+    private void setSearchBar(FloatingSearchView mSearchView) {
         SearchHistory searchHistory = new SearchHistory(MainActivity.USER_ID);
-        mSearchView = rootView.findViewById(R.id.floating_search_view);
+
         search = new Search(mSearchView, searchHistory, discountsManager);
         mSearchView.setOnQueryChangeListener(search);
         mSearchView.setOnBindSuggestionCallback(search);
@@ -93,13 +100,15 @@ public class DiscountsTab extends Fragment {
                 startVoiceRecognitionActivity();
             }
         });
-
-        setDrawer();
-
-        return rootView;
     }
 
-    public void setDrawer() {
+    private void decorate(RecyclerView recyclerView) {
+        ItemSpaceDecoration decoration = new ItemSpaceDecoration(16);
+        recyclerView.addItemDecoration(decoration);
+        recyclerView.setHasFixedSize(true);
+    }
+
+    public void setDrawer(FloatingSearchView mSearchView) {
         mDrawerLayout = getActivity().findViewById(R.id.drawer_layout);
 
         mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);

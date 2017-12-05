@@ -2,6 +2,8 @@ package com.tl.discountsaroundme.ui_controllers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.ItemDetailsActivity;
 import com.tl.discountsaroundme.entities.Item;
@@ -29,7 +29,6 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
     private Context context;
     private ArrayList<Item> items;
 
-
     public ItemViewAdapter(Context context, ArrayList<Item> items) {
         this.items = items;
         this.context = context;
@@ -39,23 +38,36 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
     public ItemView onCreateViewHolder(ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
         return new ItemView(layoutView);
-
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(ItemView holder, int position) {
         holder.tvItemName.setText(items.get(position).getName());
         holder.tvItemDetails.setText(items.get(position).getDescription());
         holder.tvStoreName.setText(items.get(position).getStore());
         holder.imgString.setText(items.get(position).getPicture());
-        holder.itemDiscount.setText(Double.toString(items.get(position).getDiscount()));
         holder.type.setText(items.get(position).getType());
-        // holder.tvStoreName.setText(storeList[position]);
-        holder.tvPrice.setText(Double.toString(items.get(position).getPrice()) + " $");
-        RequestOptions options = new RequestOptions();
-        Glide.with(context)
+
+        String priceString = "$" + Double.toString(items.get(position).getPrice());
+        holder.tvPrice.setText(priceString);
+
+        int discount = (int) items.get(position).getDiscount();
+        holder.itemDiscount.setText(String.valueOf(discount));
+
+
+        GlideApp.with(context)
                 .load(items.get(position).getPicture())
+                .encodeQuality(10)
                 .into(holder.imageView);
+
+        GlideApp.with(context)
+                .load("https://grandmall-varna.com/pictures/original_1373.jpg")
+                .encodeQuality(5)
+                .circleCrop()
+                .into(holder.shopImage);
+
+        holder.imageView.animate();
     }
 
     @Override
@@ -63,7 +75,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
         return items.size();
     }
 
-    public class ItemView extends RecyclerView.ViewHolder {
+    class ItemView extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView tvItemName;
         TextView tvItemDetails;
@@ -72,8 +84,9 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
         TextView imgString;
         TextView type;
         TextView itemDiscount;
+        ImageView shopImage;
 
-        public ItemView(final View itemView) {
+        ItemView(final View itemView) {
             super(itemView);
 
             imageView = itemView.findViewById(R.id.img);
@@ -84,6 +97,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
             imgString = itemView.findViewById(R.id.imgString);
             type = itemView.findViewById(R.id.type);
             itemDiscount = itemView.findViewById(R.id.itemDiscount);
+            shopImage = itemView.findViewById(R.id.shop_image);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

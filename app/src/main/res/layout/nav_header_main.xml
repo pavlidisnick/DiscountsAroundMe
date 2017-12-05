@@ -25,7 +25,7 @@
         tools:layout_editor_absoluteY="0dp" />
 
     <TextView
-        android:id="@+id/textViewUserType"
+        android:id="@+id/drawerUserType"
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_alignParentStart="true"
@@ -39,13 +39,16 @@
         tools:layout_editor_absoluteY="50dp" />
 
     <TextView
-        android:id="@+id/textViewEmail"
+        android:id="@+id/drawerEmail"
         android:layout_width="wrap_content"
         android:layout_height="23dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:text="android.studio@android.com"
         tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="84dp" />
+        tools:layout_editor_absoluteY="84dp"
+        android:textAlignment="viewStart"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="14sp"/>
 
 </LinearLayout>

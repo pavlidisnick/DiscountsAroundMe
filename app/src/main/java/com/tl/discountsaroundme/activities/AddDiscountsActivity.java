@@ -3,8 +3,11 @@ package com.tl.discountsaroundme.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,8 +23,13 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -49,11 +57,16 @@ public class AddDiscountsActivity extends AppCompatActivity {
 
     Boolean image = false;
 
+    int MaxUploadTime = 40000; //set Max time for uploading to 40 seconds
+
+    String ShopName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_discount);
+
+        getShopName();
 
         imageView = findViewById(R.id.imageView);
         selectImg = findViewById(R.id.buttonSelectImage);
@@ -79,7 +92,12 @@ public class AddDiscountsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (checkData()) {
-                    insertToDatabase();
+                    if(isConnectedToInternet(getApplicationContext())){
+                        insertToDatabase();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "Check your internet connection", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -147,26 +165,30 @@ public class AddDiscountsActivity extends AppCompatActivity {
         if (name.isEmpty() || description.isEmpty() || category.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Complete correct the informations", Toast.LENGTH_LONG).show();
             correctData = false;
-        }
-
-        try {
-            price = Double.parseDouble(pr.getText().toString());
-            discount = Double.parseDouble(disc.getText().toString());
-            if (!image && correctData) {
-                Toast.makeText(getApplicationContext(), "Select Image", Toast.LENGTH_LONG).show();
-                System.out.println("Select Image");
+        }else {
+            try {
+                price = Double.parseDouble(pr.getText().toString());
+                discount = Double.parseDouble(disc.getText().toString());
+                if(discount>100 || discount<0){
+                    Toast.makeText(getApplicationContext(), "Discount must be number 1 to 100", Toast.LENGTH_LONG).show();
+                    correctData = false;
+                }
+                if (!image && correctData) {
+                    Toast.makeText(getApplicationContext(), "Select Image", Toast.LENGTH_LONG).show();
+                    System.out.println("Select Image");
+                    correctData = false;
+                }
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "Price and discount must be numbers", Toast.LENGTH_LONG).show();
                 correctData = false;
             }
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Price and discount must be numbers", Toast.LENGTH_LONG).show();
-            correctData = false;
         }
-
         return correctData; //return true if data completed correct
     }
 
     public void insertToDatabase() {
         FirebaseStorage storage = FirebaseStorage.getInstance();
+        FirebaseStorage.getInstance().setMaxUploadRetryTimeMillis(MaxUploadTime);
         final StorageReference storageRef = storage.getReference();
 
         final ProgressDialog pd = ProgressDialog.show(this, "", "Uploading...");
@@ -185,7 +207,7 @@ public class AddDiscountsActivity extends AppCompatActivity {
 
                 pd.dismiss();
 
-                Item item = new Item(name, category, price, discount, description, link, "temp");
+                Item item = new Item(name, category, price, discount, description, link, ShopName);
 
                 String id = databaseItem.push().getKey();
                 databaseItem.child(id).setValue(item);
@@ -201,5 +223,38 @@ public class AddDiscountsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public static boolean isConnectedToInternet(Context context) {
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    public void getShopName(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("/shops");
+        if (user != null) {
+            final String uid = user.getUid();
+
+            categoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                        String ID = itemSnapshot.child("ownerUID").getValue(String.class);
+                        if(ID.matches(uid)){
+                            ShopName = itemSnapshot.child("name").getValue(String.class);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 }

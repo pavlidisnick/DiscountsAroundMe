@@ -1,64 +1,112 @@
 package com.tl.discountsaroundme.fragments;
 
-
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.tl.discountsaroundme.R;
-import com.tl.discountsaroundme.activities.UserProfileActivity;
+import com.tl.discountsaroundme.ui_controllers.NumberPickerAnimated;
 
-public class UserTab extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
-    public static Boolean LogoutOnStop;
-    Switch swLogout;
-    Button btEditUser;
-    Button btApply;
+public class UserTab extends Fragment {
+    private boolean notifyEveryHour = false;
+    public static int notifyEvery = 5;
+
+    private LinearLayout linearLayout;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab_user_options, container, false);
 
-        // #47 Set a switch on changed variable to be stored in the SharedPreferences regarding the  user's preference on logout option.
-        swLogout = rootView.findViewById(R.id.sLogoutOptions);
-        SharedPreferences mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        swLogout.setChecked(mSharedPrefs.getBoolean("logoutKey", false));
-        btEditUser = rootView.findViewById(R.id.btEditUser);
-        btApply = rootView.findViewById(R.id.btApply);
+        final TextView everyText = rootView.findViewById(R.id.everyText);
+        final TextView numberDisplay = rootView.findViewById(R.id.hours_text_view);
+        final TextView hoursText = rootView.findViewById(R.id.hoursText);
 
-        btEditUser.setOnClickListener(this);
-        btApply.setOnClickListener(this);
-        swLogout.setOnCheckedChangeListener(this);
+        final ImageView checkBox = rootView.findViewById(R.id.checkBox);
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (notifyEveryHour) {
+                    checkBox.setImageResource(R.drawable.checkbox_unchecked);
+                    notifyEveryHour = false;
+                } else {
+                    checkBox.setImageResource(R.drawable.checkbox);
+                    notifyEveryHour = true;
+                }
+            }
+        });
+
+        // Animations for texts every and hour
+        final Animation everyAnimation = new TranslateAnimation(0f, -40f, 0f, 0f);
+        everyAnimation.setDuration(400);
+        everyAnimation.setFillEnabled(true);
+        everyAnimation.setFillAfter(true);
+
+        final Animation everyAnimationReturn = new TranslateAnimation(-40f, 0f, 0f, 0f);
+        everyAnimationReturn.setDuration(400);
+        everyAnimationReturn.setFillEnabled(true);
+        everyAnimationReturn.setFillAfter(true);
+
+        final Animation hoursAnimation = new TranslateAnimation(0f, 40f, 0f, 0f);
+        hoursAnimation.setDuration(400);
+        hoursAnimation.setFillEnabled(true);
+        hoursAnimation.setFillAfter(true);
+
+        final Animation hoursAnimationReturn = new TranslateAnimation(40f, 0f, 0f, 0f);
+        hoursAnimationReturn.setDuration(400);
+        hoursAnimationReturn.setFillEnabled(true);
+        hoursAnimationReturn.setFillAfter(true);
+
+        final NumberPickerAnimated numberPickerAnimated = rootView.findViewById(R.id.number_picker);
+
+        SeekBar seekBar = rootView.findViewById(R.id.seekBar);
+        seekBar.setOnSeekBarChangeListener(numberPickerAnimated);
+
+//        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//                everyText.startAnimation(everyAnimation);
+//                hoursText.startAnimation(hoursAnimation);
+//            }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//                everyAnimation.cancel();
+//                hoursAnimation.cancel();
+//                everyText.startAnimation(everyAnimationReturn);
+//                hoursText.startAnimation(hoursAnimationReturn);
+//            }
+//        });
 
         return rootView;
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        // TODO: make it work properly
-        SharedPreferences mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        LogoutOnStop = isChecked;
-        SharedPreferences.Editor editor = mSharedPrefs.edit();
-        editor.putBoolean("logoutKey", LogoutOnStop);
-        editor.commit();
+    private void animateNumberLeft() {
+
     }
 
+    private void animateNumberRight() {
 
-    @Override
-    public void onClick(View v) {
-        if (v.equals(btEditUser)) {
-            Intent UserProfileActivity = new Intent(getActivity(), UserProfileActivity.class);
-            startActivity(UserProfileActivity);
-        } else if (v.equals(btApply)) {
-            //APPLY USER PREFS
-        }
+    }
+
+    private void animationToLeft() {
+
+    }
+
+    private void animationToRight() {
+
     }
 
 }

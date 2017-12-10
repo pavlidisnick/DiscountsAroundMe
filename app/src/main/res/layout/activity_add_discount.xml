@@ -67,7 +67,6 @@
                 android:background="@drawable/bordered_button"
                 android:drawableStart="@drawable/ic_camera_alt"
                 android:drawableTint="@color/colorPrimaryWhite"
-                android:onClick="SelectImg"
                 android:padding="6dp"
                 android:text="Camera"
                 android:textColor="@color/colorPrimaryWhite" />

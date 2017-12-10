@@ -58,9 +58,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
         tvShopLocation = findViewById(R.id.tvShopLocation);
         sShopType = findViewById(R.id.sShopType);
-        ArrayAdapter<CharSequence> spineradapter = ArrayAdapter.createFromResource(this, R.array.shopTypeSpinner, R.layout.spinner_dropdown_list);
-        spineradapter.setDropDownViewResource(R.layout.spinner_dropdown_list);
-        sShopType.setAdapter(spineradapter);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.shopTypeSpinner, R.layout.spinner_dropdown_list);
+        spinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_list);
+        sShopType.setAdapter(spinnerAdapter);
 
         cbBusinessAccount.setOnCheckedChangeListener(this);
         register.setOnClickListener(this);
@@ -167,7 +167,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
      */
     private boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        NetworkInfo netInfo = cm != null ? cm.getActiveNetworkInfo() : null;
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 

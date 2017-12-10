@@ -36,7 +36,8 @@
             android:backgroundTint="@color/colorPrimaryWhite"
             android:hint="Email"
             android:inputType="textWebEmailAddress"
-            android:textColor="@color/colorPrimaryWhite" />
+            android:textColor="@color/colorPrimaryWhite"
+            android:textColorHint="#80cecece" />
 
         <EditText
             android:id="@+id/password"
@@ -45,7 +46,8 @@
             android:backgroundTint="@color/colorPrimaryWhite"
             android:hint="Password"
             android:inputType="textPassword"
-            android:textColor="@color/colorPrimaryWhite" />
+            android:textColor="@color/colorPrimaryWhite"
+            android:textColorHint="#80cecece" />
 
         <LinearLayout
             android:layout_width="wrap_content"

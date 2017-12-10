@@ -13,8 +13,6 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,8 +28,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.entities.User;
+import com.tl.discountsaroundme.ui_controllers.AnimCheckBox;
 
-public class RegisterActivity extends Activity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class RegisterActivity extends Activity implements View.OnClickListener, AnimCheckBox.OnCheckedChangeListener {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
 
@@ -39,9 +38,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
     private Button login;
     //Issue 8 params
     private DatabaseReference mDbRef = FirebaseDatabase.getInstance().getReference();
-    private CheckBox cbBusinessAccount;
+    private AnimCheckBox cbBusinessAccount;
     private EditText etShopName;
-    private TextView tvShopLocation;
     private Spinner sShopType;
 
     private String email;
@@ -56,11 +54,10 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         login = findViewById(R.id.login_button);
         etShopName = findViewById(R.id.etShopName);
         cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
-        tvShopLocation = findViewById(R.id.tvShopLocation);
         sShopType = findViewById(R.id.sShopType);
-        ArrayAdapter<CharSequence> spineradapter = ArrayAdapter.createFromResource(this, R.array.shopTypeSpinner, R.layout.spinner_dropdown_list);
-        spineradapter.setDropDownViewResource(R.layout.spinner_dropdown_list);
-        sShopType.setAdapter(spineradapter);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.shopTypeSpinner, R.layout.spinner_dropdown_list);
+        spinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_list);
+        sShopType.setAdapter(spinnerAdapter);
 
         cbBusinessAccount.setOnCheckedChangeListener(this);
         register.setOnClickListener(this);
@@ -139,7 +136,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
      */
     private boolean isFormFilled() {
         //Issue 8 changes need when the business account cb is checked
-        CheckBox cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
+        AnimCheckBox cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
         EditText etShopName = findViewById(R.id.etShopName);
         Spinner sShopType = findViewById(R.id.sShopType);
 
@@ -167,25 +164,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
      */
     private boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        NetworkInfo netInfo = cm != null ? cm.getActiveNetworkInfo() : null;
         return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
-    /**
-     * Issue 8
-     * If user Checks the box more options become visible
-     */
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked) {
-            etShopName.setVisibility(View.VISIBLE);
-            sShopType.setVisibility(View.VISIBLE);
-            tvShopLocation.setVisibility(View.VISIBLE);
-        } else {
-            etShopName.setVisibility(View.GONE);
-            sShopType.setVisibility(View.GONE);
-            tvShopLocation.setVisibility(View.GONE);
-        }
     }
 
     /**
@@ -218,5 +198,20 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         }
         User newUser = new User(user.getEmail(), user.getEmail(), userType, "imgURL");
         mDbRef.child("users").child(user.getUid()).setValue(newUser);
+    }
+
+    /**
+     * Issue 8
+     * If user Checks the box more options become visible
+     */
+    @Override
+    public void onChange(AnimCheckBox view, boolean checked) {
+        if (checked) {
+            etShopName.setVisibility(View.VISIBLE);
+            sShopType.setVisibility(View.VISIBLE);
+        } else {
+            etShopName.setVisibility(View.GONE);
+            sShopType.setVisibility(View.GONE);
+        }
     }
 }

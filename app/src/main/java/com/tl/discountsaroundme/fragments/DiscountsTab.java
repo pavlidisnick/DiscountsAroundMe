@@ -51,7 +51,7 @@ public class DiscountsTab extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.grid_layout, container, false);
+        View rootView = inflater.inflate(R.layout.tab_discounts, container, false);
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.item_grid);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));

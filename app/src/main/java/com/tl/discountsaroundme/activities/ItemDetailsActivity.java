@@ -41,9 +41,9 @@ public class ItemDetailsActivity extends Activity {
         price.setText(dataPrice);
         price.setPaintFlags(price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         discount.setText(getFinalPrice(dataPrice, dataDiscount));
-        itemDetails.append(dataItemDetails);
+        itemDetails.setText(dataItemDetails);
         itemName.setText(dataItemName);
-        storeName.append(dataStoreName);
+        storeName.setText(dataStoreName);
         type.append(dataType);
         Glide.with(this)
                 .load(dataImg)
@@ -55,6 +55,6 @@ public class ItemDetailsActivity extends Activity {
         double price = Double.parseDouble(priceString);
         double discount = Double.parseDouble(discountString);
         BigDecimal finalPrice = BigDecimal.valueOf(price - (price * discount / 100)).setScale(2, RoundingMode.HALF_UP);
-        return String.valueOf(finalPrice).concat("$");
+        return "$" + String.valueOf(finalPrice);
     }
 }

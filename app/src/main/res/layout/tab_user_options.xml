@@ -1,210 +1,101 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
+    android:id="@+id/root_frame_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/purple"
+    android:orientation="vertical"
     tools:context="com.tl.discountsaroundme.activities.MainActivity">
 
-    <TextView
-        android:id="@+id/titleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:text="User's Options"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
-        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginTop="40dp"
+            app:srcCompat="@drawable/ic_hot" />
 
         <TextView
-            android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="72dp"
-            android:text="Nearby Stores Radius"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="5dp"
+            android:text="Get hottest discounts"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryWhite" />
 
-        <SeekBar
-            android:id="@+id/storesRadius"
-            style="@android:style/Widget.Material.SeekBar"
+        <com.tl.discountsaroundme.ui_controllers.NumberPickerAnimated
+            android:id="@+id/number_picker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:max="5"
-            android:progress="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-        <Switch
-            android:id="@+id/notifyDiscounts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:text="Notify Me for Discounts "
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="140dp" />
-
-        <TextView
-            android:id="@+id/textViewEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:text="Notify for Discounts Above"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="208dp" />
-
-        <SeekBar
-            android:id="@+id/discountThres"
-            style="@android:style/Widget.Material.SeekBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:max="10"
-            android:progress="2"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="167dp" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:text="Select Your Favorite Categories" />
-
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp">
-
-            <CheckBox
-                android:id="@+id/checkBox4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="CheckBox" />
-
-            <CheckBox
-                android:id="@+id/checkBox3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="CheckBox" />
-
-            <CheckBox
-                android:id="@+id/checkBox2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Shoes" />
-
-            <CheckBox
-                android:id="@+id/checkBox1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Clothes" />
-        </GridLayout>
-
-        <Switch
-            android:id="@+id/sLogoutOptions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:text="Log me out when i close the app "
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="140dp" />
-
-        <TextView
-            android:id="@+id/tvUserEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:scrollHorizontally="false"
-            android:text="ExampleEMail@email.com"
-            android:textSize="18sp"
-            android:textStyle="normal" />
-
-        <TextView
-            android:id="@+id/tvDisplayName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:text="Displayname "
-            android:textSize="18sp"
-            android:textStyle="normal" />
-
-
-        <TextView
-            android:id="@+id/tvUserType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:text="UserType "
-            android:textSize="18sp"
-            android:textStyle="normal" />
-
+            app:fontSize="150"
+            app:leftText="Every"
+            app:rightText="Meters"
+            custom:startingNumber="5" />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btEditUser"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_gravity="right"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_weight="0"
-        android:text="Edit"
-        app:layout_constraintBottom_toTopOf="@+id/btApply"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
-        app:layout_constraintVertical_bias="0.917" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="340dp"
+        android:background="@color/colorPrimaryWhite"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btApply"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Apply"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="80dp"
+            tools:ignore="UselessParent">
 
-</android.support.constraint.ConstraintLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Off"
+                android:textAlignment="textEnd"
+                android:textColor="#757575"
+                tools:ignore="RtlCompat" />
+
+            <com.tl.discountsaroundme.ui_controllers.CheckBox
+                android:id="@+id/my_checkbox"
+                android:layout_width="100dp"
+                android:layout_height="44dp"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="On"
+                android:textAlignment="textStart"
+                android:textColor="#757575"
+                tools:ignore="RtlCompat" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:layout_marginTop="307dp"
+        android:backgroundTint="@color/colorPrimaryWhite"
+        android:foregroundTint="@color/colorPrimaryWhite"
+        android:max="24"
+        android:paddingBottom="10dp"
+        android:progress="5"
+        android:progressBackgroundTint="#00ffffff"
+        android:progressTint="#00ffffff"
+        android:thumb="@drawable/scroller_complete" />
+
+
+</FrameLayout>

@@ -35,7 +35,7 @@
         android:elevation="8dp"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="vertical"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"

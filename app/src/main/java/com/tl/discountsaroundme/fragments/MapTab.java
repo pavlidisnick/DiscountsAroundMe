@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.fragments;
 
+import android.animation.Animator;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -40,6 +43,7 @@ public class MapTab extends Fragment {
     private GPSTracker gps;
     private GoogleMap googleMap;
     private MarkerHelper markerHelper;
+    private LinearLayout popupMenu;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,7 +103,7 @@ public class MapTab extends Fragment {
             public void onClick(View view) {
                 ArrayList<Store> stores = new ArrayList<>();
                 try {
-                    stores.addAll(storeManager.getNearbyStores(gps.getLatitude(), gps.getLongitude(), distance * 1000));
+                    stores.addAll(storeManager.getNearbyStores(gps.getLatitude(), gps.getLongitude(), distance));
                 } catch (NullPointerException e) {
                     Toast.makeText(getContext(), "GPS disabled", Toast.LENGTH_SHORT).show();
                 }
@@ -174,13 +178,13 @@ public class MapTab extends Fragment {
             }
         });
 
-        final LinearLayout popupMenu = rootView.findViewById(R.id.popup_menu);
+        popupMenu = rootView.findViewById(R.id.popup_menu);
 
         ImageButton closePopup = rootView.findViewById(R.id.close_popup);
         closePopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popupMenu.setVisibility(View.INVISIBLE);
+                hideMenu();
             }
         });
 
@@ -198,13 +202,34 @@ public class MapTab extends Fragment {
                         Toast.makeText(getContext(), "GPS disabled", Toast.LENGTH_LONG).show();
                     }
                 } else if (itemId == R.id.map_options) {
-                    int visibility = (popupMenu.getVisibility() == View.VISIBLE) ? View.INVISIBLE : View.VISIBLE;
-                    popupMenu.setVisibility(visibility);
+                    if (popupMenu.getVisibility() == View.INVISIBLE)
+                        showMenu();
+                    else
+                        hideMenu();
                 }
             }
         });
 
         return rootView;
+    }
+
+    private void showMenu() {
+        popupMenu.setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.SlideInDown)
+                .duration(400)
+                .playOn(popupMenu);
+    }
+
+    private void hideMenu() {
+        YoYo.with(Techniques.SlideOutUp)
+                .duration(400)
+                .onEnd(new YoYo.AnimatorCallback() {
+                    @Override
+                    public void call(Animator animator) {
+                        popupMenu.setVisibility(View.INVISIBLE);
+                    }
+                })
+                .playOn(popupMenu);
     }
 
     @Override

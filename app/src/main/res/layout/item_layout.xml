@@ -27,7 +27,6 @@
             android:layout_height="0dp"
             android:gravity="left"
             android:padding="8dp"
-            android:textSize="32px"
             android:visibility="invisible" />
 
         <TextView
@@ -36,7 +35,6 @@
             android:layout_height="0dp"
             android:gravity="left"
             android:padding="8dp"
-            android:textSize="32px"
             android:visibility="invisible" />
 
         <TextView
@@ -48,7 +46,7 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="8dp"
-            android:textSize="32px"
+            android:textSize="17sp"
             android:textStyle="bold" />
 
         <TextView
@@ -60,28 +58,28 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:textColor="@color/description"
-            android:textSize="24px" />
+            android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="8dp">
 
             <ImageView
                 android:id="@+id/shop_image"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:adjustViewBounds="true"
                 android:layout_gravity="center_vertical"
+                android:adjustViewBounds="true"
                 android:src="@mipmap/badge" />
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="8dp">
 
                 <TextView
                     android:id="@+id/tvPrice"
@@ -89,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:textColor="@color/colorPrice"
-                    android:textSize="42px"
+                    android:textSize="20sp"
                     android:textStyle="italic" />
 
                 <TextView
@@ -98,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:textColor="@color/description"
-                    android:textSize="28px" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 

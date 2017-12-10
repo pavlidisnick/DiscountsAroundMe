@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_2">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -15,17 +16,12 @@
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="63dp"
-            android:layout_weight="0.18"
-            android:clickable="false"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="43dp"
             android:fontFamily="cursive"
             android:gravity="center"
             android:text="Login"
-            android:textAllCaps="false"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorPrimaryWhite"
             android:textSize="36sp"
             android:textStyle="bold"
             android:typeface="sans"
@@ -35,25 +31,29 @@
             android:id="@+id/emailText"
             android:layout_width="253dp"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:backgroundTint="@color/colorPrimaryWhite"
             android:hint="Email"
-            android:inputType="textWebEmailAddress" />
+            android:inputType="textWebEmailAddress"
+            android:textColor="@color/colorPrimaryWhite"
+            android:textColorHint="#80cecece" />
 
         <EditText
             android:id="@+id/passwordText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:backgroundTint="@color/colorPrimaryWhite"
             android:hint="Password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColor="@color/colorPrimaryWhite"
+            android:textColorHint="#80cecece" />
 
         <Button
             android:id="@+id/login"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:textColor="@color/colorPrimaryWhite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="login" />
+            android:text="login"
+            android:textColor="@color/colorPrimaryWhite" />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_btgoogle"
@@ -66,10 +66,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="55dp"
             android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp" />
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="5dp" />
     </LinearLayout>
 
     <Button

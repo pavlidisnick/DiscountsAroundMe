@@ -87,44 +87,6 @@ public class MainActivityTest {
         viewPager4.perform(swipeRight());
     }
 
-    @Test
-    public void TestUserOptionsMenu() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        ViewInteraction bottomNavigationItemView = onView(
-                allOf(withId(R.id.menu_user_options), isDisplayed()));
-        bottomNavigationItemView.perform(click());
-
-        ViewInteraction viewPager = onView(
-                allOf(withId(R.id.container), isDisplayed()));
-        viewPager.perform(swipeLeft());
-
-        ViewInteraction viewPager2 = onView(
-                allOf(withId(R.id.container), isDisplayed()));
-        viewPager2.perform(swipeLeft());
-
-        ViewInteraction viewPager3 = onView(
-                allOf(withId(R.id.container), isDisplayed()));
-        viewPager3.perform(swipeLeft());
-
-        ViewInteraction viewPager4 = onView(
-                allOf(withId(R.id.container), isDisplayed()));
-        viewPager4.perform(swipeLeft());
-
-        ViewInteraction switch_ = onView(
-                allOf(withId(R.id.notifyDiscounts), withText("Notify Me for Discounts "), isDisplayed()));
-        switch_.perform(click());
-
-        ViewInteraction switch_2 = onView(
-                allOf(withId(R.id.notifyDiscounts), withText("Notify Me for Discounts "), isDisplayed()));
-        switch_2.perform(click());
-    }
-
-
 
     @Test
     public void TestTopDiscountsMenu() {

@@ -1,6 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_frame_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/purple"
@@ -26,100 +28,74 @@
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryWhite" />
 
-        <LinearLayout
-            android:layout_width="360dp"
-            android:layout_height="170dp"
-            android:layout_gravity="center"
-            android:layout_margin="40dp"
-            android:orientation="horizontal"
-            android:visibility="invisible">
-
-            <TextView
-                android:id="@+id/everyText"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Every"
-                android:textAlignment="textEnd"
-                android:textColor="@color/colorPrimaryWhite"
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/hours_text_view"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="5"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimaryWhite"
-                android:textSize="120dp" />
-
-            <TextView
-                android:id="@+id/hoursText"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="hours"
-                android:textAlignment="textStart"
-                android:textColor="@color/colorPrimaryWhite"
-                android:textSize="20dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <com.tl.discountsaroundme.ui_controllers.NumberPickerAnimated
+            android:id="@+id/number_picker"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:background="@color/colorPrimaryWhite"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            app:fontSize="150"
+            app:leftText="Every"
+            app:rightText="Meters"
+            custom:startingNumber="5" />
 
-            <SeekBar
-                android:id="@+id/seekBar"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="8dp"
-                android:max="24"
-                android:progress="5"
-                android:progressTint="#CD48FF"
-                android:thumb="@drawable/scroller_hot" />
+    </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="340dp"
+        android:background="@color/colorPrimaryWhite"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="80dp"
+            tools:ignore="UselessParent">
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="40dp">
+                android:layout_gravity="center"
+                android:text="Off"
+                android:textAlignment="textEnd"
+                android:textColor="#757575"
+                tools:ignore="RtlCompat" />
 
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Off"
-                    android:textAlignment="textEnd"
-                    android:textColor="#757575" />
+            <com.tl.discountsaroundme.ui_controllers.CheckBox
+                android:id="@+id/my_checkbox"
+                android:layout_width="100dp"
+                android:layout_height="44dp"
+                android:layout_gravity="center" />
 
-                <ImageView
-                    android:id="@+id/checkBox"
-                    android:layout_width="100dp"
-                    android:layout_height="44dp"
-                    app:srcCompat="@drawable/checkbox_unchecked" />
-
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="On"
-                    android:textAlignment="textStart"
-                    android:textColor="#757575" />
-
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="On"
+                android:textAlignment="textStart"
+                android:textColor="#757575"
+                tools:ignore="RtlCompat" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <com.tl.discountsaroundme.ui_controllers.NumberPickerAnimated
-        android:id="@+id/number_picker"
+    <SeekBar
+        android:id="@+id/seekBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="120dp" />
+        android:layout_height="80dp"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:layout_marginTop="307dp"
+        android:backgroundTint="@color/colorPrimaryWhite"
+        android:foregroundTint="@color/colorPrimaryWhite"
+        android:max="24"
+        android:paddingBottom="10dp"
+        android:progress="5"
+        android:progressBackgroundTint="#00ffffff"
+        android:progressTint="#00ffffff"
+        android:thumb="@drawable/scroller_complete" />
 
 
 </FrameLayout>

@@ -99,7 +99,7 @@ public class MapTab extends Fragment {
             public void onClick(View view) {
                 ArrayList<Store> stores = new ArrayList<>();
                 try {
-                    stores.addAll(storeManager.getNearbyStores(gps.getLatitude(), gps.getLongitude(), distance * 1000));
+                    stores.addAll(storeManager.getNearbyStores(gps.getLatitude(), gps.getLongitude(), distance));
                 } catch (NullPointerException e) {
                     Toast.makeText(getContext(), "GPS disabled", Toast.LENGTH_SHORT).show();
                 }

@@ -1,9 +1,10 @@
 <resources>
     <declare-styleable name="NumberPickerAnimated">
-        <attr name="showText" format="boolean" />
-        <attr name="labelPosition" format="enum">
-            <enum name="left" value="0"/>
-            <enum name="right" value="1"/>
-        </attr>
+        <attr name="leftText" format="string" />
+        <attr name="rightText" format="string" />
+        <attr name="fontSize" format="integer" />
+        <attr name="startingNumber" format="integer" />
+        <attr name="sideTextSize" format="integer" />
+        <attr name="sideTextPadding" format="integer" />
     </declare-styleable>
 </resources>

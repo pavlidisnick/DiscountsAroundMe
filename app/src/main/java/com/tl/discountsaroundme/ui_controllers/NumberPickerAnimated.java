@@ -1,91 +1,144 @@
 package com.tl.discountsaroundme.ui_controllers;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.animation.AlphaAnimation;
+import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.fragments.MapTab;
+import com.tl.discountsaroundme.fragments.UserTab;
 
-import java.util.ArrayList;
-import java.util.List;
+/**
+ * NumberPickerAnimated
+ * Set a seekBar listener to this object and it will show the progress with animations
+ */
+public class NumberPickerAnimated extends FrameLayout implements SeekBar.OnSeekBarChangeListener {
 
-public class NumberPickerAnimated extends FrameLayout implements SeekBar.OnSeekBarChangeListener, Animation.AnimationListener {
-    private int size = 150;
-
-    private int number = 5;
-    private int maxNumber = 24;
-
-    // ANIMATION DURATIONS
-    private int animationDuration = 300;
-
-    // ALL TEXT VIEWS
-    private List<TextView> textViewList = new ArrayList<>();
+    LinearLayout linearLayout;
 
     // THE SHOWING TEXT VIEW
     TextView textView;
 
+    View viewColorAnimate;
+
+    private TextView textViewLeft;
+    private TextView textViewRight;
+
+    private int fontSize;
+
+    private int number;
+
+    private int red = 255;
+    private int blue = 0;
+
     public NumberPickerAnimated(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setLinearLayout(context, attrs);
 
-        fillList();
-    }
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.NumberPickerAnimated, 0, 0);
+        try {
+            fontSize = a.getInteger(R.styleable.NumberPickerAnimated_fontSize, 150);
 
-    boolean isInvokedLeft = false;
-    boolean isInvokedRight = false;
+            number = a.getInteger(R.styleable.NumberPickerAnimated_startingNumber, 5);
+            int sideTextSize = a.getInteger(R.styleable.NumberPickerAnimated_sideTextSize, 20);
+            int sideTextPadding = a.getInteger(R.styleable.NumberPickerAnimated_sideTextPadding, 20);
+            String leftText = a.getString(R.styleable.NumberPickerAnimated_leftText);
+            String rightText = a.getString(R.styleable.NumberPickerAnimated_rightText);
 
-    float x;
-    float absoluteCenter;
-    float endX;
-
-    float positionLeftShowing;
-    float positionLeft;
-
-    float positionRightShowing;
-    float positionRight;
-
-    private void initialize() {
-        // to place the showing text view
-        // also start fading out from here
-        x = textView.getX();
-        // absolute center of layout
-        absoluteCenter = x + textView.getWidth() / 2;
-
-        // start fading out from here
-        endX = x + textView.getWidth();
-
-        // position to start viewing text views to go left to center
-        positionLeftShowing = (float) (x - (textView.getWidth() * 0.8));
-
-        // position text view to go left to center
-        positionLeft = x - textView.getWidth();
-
-        // position text views to go center to right
-        positionRightShowing = (float) (endX + (textView.getWidth() * 0.8));
-
-        // position text  view to go center to right
-        positionRight = endX + textView.getWidth();
-    }
-
-    private void fillList() {
-        for (int i = 0; i <= maxNumber; i++) {
-            TextView textView = addTextView(size);
-            textView.setVisibility(GONE);
-            textView.setText(String.valueOf(i));
-            textViewList.add(textView);
-
-            if (i == number) {
-                textView.setVisibility(VISIBLE);
-                this.textView = textView;
-            }
+            addLeftTextView(leftText, sideTextSize, sideTextPadding);
+            setNumberTextView();
+            addRightTextView(rightText, sideTextSize, sideTextPadding);
+        } finally {
+            a.recycle();
         }
+    }
+
+    private void setLinearLayout(Context context, AttributeSet attrs) {
+        linearLayout = new LinearLayout(context, attrs);
+        linearLayout.setGravity(Gravity.CENTER);
+        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        lp.gravity = Gravity.CENTER;
+        linearLayout.setLayoutParams(lp);
+        this.addView(linearLayout);
+    }
+
+    private void setNumberTextView() {
+        textView = addTextView(fontSize);
+        textView.setText(String.valueOf(number));
+        linearLayout.addView(textView);
+    }
+
+    private void addLeftTextView(String text, int textSize, int sideTextPadding) {
+        int padding = getPixelsFromDp(sideTextPadding);
+
+        textViewLeft = addTextView(textSize);
+        textViewLeft.setText(text);
+        textViewLeft.setPadding(padding, 0, 0, 0);
+        linearLayout.addView(textViewLeft);
+    }
+
+    private void addRightTextView(String text, int textSize, int sideTextPadding) {
+        int padding = getPixelsFromDp(sideTextPadding);
+
+        textViewRight = addTextView(textSize);
+        textViewRight.setText(text);
+        textViewRight.setPadding(0, 0, padding, 0);
+        linearLayout.addView(textViewRight);
+    }
+
+    private void leftTextAnimationStart() {
+        Animation hoursAnimation = new TranslateAnimation(0f, -40f, 0f, 0f);
+        hoursAnimation.setDuration(400);
+        hoursAnimation.setFillEnabled(true);
+        hoursAnimation.setFillAfter(true);
+
+        textViewLeft.startAnimation(hoursAnimation);
+    }
+
+    private void leftTextAnimationEnd() {
+        Animation hoursAnimationReturn = new TranslateAnimation(-40f, 0f, 0f, 0f);
+        hoursAnimationReturn.setDuration(400);
+        hoursAnimationReturn.setFillEnabled(true);
+        hoursAnimationReturn.setFillAfter(true);
+
+        textViewLeft.startAnimation(hoursAnimationReturn);
+    }
+
+    private void rightTextAnimationStart() {
+        final Animation hoursAnimation = new TranslateAnimation(0f, 40f, 0f, 0f);
+        hoursAnimation.setDuration(400);
+        hoursAnimation.setFillEnabled(true);
+        hoursAnimation.setFillAfter(true);
+
+        final Animation hoursAnimationReturn = new TranslateAnimation(40f, 0f, 0f, 0f);
+        hoursAnimationReturn.setDuration(400);
+        hoursAnimationReturn.setFillEnabled(true);
+        hoursAnimationReturn.setFillAfter(true);
+
+        textViewRight.startAnimation(hoursAnimation);
+    }
+
+    private void rightTextAnimationEnd() {
+        final Animation hoursAnimationReturn = new TranslateAnimation(40f, 0f, 0f, 0f);
+        hoursAnimationReturn.setDuration(400);
+        hoursAnimationReturn.setFillEnabled(true);
+        hoursAnimationReturn.setFillAfter(true);
+
+        textViewRight.startAnimation(hoursAnimationReturn);
     }
 
     private TextView addTextView(int size) {
@@ -95,304 +148,83 @@ public class NumberPickerAnimated extends FrameLayout implements SeekBar.OnSeekB
         textView.setTextSize(size);
         textView.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryWhite));
 
-        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        LayoutParams lp = new LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER;
         textView.setLayoutParams(lp);
 
-        this.addView(textView);
         return textView;
     }
 
-    public void animateLeft() {
-        if (!isInvokedLeft && !isInvokedRight) {
-            int indexOfCurrent = textViewList.indexOf(textView);
-
-            if (indexOfCurrent != 0) {
-                TextView oldTextView = textView;
-                TextView textView = textViewList.get(indexOfCurrent - 1);
-
-                animateCenterToRight(oldTextView);
-                animateLeftToCenter(textView);
-
-                this.textView = textView;
-
-                isInvokedLeft = true;
-            }
-        }
-    }
-
-    public void animateRight() {
-        if (!isInvokedRight && !isInvokedLeft) {
-            int indexOfCurrent = textViewList.indexOf(textView);
-
-            if (indexOfCurrent != textViewList.size() - 1) {
-                TextView oldTextView = textView;
-                TextView textView = textViewList.get(indexOfCurrent + 1);
-
-                animateCenterToLeft(oldTextView);
-                animateRightToCenter(textView);
-
-                this.textView = textView;
-
-                isInvokedRight = true;
-            }
-        }
-    }
-
-
-    // ANIMATIONS
-
-
-    private void animateLeftToCenter(final TextView textView) {
-        textView.setX(positionLeft);
-        textView.setVisibility(VISIBLE);
-
-        AnimationSet animationSet = new AnimationSet(true);
-
-        TranslateAnimation translateLeft =
-                new TranslateAnimation(positionLeft, x, 0f, 0f);
-        translateLeft.setFillBefore(true);
-        translateLeft.setFillEnabled(true);
-        translateLeft.setFillAfter(true);
-        translateLeft.setDuration(animationDuration);
-
-        Animation fadeIn = new AlphaAnimation(0.0f, 1.0f);
-        fadeIn.setFillAfter(true);
-        fadeIn.setDuration(animationDuration);
-
-        ScaleAnimation scaleAnim = new ScaleAnimation(1.5f, 1.0f, 1.5f,
-                1.0f, Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-        scaleAnim.setFillAfter(true);
-        scaleAnim.setDuration(animationDuration);
-
-        animationSet.addAnimation(translateLeft);
-        animationSet.addAnimation(fadeIn);
-        animationSet.addAnimation(scaleAnim);
-
-        animationSet.setDuration(animationDuration);
-        animationSet.setFillAfter(true);
-
-        animationSet.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                textView.setX(x);
-
-                isInvokedRight = false;
-                isInvokedLeft = false;
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        textView.startAnimation(animationSet);
-    }
-
-
-    // CENTER TO LEFT
-
-    private void animateCenterToLeft(final TextView textView) {
-        textView.setX(x);
-        textView.setVisibility(VISIBLE);
-
-        AnimationSet animationSet = new AnimationSet(true);
-
-        TranslateAnimation translateLeft =
-                new TranslateAnimation(x, positionLeft, 0f, 0f);
-        translateLeft.setFillBefore(true);
-        translateLeft.setFillEnabled(true);
-        translateLeft.setFillAfter(true);
-        translateLeft.setDuration(animationDuration);
-
-        Animation fadeOut = new AlphaAnimation(1.0f, 0.0f);
-        fadeOut.setFillAfter(true);
-        fadeOut.setDuration(animationDuration);
-
-        ScaleAnimation scaleAnim = new ScaleAnimation(1.0f, 1.5f, 1.0f,
-                1.5f, Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-        scaleAnim.setFillAfter(true);
-        scaleAnim.setDuration(animationDuration);
-
-        animationSet.addAnimation(translateLeft);
-        animationSet.addAnimation(fadeOut);
-        animationSet.addAnimation(scaleAnim);
-
-        animationSet.setDuration(animationDuration);
-
-        animationSet.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                textView.setText(GONE);
-
-                isInvokedLeft = false;
-                isInvokedRight = false;
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        textView.startAnimation(animationSet);
-    }
-
-
-    // CENTER TO RIGHT
-
-    private void animateCenterToRight(final TextView textView) {
-        textView.setX(x);
-        textView.setVisibility(VISIBLE);
-
-        AnimationSet animationSet = new AnimationSet(true);
-
-        TranslateAnimation translateLeft =
-                new TranslateAnimation(x, positionRight, 0f, 0f);
-        translateLeft.setFillBefore(true);
-        translateLeft.setFillEnabled(true);
-        translateLeft.setFillAfter(true);
-        translateLeft.setDuration(animationDuration);
-
-        Animation fadeOut = new AlphaAnimation(1.0f, 0.0f);
-        fadeOut.setFillAfter(true);
-        fadeOut.setDuration(animationDuration);
-
-        ScaleAnimation scaleAnim = new ScaleAnimation(1.0f, 0.75f, 1.0f,
-                0.75f, Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-        scaleAnim.setFillAfter(true);
-        scaleAnim.setDuration(animationDuration);
-
-        animationSet.addAnimation(translateLeft);
-        animationSet.addAnimation(fadeOut);
-        animationSet.addAnimation(scaleAnim);
-
-        animationSet.setDuration(animationDuration);
-
-        animationSet.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                textView.setText(GONE);
-
-                isInvokedRight = false;
-                isInvokedLeft = false;
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        textView.startAnimation(animationSet);
-    }
-
-    // RIGHT TO CENTER
-
-    private void animateRightToCenter(final TextView textView) {
-        textView.setX(positionRight);
-        textView.setVisibility(VISIBLE);
-
-        AnimationSet animationSet = new AnimationSet(true);
-
-        TranslateAnimation translateLeft =
-                new TranslateAnimation(positionRight, x, 0f, 0f);
-        translateLeft.setFillBefore(true);
-        translateLeft.setFillEnabled(true);
-        translateLeft.setFillAfter(true);
-        translateLeft.setDuration(animationDuration);
-
-        Animation fadeOut = new AlphaAnimation(0.0f, 1.0f);
-        fadeOut.setFillAfter(true);
-        fadeOut.setDuration(animationDuration);
-
-        ScaleAnimation scaleAnim = new ScaleAnimation(0.75f, 1.0f, 0.75f,
-                1.0f, Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-        scaleAnim.setFillAfter(true);
-        scaleAnim.setDuration(animationDuration);
-
-        animationSet.addAnimation(translateLeft);
-        animationSet.addAnimation(fadeOut);
-        animationSet.addAnimation(scaleAnim);
-
-        animationSet.setDuration(animationDuration);
-
-        animationSet.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                textView.setX(x);
-
-                isInvokedRight = false;
-                isInvokedLeft = false;
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        textView.startAnimation(animationSet);
-    }
-
-
-    // END ANIMATIONS
-
-
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (progress < number) {
-            number = progress;
-            animateLeft();
-        } else {
-            number = progress;
-            animateRight();
+        YoYo.with(Techniques.Shake)
+                .duration(300)
+                .playOn(textView);
+
+        textView.setText(String.valueOf(progress));
+
+        try {
+            if (number < progress)
+                rightGradientChange();
+            else if (number > progress)
+                leftGradientChange();
+
+            gradientChange();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        number = progress;
+        MapTab.distance = progress;
     }
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-        initialize();
+        leftTextAnimationStart();
+        rightTextAnimationStart();
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+        leftTextAnimationEnd();
+        rightTextAnimationEnd();
     }
 
-    @Override
-    public void onAnimationStart(Animation animation) {
+    private int getPixelsFromDp(int dp) {
+        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
     }
 
-    @Override
-    public void onAnimationEnd(Animation animation) {
+    public void setBackgroundToAnimate(View layout) {
+        viewColorAnimate = layout;
     }
 
-    @Override
-    public void onAnimationRepeat(Animation animation) {
+    @SuppressWarnings("deprecation")
+    private void gradientChange() {
+        // only red and blue changes
+        String red = Integer.toHexString(this.red);
+        String green = Integer.toHexString(107);
+        String blue = Integer.toHexString(this.blue);
+        String color = "#" + red + green + blue;
 
+        int[] colors = {Color.parseColor(color), Color.parseColor("#f98abf")};
+
+        GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+
+        viewColorAnimate.setBackgroundDrawable(gd);
+    }
+
+    private void leftGradientChange() {
+        if (blue > 0)
+            blue -= 15;
+        else if (red < 255)
+            red += 15;
+    }
+
+    private void rightGradientChange() {
+        if (blue < 255)
+            blue += 15;
+        else if (red > 0)
+            red -= 15;
     }
 }

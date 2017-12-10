@@ -11,8 +11,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_margin="25dp"
         android:orientation="vertical">
 
@@ -80,8 +78,8 @@
             android:id="@+id/etShopName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter your shop's name"
             android:backgroundTint="@color/colorPrimaryWhite"
+            android:hint="Enter your shop's name"
             android:inputType="textPersonName"
             android:textColor="@color/colorPrimaryWhite"
             android:visibility="gone" />

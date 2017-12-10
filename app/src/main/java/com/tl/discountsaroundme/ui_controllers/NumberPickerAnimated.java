@@ -20,7 +20,6 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.fragments.MapTab;
-import com.tl.discountsaroundme.fragments.UserTab;
 
 /**
  * NumberPickerAnimated

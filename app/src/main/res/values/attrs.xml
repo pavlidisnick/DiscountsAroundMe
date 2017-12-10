@@ -7,4 +7,11 @@
         <attr name="sideTextSize" format="integer" />
         <attr name="sideTextPadding" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="AnimCheckBox">
+        <attr name="stroke_width" format="dimension" />
+        <attr name="stroke_color" format="color" />
+        <attr name="circle_color" format="color" />
+        <attr name="checked" format="boolean" />
+    </declare-styleable>
 </resources>

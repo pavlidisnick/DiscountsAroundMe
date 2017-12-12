@@ -98,8 +98,8 @@ public class DiscountsManagerTest {
     public void getDiscountNames() throws Exception {
         ArrayList<String> list = discountsManager.getDiscountNames();
         assertEquals("abc", list.get(0));
-        assertEquals("cde", list.get(0));
-        assertEquals("qwerty", list.get(0));
+        assertEquals("cde", list.get(1));
+        assertEquals("qwerty", list.get(2));
     }
 
 //    @Test

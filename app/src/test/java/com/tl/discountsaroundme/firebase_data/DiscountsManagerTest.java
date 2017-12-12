@@ -1,36 +1,29 @@
 package com.tl.discountsaroundme.firebase_data;
 
-import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.entities.Item;
-import com.tl.discountsaroundme.ui_controllers.ItemViewAdapter;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.ArrayList;
 
-import static org.mockito.Mockito.mock;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotSame;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(FirebaseDatabase.class)
 public class DiscountsManagerTest {
 
-    private DiscountsManager discountsManager = new DiscountsManager();
+    private static DiscountsManager discountsManager = new DiscountsManager();
+    private static ArrayList<Item> itemList = new ArrayList<>();
 
     @Before
-    public void setup() throws Exception {
-        ArrayList<Item> itemList = new ArrayList<Item>() {{
-            new Item("abc", "Clothing", 23, 35, "Empty", "Empty", "abcStore");
-            new Item("cde", "Technology", 23, 40, "Empty", "Empty", "abcStore");
-            new Item("qwerty", "Food", 23, 45, "Empty", "Empty", "cdeStore");
-        }};
+    public void setup() {
+        itemList.add(new Item("abc", "Clothing", 23,
+                35, "Empty", "Empty", "abcStore"));
+        itemList.add(new Item("cde", "Technology", 23,
+                40, "Empty", "Empty", "abcStore"));
+        itemList.add(new Item("qwerty", "Food", 23,
+                45, "Empty", "Empty", "cdeStore"));
         discountsManager.showTopDiscounts(itemList);
-
-        ItemViewAdapter itemViewAdapter = mock(ItemViewAdapter.class);
-        discountsManager.setAdapter(itemViewAdapter);
     }
 
 //    @Test
@@ -156,41 +149,41 @@ public class DiscountsManagerTest {
     public void getTopDiscountsByStore1() throws Exception {
         ArrayList<Item> itemList = discountsManager.getTopDiscountsByStore("abcStore", 40);
 
-        assert itemList.get(0).getDiscount() == 40;
+        assertEquals(40.0, itemList.get(0).getDiscount());
     }
 
     @Test
     public void getTopDiscountsByStore2() throws Exception {
         ArrayList<Item> itemList = discountsManager.getTopDiscountsByStore("abcStore", 40);
 
-        assert itemList.get(0).getDiscount() != 35;
+        assertNotSame(35, itemList.get(0).getDiscount());
     }
 
     @Test
     public void getTopDiscountsByStore3() throws Exception {
         ArrayList<Item> itemList = discountsManager.getTopDiscountsByStore("abcStore", 45);
 
-        assert itemList.get(0) == null;
+        assertEquals(true, itemList.isEmpty());
     }
 
     @Test
     public void getTopDiscountsByStore4() throws Exception {
         ArrayList<Item> itemList = discountsManager.getTopDiscountsByStore("Store", 30);
 
-        assert itemList.get(0) == null;
+        assertEquals(true, itemList.isEmpty());
     }
 
     @Test
     public void getTopDiscountsByStore5() throws Exception {
         ArrayList<Item> itemList = discountsManager.getTopDiscountsByStore("abcStore", 30);
 
-        assert itemList.get(0).getDiscount() == 40;
+        assertEquals(35.0, itemList.get(0).getDiscount());
     }
 
     @Test
     public void getTopItemByStore() throws Exception {
         Item item = discountsManager.getTopItemByStore("abcStore");
 
-        assert item.getDiscount() == 40;
+        assertEquals(40.0, item.getDiscount());
     }
 }

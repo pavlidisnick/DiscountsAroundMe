@@ -97,9 +97,9 @@ public class DiscountsManagerTest {
     @Test
     public void getDiscountNames() throws Exception {
         ArrayList<String> list = discountsManager.getDiscountNames();
-        assert list.get(0).equals("abc");
-        assert list.get(0).equals("cde");
-        assert list.get(0).equals("qwerty");
+        assertEquals("abc", list.get(0));
+        assertEquals("cde", list.get(0));
+        assertEquals("qwerty", list.get(0));
     }
 
 //    @Test

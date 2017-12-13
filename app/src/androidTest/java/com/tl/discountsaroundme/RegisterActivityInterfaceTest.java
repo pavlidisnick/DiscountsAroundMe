@@ -101,7 +101,6 @@ public class RegisterActivityInterfaceTest {
     @Test
     public void CheckBoxClickAndDisplayShopLocationTest() {
         onView(withId(R.id.cbBusinessAccount)).perform(click()).check(matches(isChecked()));
-        onView(withId(R.id.tvShopLocation)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -114,7 +113,6 @@ public class RegisterActivityInterfaceTest {
     public void CheckBoxClickAndDisplayAllTest() {
         onView(withId(R.id.cbBusinessAccount)).perform(click()).check(matches(isChecked()));
         onView(withId(R.id.etShopName)).check(matches(isDisplayed()));
-        onView(withId(R.id.tvShopLocation)).check(matches(isDisplayed()));
         onView(withId(R.id.sShopType)).check(matches(isDisplayed()));
     }
     @Test
@@ -125,7 +123,6 @@ public class RegisterActivityInterfaceTest {
     @Test
     public void CheckBoxNotCheckedDisplayShopLocationTest() {
         onView(withId(R.id.cbBusinessAccount)).check(matches( isNotChecked()));
-        onView(withId(R.id.tvShopLocation)).check(matches(not(isDisplayed())));
     }
     @Test
     public void CheckBoxNotCheckedDisplayShopTypeTest() {
@@ -136,7 +133,6 @@ public class RegisterActivityInterfaceTest {
     public void CheckBoxNotCheckedDisplayAllTest() {
         onView(withId(R.id.cbBusinessAccount)).check(matches(isNotChecked()));
         onView(withId(R.id.etShopName)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.tvShopLocation)).check(matches(not(isDisplayed())));
         onView(withId(R.id.sShopType)).check(matches(not(isDisplayed())));
     }
     @Test
@@ -148,12 +144,8 @@ public class RegisterActivityInterfaceTest {
 
     @Test
     public void ShopLocationTextViewTest() {
-        /**
-         TODO: In case location is added test the location using mocks
-         */
+        // TODO: In case location is added test the location using mocks
         onView(withId(R.id.cbBusinessAccount)).perform(click()).check(matches( isChecked()));
-        onView(withId(R.id.tvShopLocation)).check(matches(isDisplayed()));
-        onView(withId(R.id.tvShopLocation)).check(matches(withText("LATLANG")));
     }
     @Test
     public void ShopTypeTest() {

@@ -17,9 +17,11 @@ import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
 
 import org.hamcrest.Matcher;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -34,111 +36,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
 
-
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class LoginActivityInterfaceTest {
 
     @Rule
     public ActivityTestRule<LoginActivity> mActivityRule = new ActivityTestRule<>(LoginActivity.class);
-    public void useAppContext() throws Exception {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-
-        assertEquals("com.tl.discountsaroundme.Activities", appContext.getPackageName());
-    }
-
-    @Test
-    public void normalLogin(){
-        onView(withId(R.id.emailText)).perform(typeText("pavlidis.nik95@gmail.com")).check(matches(withText("pavlidis.nik95@gmail.com")));
-        onView(withId(R.id.passwordText)).perform(typeText("pavlidis")).check(matches(withText("pavlidis")));
-    }
-
-    @Test
-    public void wrongEmail(){
-        onView(withId(R.id.emailText)).perform(typeText("email"));
-        onView(withId(R.id.passwordText)).perform(typeText("pavlidis"),
-                closeSoftKeyboard());
-        onView(withId(R.id.login)).perform(click());
-    }
-
-    @Test
-    public void wrongPassword(){
-        onView(withId(R.id.emailText)).perform(typeText("pavlidis.nik95@gmail.com"));
-        onView(withId(R.id.passwordText)).perform(typeText("password"),
-                closeSoftKeyboard());
-        onView(withId(R.id.login)).perform(click());
-    }
-
-    @Test
-    public void wrongData(){
-        onView(withId(R.id.emailText)).perform(typeText("email"));
-        onView(withId(R.id.passwordText)).perform(typeText("password"),
-                closeSoftKeyboard());
-        onView(withId(R.id.login)).perform(click());
-    }
-
-    @Test
-    public void emptyEmail(){
-        onView(withId(R.id.emailText)).perform(typeText(""));
-        onView(withId(R.id.passwordText)).perform(typeText("pavlidis"),
-                closeSoftKeyboard());
-        onView(withId(R.id.login)).perform(click());
-    }
-
-    @Test
-    public void emptyPassword(){
-        onView(withId(R.id.emailText)).perform(typeText("pavlidis.nik95@gmail.com"));
-        onView(withId(R.id.passwordText)).perform(typeText(""),
-                closeSoftKeyboard());
-        onView(withId(R.id.login)).perform(click());
-    }
-
-    @Test
-    public void emptyData(){
-        onView(withId(R.id.emailText)).perform(typeText(""));
-        onView(withId(R.id.passwordText)).perform(typeText(""),
-                closeSoftKeyboard());
-        onView(withId(R.id.login)).perform(click());
-    }
-    @Test
-    public void EmailTypeTest() {
-        Espresso.onView(withId(R.id.emailText)).perform(typeText("Email@mail.com")).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void PasswordTypeTest() {
-        Espresso.onView(withId(R.id.passwordText)).perform(typeText("Pass")).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void LoginButtonClickTest() {
-        Espresso.onView(withId(R.id.login)).perform(click());
-
-    }
-
-    @Test
-    public void PasswordTypeTest2() {
-        Espresso.onView(withId(R.id.passwordText)).perform(typeText("Pass")).check(matches(withText("Pass")));
-    }
-
-    @Test
-    public void EmailTypeTest2() {
-        Espresso.onView(withId(R.id.emailText)).perform(typeText("Email@mail.com")).check(matches(withText("Email@mail.com")));
-    }
-
-    @Test
-    public void LoginActivityIntentTest() throws Exception{
-        Intents.init();
-        mActivityRule.launchActivity(new Intent());
-        onView(withId(R.id.emailText)).perform(typeText("test@gmail.com"));
-        onView(withId(R.id.passwordText)).perform(typeText("123456"));
-        pressBack();
-        onView(withId(R.id.login)).perform(click());
-        onView(isRoot()).perform(waitFor(5000));
-        intended(hasComponent(MainActivity.class.getName()));
-        Intents.release();
-    }
 
     /**
      * Method to  make espresso wait up
@@ -164,5 +68,104 @@ public class LoginActivityInterfaceTest {
 
     public static void pressBack() {
         onView(isRoot()).perform(ViewActions.pressBack());
+    }
+
+    public void useAppContext() throws Exception {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getTargetContext();
+
+        assertEquals("com.tl.discountsaroundme.Activities", appContext.getPackageName());
+    }
+
+    @Test
+    public void normalLogin() {
+        onView(withId(R.id.emailText)).perform(typeText("pavlidis.nik95@gmail.com")).check(matches(withText("pavlidis.nik95@gmail.com")));
+        onView(withId(R.id.passwordText)).perform(typeText("pavlidis")).check(matches(withText("pavlidis")));
+    }
+
+    @Test
+    public void wrongEmail() {
+        onView(withId(R.id.emailText)).perform(typeText("email"));
+        onView(withId(R.id.passwordText)).perform(typeText("pavlidis"),
+                closeSoftKeyboard());
+        onView(withId(R.id.login)).perform(click());
+    }
+
+    @Test
+    public void wrongPassword() {
+        onView(withId(R.id.emailText)).perform(typeText("pavlidis.nik95@gmail.com"));
+        onView(withId(R.id.passwordText)).perform(typeText("password"),
+                closeSoftKeyboard());
+        onView(withId(R.id.login)).perform(click());
+    }
+
+    @Test
+    public void wrongData() {
+        onView(withId(R.id.emailText)).perform(typeText("email"));
+        onView(withId(R.id.passwordText)).perform(typeText("password"),
+                closeSoftKeyboard());
+        onView(withId(R.id.login)).perform(click());
+    }
+
+    @Test
+    public void emptyEmail() {
+        onView(withId(R.id.emailText)).perform(typeText(""));
+        onView(withId(R.id.passwordText)).perform(typeText("pavlidis"),
+                closeSoftKeyboard());
+        onView(withId(R.id.login)).perform(click());
+    }
+
+    @Test
+    public void emptyPassword() {
+        onView(withId(R.id.emailText)).perform(typeText("pavlidis.nik95@gmail.com"));
+        onView(withId(R.id.passwordText)).perform(typeText(""),
+                closeSoftKeyboard());
+        onView(withId(R.id.login)).perform(click());
+    }
+
+    @Test
+    public void emptyData() {
+        onView(withId(R.id.emailText)).perform(typeText(""));
+        onView(withId(R.id.passwordText)).perform(typeText(""),
+                closeSoftKeyboard());
+        onView(withId(R.id.login)).perform(click());
+    }
+
+    @Test
+    public void emailTypeTest() {
+        Espresso.onView(withId(R.id.emailText)).perform(typeText("Email@mail.com")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void passwordTypeTest() {
+        Espresso.onView(withId(R.id.passwordText)).perform(typeText("Pass")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void loginButtonClickTest() {
+        Espresso.onView(withId(R.id.login)).perform(click());
+    }
+
+    @Test
+    public void passwordTypeTest2() {
+        Espresso.onView(withId(R.id.passwordText)).perform(typeText("Pass")).check(matches(withText("Pass")));
+    }
+
+    @Test
+    public void emailTypeTest2() {
+        Espresso.onView(withId(R.id.emailText)).perform(typeText("Email@mail.com")).check(matches(withText("Email@mail.com")));
+    }
+
+    @Test
+    public void zLoginActivityIntentTest() throws Exception {
+        Intents.init();
+        mActivityRule.launchActivity(new Intent());
+        onView(withId(R.id.emailText)).perform(typeText("test@gmail.com"));
+        onView(withId(R.id.passwordText)).perform(typeText("123456"));
+        pressBack();
+        onView(withId(R.id.login)).perform(click());
+        onView(isRoot()).perform(waitFor(5000));
+        intended(hasComponent(MainActivity.class.getName()));
+        Intents.release();
     }
 }

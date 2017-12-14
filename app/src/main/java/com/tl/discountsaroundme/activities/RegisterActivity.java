@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -18,6 +19,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -30,12 +38,15 @@ import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.entities.User;
 import com.tl.discountsaroundme.ui_controllers.AnimCheckBox;
 
-public class RegisterActivity extends Activity implements View.OnClickListener, AnimCheckBox.OnCheckedChangeListener {
+public class RegisterActivity extends Activity implements View.OnClickListener, AnimCheckBox.OnCheckedChangeListener, OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-
+    GoogleMap map;
+    double latitude=0;
+    double longitude=0;
     private Button register;
     private Button login;
+    private MapView tagShop;
     //Issue 8 params
     private DatabaseReference mDbRef = FirebaseDatabase.getInstance().getReference();
     private AnimCheckBox cbBusinessAccount;
@@ -46,13 +57,50 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
     private String password;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        tagShop.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        tagShop.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        tagShop.onPause();
+    }
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        tagShop.onLowMemory();
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+
+
+
+
         register = findViewById(R.id.register_button);
         login = findViewById(R.id.login_button);
         etShopName = findViewById(R.id.etShopName);
+
+        tagShop = findViewById(R.id.tagShopOnMap);
+        tagShop.onCreate(savedInstanceState);
+
+        tagShop.getMapAsync(this);
+
+
+
+
         cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
         sShopType = findViewById(R.id.sShopType);
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.shopTypeSpinner, R.layout.spinner_dropdown_list);
@@ -60,6 +108,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         sShopType.setAdapter(spinnerAdapter);
 
         cbBusinessAccount.setOnCheckedChangeListener(this);
+
         register.setOnClickListener(this);
         login.setOnClickListener(this);
     }
@@ -182,8 +231,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         Shop.setDescription("Details");
         Shop.setName(etShopName.getText().toString());
         Shop.setImage("");
-        Shop.setLat(0);
-        Shop.setLng(0);
+        Shop.setLat(latitude);
+        Shop.setLng(longitude);
         Shop.setType(sShopType.getSelectedItem().toString());
         Shop.setOwnerUID(BAUserUID);
         // Now Shops are stored under their owner's UID
@@ -209,9 +258,52 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         if (checked) {
             etShopName.setVisibility(View.VISIBLE);
             sShopType.setVisibility(View.VISIBLE);
+            tagShop.setVisibility(View.VISIBLE);
         } else {
             etShopName.setVisibility(View.GONE);
             sShopType.setVisibility(View.GONE);
+            tagShop.setVisibility(View.GONE);
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        map.setMyLocationEnabled(true);
+        map.setOnMapClickListener(this);
+        map.setOnMapLongClickListener(this);
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+
+        map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+//        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+//        @SuppressLint("MissingPermission") Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//         longitude = location.getLongitude();
+//         latitude = location.getLatitude();
+
+        Toast.makeText(getApplicationContext(), latLng.toString(),
+                Toast.LENGTH_LONG).show();
+
+
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+
+        map.addMarker(new MarkerOptions()
+                .position(latLng)
+                .title(latLng.toString())
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+//        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+//        @SuppressLint("MissingPermission") Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        longitude = location.getLongitude();
+//        latitude = location.getLatitude();
+
+        Toast.makeText(getApplicationContext(),
+                "New marker added@" + latLng.toString(), Toast.LENGTH_LONG)
+                .show();
     }
 }

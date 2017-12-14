@@ -9,16 +9,20 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,6 +44,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 
 public class AddDiscountsActivity extends AppCompatActivity {
@@ -53,6 +59,13 @@ public class AddDiscountsActivity extends AppCompatActivity {
     UploadTask uploadTask;
 
     String name, description, category, link;
+    TextView export,today;
+
+    TimeZone tz = TimeZone.getTimeZone("GMT+2:00");
+    Calendar calendar = Calendar.getInstance(tz);
+    CalendarView calendarApp;
+
+    int realDate,realYear,realMonth;
     double price, discount;
 
     Boolean image = false;
@@ -61,6 +74,7 @@ public class AddDiscountsActivity extends AppCompatActivity {
 
     String ShopName;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,10 +82,34 @@ public class AddDiscountsActivity extends AppCompatActivity {
 
         getShopName();
 
+        calendarApp = findViewById(R.id.calendarDateMonthYear);
+
+        today = findViewById(R.id.todayDate);
+
+        realDate = calendar.get(Calendar.DATE);
+        realMonth = calendar.get((Calendar.MONTH));
+        realYear = calendar.get(Calendar.YEAR);
+
+        today.setText("Today: "+realDate+"-"+(realMonth+1)+"-"+realYear+"");
+
+
+
         imageView = findViewById(R.id.imageView);
         selectImg = findViewById(R.id.buttonSelectImage);
         addItem = findViewById(R.id.buttonAddItem);
         camera = findViewById(R.id.buttonCamera);
+        export = findViewById(R.id.exportText);
+
+        calendarApp.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
+                export.setText("Export: "+day+"-"+(month+1)+"-"+year+"");
+            }
+        });
+
+
+
+
 
         selectImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,6 +221,8 @@ public class AddDiscountsActivity extends AppCompatActivity {
                 correctData = false;
             }
         }
+
+
         return correctData; //return true if data completed correct
     }
 

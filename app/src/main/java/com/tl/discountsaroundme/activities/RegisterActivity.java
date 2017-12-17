@@ -305,5 +305,14 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         Toast.makeText(getApplicationContext(),
                 "New marker added@" + latLng.toString(), Toast.LENGTH_LONG)
                 .show();
-    }
+        String[] latLong;
+        String[] latReal;
+        String[] longReal;
+        latLong = latLng.toString().split(",");
+        latReal = latLong[0].split("\\(");
+        longReal = latLong[1].split("\\)");
+
+        latitude = Double.parseDouble(latReal[1]);
+        longitude = Double.parseDouble(longReal[0]);
+       }
 }

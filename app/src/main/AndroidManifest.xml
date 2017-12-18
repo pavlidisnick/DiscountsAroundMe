@@ -87,6 +87,10 @@
         <activity android:name=".activities.ItemDetailsActivity"></activity>
       
         <activity android:name=".activities.UserProfileActivity"></activity>
+
+        <activity android:name=".activities.MyDiscountsActivity"></activity>
+
+        <activity android:name=".activities.StoreItemDetailsActivity"></activity>
   
     </application>
 

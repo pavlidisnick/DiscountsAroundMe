@@ -23,14 +23,21 @@ import android.widget.Toast;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
+import com.tl.discountsaroundme.activities.MyDiscountsActivity;
 import com.tl.discountsaroundme.discounts.AddCategoryToLayout;
 import com.tl.discountsaroundme.discounts.FetchCategories;
 import com.tl.discountsaroundme.discounts.Search;
+import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.SearchHistory;
 import com.tl.discountsaroundme.ui_controllers.ItemSpaceDecoration;
@@ -48,6 +55,9 @@ public class DiscountsTab extends Fragment {
     DrawerLayout mDrawerLayout;
     DiscountsManager discountsManager = new DiscountsManager();
     private Search search;
+
+    String ShopName;
+    ArrayList<Item> shopDiscounts = new ArrayList<>();
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -119,7 +129,11 @@ public class DiscountsTab extends Fragment {
         if (MainActivity.USER_TYPE.equals("user")) {
             Menu menu = nav.getMenu();
             MenuItem target = menu.findItem(R.id.nav_insert_item);
+            MenuItem target2 = menu.findItem(R.id.nav_my_discounts);
             target.setVisible(false);
+            target2.setVisible(false);
+        } else {
+            getShopName();
         }
 
         nav.bringToFront();
@@ -133,6 +147,10 @@ public class DiscountsTab extends Fragment {
                     startActivity(addDiscount);
                 } else if (id == R.id.temp) {
                     Toast.makeText(getContext(), "temp", Toast.LENGTH_LONG).show();
+                } else if (id == R.id.nav_my_discounts) {
+                    Intent MyDiscounts = new Intent(getContext(), MyDiscountsActivity.class);
+                    MyDiscounts.putExtra("SHOP_DISCOUNTS",shopDiscounts);
+                    startActivity(MyDiscounts);
                 } else if (id == R.id.nav_info) {
                     Toast.makeText(getContext(), "info", Toast.LENGTH_LONG).show();
                 } else if (id == R.id.nav_logout) {
@@ -191,4 +209,54 @@ public class DiscountsTab extends Fragment {
             }
         });
     }
+
+    public void getShopName(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("/shops");
+        if (user != null) {
+            final String uid = user.getUid();
+
+            categoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                        String ID = itemSnapshot.child("ownerUID").getValue(String.class);
+                        if(ID.matches(uid)){
+                            ShopName = itemSnapshot.child("name").getValue(String.class);
+                            getStoreDiscounts();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    public void getStoreDiscounts(){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/items");
+        Query query = ref.orderByChild("store").equalTo(ShopName);
+
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                shopDiscounts.clear();
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    Item item = data.getValue(Item.class);
+                    shopDiscounts.add(item);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
 }

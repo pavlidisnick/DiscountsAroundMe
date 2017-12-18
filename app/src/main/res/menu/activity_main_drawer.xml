@@ -9,6 +9,9 @@
             android:id="@+id/nav_insert_item"
             android:title="Add Discount" />
         <item
+            android:id="@+id/nav_my_discounts"
+            android:title="My Discounts" />
+        <item
             android:id="@+id/temp"
             android:title="Temp" />
 

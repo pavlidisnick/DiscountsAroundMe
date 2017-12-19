@@ -4,22 +4,30 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.ui_controllers.ItemViewAdapter;
+import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class ItemDetailsActivity extends Activity {
+public class ItemDetailsActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_details);
+
+        new StatusBar(this);
+
+        ImageView backImage = findViewById(R.id.back_button);
+        backImage.setOnClickListener(this);
+
 
         Intent intent = getIntent();
         String dataPrice = intent.getStringExtra(ItemViewAdapter.DATA_ITEM_PRICE);
@@ -56,5 +64,10 @@ public class ItemDetailsActivity extends Activity {
         double discount = Double.parseDouble(discountString);
         BigDecimal finalPrice = BigDecimal.valueOf(price - (price * discount / 100)).setScale(2, RoundingMode.HALF_UP);
         return "$" + String.valueOf(finalPrice);
+    }
+
+    @Override
+    public void onClick(View v) {
+        this.finish();
     }
 }

@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryWhite"
+    android:background="@drawable/accent_pink_gradient"
     android:orientation="vertical">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/bg_1" />
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg3"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:layout_marginBottom="4dp"
-                android:background="@drawable/bordered_button"
+                android:background="@drawable/bordered_button_transparent"
                 android:drawableStart="@drawable/ic_collections"
                 android:drawableTint="@color/colorPrimaryWhite"
                 android:onClick="SelectImg"
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
-                android:background="@drawable/bordered_button"
+                android:background="@drawable/bordered_button_transparent"
                 android:drawableStart="@drawable/ic_camera_alt"
                 android:drawableTint="@color/colorPrimaryWhite"
                 android:padding="6dp"
@@ -112,7 +112,7 @@
                 android:inputType="textPersonName"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:textColor="@color/purple" />
+                android:textColor="@color/orange" />
 
         </LinearLayout>
 
@@ -141,7 +141,7 @@
                 android:inputType="textPersonName"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:textColor="@color/purple" />
+                android:textColor="@color/orange" />
 
         </LinearLayout>
 
@@ -170,7 +170,7 @@
                 android:inputType="textPersonName"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:textColor="@color/purple" />
+                android:textColor="@color/orange" />
 
         </LinearLayout>
 
@@ -203,7 +203,7 @@
                     android:inputType="numberDecimal"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
-                    android:textColor="@color/purple" />
+                    android:textColor="@color/orange" />
 
             </LinearLayout>
 
@@ -233,7 +233,7 @@
                     android:inputType="number"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
-                    android:textColor="@color/purple" />
+                    android:textColor="@color/orange" />
 
             </LinearLayout>
 
@@ -247,8 +247,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="40dp"
-        android:background="@drawable/round_button"
+        android:background="@drawable/orange_circled_button"
         android:text="Add Discount"
         android:textColor="@color/colorPrimaryWhite" />
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="14dp"
+        android:layout_gravity="start|left"
+        android:tint="@color/colorPrimaryWhite"
+        android:src="@drawable/ic_arrow_back_black_24dp"/>
 
 </FrameLayout>

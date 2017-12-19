@@ -6,15 +6,17 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
+import android.widget.Checkable;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.tl.discountsaroundme.R;
 
-public class CheckBox extends FrameLayout implements View.OnClickListener {
+public class CheckBox extends FrameLayout implements View.OnClickListener, Checkable {
     private ImageView background;
     private ImageView circle;
-    private boolean notifyEveryHour = true;
+    private boolean isChecked = true;
+    private OnCheckedChangeListener onCheckedListener;
 
     public CheckBox(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -46,14 +48,14 @@ public class CheckBox extends FrameLayout implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (notifyEveryHour) {
+        if (isChecked) {
             background.setImageResource(R.drawable.checkbox_unchecked);
-            notifyEveryHour = false;
+            isChecked = false;
             animateCircleLeft();
         } else {
             animateCircleRight();
             background.setImageResource(R.drawable.checkbox);
-            notifyEveryHour = true;
+            isChecked = true;
         }
     }
 
@@ -77,5 +79,28 @@ public class CheckBox extends FrameLayout implements View.OnClickListener {
         translateAnimation.setFillAfter(true);
 
         circle.startAnimation(translateAnimation);
+    }
+
+    @Override
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    @Override
+    public void setChecked(boolean checked) {
+        onCheckedListener.onChange(this, isChecked);
+    }
+
+    @Override
+    public void toggle() {
+        setChecked(!isChecked());
+    }
+
+    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
+        this.onCheckedListener = listener;
+    }
+
+    public interface OnCheckedChangeListener {
+        void onChange(CheckBox view, boolean checked);
     }
 }

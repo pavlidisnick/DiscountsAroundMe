@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,9 +34,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
-public class LoginActivity extends FragmentActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+public class LoginActivity extends FragmentActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, FacebookCallback<LoginResult> {
     private static final int RC_SIGN_IN = 9000;
+
+    ProgressDialog progress;
 
     Button login;
     Button register;
@@ -50,11 +54,19 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
     private DatabaseReference mDbRef = FirebaseDatabase.getInstance().getReference("/shops");
     private FirebaseUser user;
 
-
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // ProgressBar init
+        progress = new ProgressDialog(this);
+        progress.setMessage("Signing in");
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+
+        new StatusBar(this);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.web_client_id))
@@ -65,9 +77,6 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
-        //Facebook login
-        FacebookSdk.sdkInitialize(getApplicationContext());
 
         signInButton = findViewById(R.id.sign_in_btgoogle);
         signInButton.setOnClickListener(this);
@@ -81,25 +90,11 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
         loginFacebook = findViewById(R.id.login_facebook);
         loginFacebook.setReadPermissions("email", "public_profile");
 
+        //Facebook login
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
         callbackManager = CallbackManager.Factory.create();
-        loginFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Toast.makeText(getApplicationContext(), "LoginActivity Successful", Toast.LENGTH_LONG).show();
-                user = mAuth.getCurrentUser();
-                loginSuccessful("user", user.getUid().toString());
-            }
-
-            @Override
-            public void onCancel() {
-                Toast.makeText(getApplicationContext(), "LoginActivity Cancelled", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Toast.makeText(getApplicationContext(), "####Error-facebook####", Toast.LENGTH_LONG).show();
-            }
-        });
+        loginFacebook.registerCallback(callbackManager, this);
     }
 
     @Override
@@ -107,18 +102,21 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            checkUserType(); //And login
+            showProgressBar();
+            checkUserType();
         }
     }
 
     @Override
     public void onClick(View view) {
         if (view.equals(login)) {
-            if (isFormFilled())
+            if (isFormFilled()) {
+                showProgressBar();
                 signIn(email, password);
-            else
-                Toast.makeText(getApplicationContext(), "Please fill the form", Toast.LENGTH_LONG).show();
+            } else
+                Toast.makeText(getApplicationContext(), "Please fill the form", Toast.LENGTH_SHORT).show();
         } else if (view.equals(signInButton)) {
+            showProgressBar();
             signIn();
         } else if (view.equals(register)) {
             Intent registerActivity = new Intent(this, RegisterActivity.class);
@@ -144,7 +142,7 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
                 if (task.isSuccessful()) {
                     checkUserType();
                 } else {
-                    Toast.makeText(getApplicationContext(), "LoginActivity failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "LoginActivity failed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -168,16 +166,15 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
      */
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(this, "Connection failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Connection failed", Toast.LENGTH_SHORT).show();
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
-            Toast.makeText(getApplicationContext(), "LoginActivity Successful", Toast.LENGTH_LONG).show();
             GoogleSignInAccount account = result.getSignInAccount();
-            loginSuccessful("user", account.getId());
+            loginSuccessful("user", account != null ? account.getId() : null);
         } else {
-            Toast.makeText(getApplicationContext(), "LoginActivity failed", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "LoginActivity failed", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -195,25 +192,25 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
 
     //After a successful login start the main activity
     private void loginSuccessful(String userType, String userId) {
-        Toast.makeText(getApplicationContext(), userType, Toast.LENGTH_LONG).show();
-
         Intent mainActivity = new Intent(LoginActivity.this, MainActivity.class);
         mainActivity.putExtra("USER_TYPE", userType);
         mainActivity.putExtra("USER_ID", userId);
         startActivity(mainActivity);
+
+        hideProgressBar();
     }
 
-    private void checkUserType() {
+    private void checkUserType() throws NullPointerException {
         user = mAuth.getCurrentUser();
         mDbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String userType = null;
-                String userId = user.getUid().toString();
+                String userId = user.getUid();
                 String dbUID;
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    dbUID = child.child("ownerUID").getValue().toString();
-                    if (dbUID.equals(userId)) {
+                    dbUID = (String) child.child("ownerUID").getValue();
+                    if (dbUID != null && dbUID.equals(userId)) {
                         userType = "owner";
                         break;
                     } else {
@@ -228,6 +225,30 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
 
             }
         });
+    }
 
+    private void showProgressBar() {
+        progress.show();
+    }
+
+    private void hideProgressBar() {
+        progress.dismiss();
+    }
+
+    // Facebook Callbacks
+    @Override
+    public void onSuccess(LoginResult loginResult) {
+        user = mAuth.getCurrentUser();
+        loginSuccessful("user", loginResult.getAccessToken().getUserId());
+    }
+
+    @Override
+    public void onCancel() {
+        Toast.makeText(getApplicationContext(), "Login cancelled", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onError(FacebookException e) {
+        Toast.makeText(getApplicationContext(), "Facebook login failed", Toast.LENGTH_SHORT).show();
     }
 }

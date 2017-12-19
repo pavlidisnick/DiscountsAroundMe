@@ -35,6 +35,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.entities.Item;
+import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -42,7 +43,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 
-public class AddDiscountsActivity extends AppCompatActivity {
+public class AddDiscountsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int SELECTED_PICTURE = 100;
     private static final int CAMERA_REQUEST = 1888;
@@ -66,7 +67,12 @@ public class AddDiscountsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_discount);
 
+        new StatusBar(this);
+
         getShopName();
+
+        ImageView backImage = findViewById(R.id.back_button);
+        backImage.setOnClickListener(this);
 
         imageView = findViewById(R.id.imageView);
         selectImg = findViewById(R.id.buttonSelectImage);
@@ -256,5 +262,10 @@ public class AddDiscountsActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        this.finish();
     }
 }

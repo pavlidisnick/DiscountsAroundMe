@@ -18,12 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tl.discountsaroundme.BuildConfig;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.LoginActivity;
@@ -43,7 +43,6 @@ import static android.app.Activity.RESULT_OK;
 public class DiscountsTab extends Fragment {
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
 
-    //
     public static int discountValue = 30;
     DrawerLayout mDrawerLayout;
     DiscountsManager discountsManager = new DiscountsManager();
@@ -122,6 +121,11 @@ public class DiscountsTab extends Fragment {
             target.setVisible(false);
         }
 
+        String versionName = "v" + BuildConfig.VERSION_NAME;
+        Menu menu = nav.getMenu();
+        MenuItem versionMenuItem = menu.findItem(R.id.version);
+        versionMenuItem.setTitle(versionName);
+
         nav.bringToFront();
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -131,10 +135,6 @@ public class DiscountsTab extends Fragment {
                 if (id == R.id.nav_insert_item) {
                     Intent addDiscount = new Intent(getContext(), AddDiscountsActivity.class);
                     startActivity(addDiscount);
-                } else if (id == R.id.temp) {
-                    Toast.makeText(getContext(), "temp", Toast.LENGTH_LONG).show();
-                } else if (id == R.id.nav_info) {
-                    Toast.makeText(getContext(), "info", Toast.LENGTH_LONG).show();
                 } else if (id == R.id.nav_logout) {
                     FirebaseAuth mAuth = FirebaseAuth.getInstance();
                     mAuth.signOut();
@@ -152,7 +152,7 @@ public class DiscountsTab extends Fragment {
                 return false;
             }
         });
-        drawerInformations();
+        drawerInformation();
     }
 
     public void startVoiceRecognitionActivity() {
@@ -172,7 +172,8 @@ public class DiscountsTab extends Fragment {
         }
     }
 
-    public void drawerInformations(){
+    @SuppressWarnings("deprecation")
+    public void drawerInformation() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         mDrawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
@@ -181,10 +182,10 @@ public class DiscountsTab extends Fragment {
                 if (user != null) {
                     final String email = user.getEmail();
 
-                    TextView ut = (TextView) mDrawerLayout.findViewById(R.id.drawerUserType);
+                    TextView ut = mDrawerLayout.findViewById(R.id.drawerUserType);
                     ut.setText(MainActivity.USER_TYPE);
 
-                    TextView userEmail = (TextView) mDrawerLayout.findViewById(R.id.drawerEmail);
+                    TextView userEmail = mDrawerLayout.findViewById(R.id.drawerEmail);
                     userEmail.setText(email);
                 }
                 super.onDrawerOpened(drawerView);

@@ -29,6 +29,8 @@ import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.entities.User;
 import com.tl.discountsaroundme.ui_controllers.AnimCheckBox;
+import com.tl.discountsaroundme.ui_controllers.CheckBox;
+import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
 public class RegisterActivity extends Activity implements View.OnClickListener, AnimCheckBox.OnCheckedChangeListener {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -49,6 +51,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        new StatusBar(this);
 
         register = findViewById(R.id.register_button);
         login = findViewById(R.id.login_button);
@@ -136,7 +140,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
      */
     private boolean isFormFilled() {
         //Issue 8 changes need when the business account cb is checked
-        AnimCheckBox cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
+        CheckBox cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
         EditText etShopName = findViewById(R.id.etShopName);
         Spinner sShopType = findViewById(R.id.sShopType);
 
@@ -200,10 +204,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         mDbRef.child("users").child(user.getUid()).setValue(newUser);
     }
 
-    /**
-     * Issue 8
-     * If user Checks the box more options become visible
-     */
     @Override
     public void onChange(AnimCheckBox view, boolean checked) {
         if (checked) {

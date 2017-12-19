@@ -251,4 +251,9 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
     public void onError(FacebookException e) {
         Toast.makeText(getApplicationContext(), "Facebook login failed", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onBackPressed() {
+        this.finishAffinity();
+    }
 }

@@ -1,6 +1,7 @@
 package com.tl.discountsaroundme.activities;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.ui_controllers.DiscountsAdapter;
@@ -26,18 +35,80 @@ import static com.tl.discountsaroundme.ui_controllers.ItemViewAdapter.DATA_TYPE;
 
 public class MyDiscountsActivity extends AppCompatActivity{
 
-    ArrayList<Item> shopDiscounts = new ArrayList<>();
+    private ArrayList<Item> shopDiscounts = new ArrayList<>();
+    private String ShopName;
+    private ProgressDialog pd;
+    private DiscountsAdapter adapter;
+    private ListView listView;
+    private ArrayList<String> keys=new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_discounts);
 
-        shopDiscounts = (ArrayList<Item>) getIntent().getSerializableExtra("SHOP_DISCOUNTS");
+        pd = ProgressDialog.show(this, "", "Just a moment");
 
-        DiscountsAdapter adapter = new DiscountsAdapter(this, shopDiscounts);
-        ListView listView = (ListView) findViewById(R.id.list_discounts);
+        getShopName();
+    }
 
+    private void getShopName(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("/shops");
+        if (user != null) {
+            final String uid = user.getUid();
+
+            categoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                        String ID = itemSnapshot.child("ownerUID").getValue(String.class);
+                        if(ID.matches(uid)){
+                            ShopName = itemSnapshot.child("name").getValue(String.class);
+                            getStoreDiscounts();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    private void getStoreDiscounts(){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/items");
+        Query query = ref.orderByChild("store").equalTo(ShopName);
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                shopDiscounts.clear();
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    Item item = data.getValue(Item.class);
+                    shopDiscounts.add(item);
+                    keys.add(data.getKey());
+                }
+                setDiscountsToListview();
+                pd.dismiss();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void setDiscountsToListview(){
+
+        adapter = new DiscountsAdapter(this, shopDiscounts);
+        listView = (ListView) findViewById(R.id.list_discounts);
+
+        listView.clearChoices();
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -54,6 +125,8 @@ public class MyDiscountsActivity extends AppCompatActivity{
                 String Price = String.valueOf(Price2);
                 String Discount = String.valueOf(Discount2);
 
+                String k = keys.get(i);
+
                 Intent itemDetailsActivity = new Intent(getApplicationContext(), StoreItemDetailsActivity.class);
 
                 itemDetailsActivity.putExtra(DATA_ITEM_DETAILS, Description);
@@ -63,10 +136,12 @@ public class MyDiscountsActivity extends AppCompatActivity{
                 itemDetailsActivity.putExtra(DATA_IMAGE, Picture);
                 itemDetailsActivity.putExtra(DATA_TYPE, Type);
                 itemDetailsActivity.putExtra(DATA_DISCOUNT, Discount);
+
+                itemDetailsActivity.putExtra("KEY",k);
+
                 startActivity(itemDetailsActivity);
             }
         });
-
     }
 
 }

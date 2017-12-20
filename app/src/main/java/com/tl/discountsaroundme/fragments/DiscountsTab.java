@@ -56,8 +56,6 @@ public class DiscountsTab extends Fragment {
     DiscountsManager discountsManager = new DiscountsManager();
     private Search search;
 
-    String ShopName;
-    ArrayList<Item> shopDiscounts = new ArrayList<>();
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -132,8 +130,6 @@ public class DiscountsTab extends Fragment {
             MenuItem target2 = menu.findItem(R.id.nav_my_discounts);
             target.setVisible(false);
             target2.setVisible(false);
-        } else {
-            getShopName();
         }
 
         nav.bringToFront();
@@ -149,7 +145,6 @@ public class DiscountsTab extends Fragment {
                     Toast.makeText(getContext(), "temp", Toast.LENGTH_LONG).show();
                 } else if (id == R.id.nav_my_discounts) {
                     Intent MyDiscounts = new Intent(getContext(), MyDiscountsActivity.class);
-                    MyDiscounts.putExtra("SHOP_DISCOUNTS",shopDiscounts);
                     startActivity(MyDiscounts);
                 } else if (id == R.id.nav_info) {
                     Toast.makeText(getContext(), "info", Toast.LENGTH_LONG).show();
@@ -208,55 +203,6 @@ public class DiscountsTab extends Fragment {
                 super.onDrawerOpened(drawerView);
             }
         });
-    }
-
-    public void getShopName(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("/shops");
-        if (user != null) {
-            final String uid = user.getUid();
-
-            categoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                        String ID = itemSnapshot.child("ownerUID").getValue(String.class);
-                        if(ID.matches(uid)){
-                            ShopName = itemSnapshot.child("name").getValue(String.class);
-                            getStoreDiscounts();
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
-
-    public void getStoreDiscounts(){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/items");
-        Query query = ref.orderByChild("store").equalTo(ShopName);
-
-
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                shopDiscounts.clear();
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    Item item = data.getValue(Item.class);
-                    shopDiscounts.add(item);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
     }
 
 }

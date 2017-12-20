@@ -1,16 +1,12 @@
 package com.tl.discountsaroundme.entities;
 
 public class Store {
-
-
     protected String name;
     private String type;
     private double lat;
     private double lng;
     private String image;
     private String description;
-
-
     private String ownerUID;
 
     public Store() {

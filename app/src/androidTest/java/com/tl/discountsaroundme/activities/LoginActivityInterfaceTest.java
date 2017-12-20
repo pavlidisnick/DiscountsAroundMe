@@ -1,4 +1,4 @@
-package com.tl.discountsaroundme;
+package com.tl.discountsaroundme.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,15 +6,16 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.intent.Intents;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
-import com.tl.discountsaroundme.activities.LoginActivity;
-import com.tl.discountsaroundme.activities.MainActivity;
+import com.tl.discountsaroundme.R;
 
 import org.hamcrest.Matcher;
 import org.junit.FixMethodOrder;
@@ -35,6 +36,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.Matchers.allOf;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
@@ -43,6 +45,23 @@ public class LoginActivityInterfaceTest {
 
     @Rule
     public ActivityTestRule<LoginActivity> mActivityRule = new ActivityTestRule<>(LoginActivity.class);
+
+    @Test
+    public void activate() {
+        try {
+            waitFor(5000);
+            ViewInteraction appCompatImageView = onView(
+                    allOf(withId(R.id.left_action),
+                            isDisplayed()));
+            appCompatImageView.perform(click());
+
+            onView(allOf(withText("Logout"),
+                    isDisplayed()))
+                    .perform(click());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Method to  make espresso wait up
@@ -79,7 +98,7 @@ public class LoginActivityInterfaceTest {
 
     @Test
     public void normalLogin() {
-        onView(withId(R.id.emailText)).perform(typeText("pavlidis.nik95@gmail.com")).check(matches(withText("pavlidis.nik95@gmail.com")));
+        onView(ViewMatchers.withId(R.id.emailText)).perform(typeText("pavlidis.nik95@gmail.com")).check(matches(withText("pavlidis.nik95@gmail.com")));
         onView(withId(R.id.passwordText)).perform(typeText("pavlidis")).check(matches(withText("pavlidis")));
     }
 
@@ -158,6 +177,7 @@ public class LoginActivityInterfaceTest {
 
     @Test
     public void zLoginActivityIntentTest() throws Exception {
+        Intents.release();
         Intents.init();
         mActivityRule.launchActivity(new Intent());
         onView(withId(R.id.emailText)).perform(typeText("test@gmail.com"));

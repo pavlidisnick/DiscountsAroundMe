@@ -63,6 +63,10 @@ public class DiscountsTab extends Fragment {
         decorate(mRecyclerView);
 
         final SwipeRefreshLayout swipeRefreshLayout = rootView.findViewById(R.id.swiperefresh);
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.pink,
+                R.color.orange,
+                R.color.colorPrice);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

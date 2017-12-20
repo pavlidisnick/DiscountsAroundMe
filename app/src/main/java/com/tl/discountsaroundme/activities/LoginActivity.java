@@ -142,6 +142,7 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
                 if (task.isSuccessful()) {
                     checkUserType();
                 } else {
+                    hideProgressBar();
                     Toast.makeText(getApplicationContext(), "LoginActivity failed", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -174,6 +175,7 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
             GoogleSignInAccount account = result.getSignInAccount();
             loginSuccessful("user", account != null ? account.getId() : null);
         } else {
+            hideProgressBar();
             Toast.makeText(getApplicationContext(), "LoginActivity failed", Toast.LENGTH_SHORT).show();
         }
     }

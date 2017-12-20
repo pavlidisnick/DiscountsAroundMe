@@ -98,15 +98,16 @@
             android:visibility="gone"
              />
 
-        <com.google.android.gms.maps.MapView
+        <Button
             android:id="@+id/tagShopOnMap"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
+            android:layout_marginTop="5dp"
             android:background="@mipmap/ic_launcher_googlemap"
             android:text="TAG On MAP"
             android:textColor="@color/colorAlert"
-            android:textSize="10sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:visibility="gone"
             />

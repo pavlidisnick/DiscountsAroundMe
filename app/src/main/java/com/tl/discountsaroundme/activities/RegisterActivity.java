@@ -1,6 +1,5 @@
 package com.tl.discountsaroundme.activities;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -19,13 +18,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -38,15 +30,18 @@ import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.entities.User;
 import com.tl.discountsaroundme.ui_controllers.AnimCheckBox;
 
-public class RegisterActivity extends Activity implements View.OnClickListener, AnimCheckBox.OnCheckedChangeListener, OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener {
+public class RegisterActivity extends Activity implements View.OnClickListener, AnimCheckBox.OnCheckedChangeListener{
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    final static int REQ_CODE = 1;
 
-    GoogleMap map;
+    String latLongDataBack;
+    String[] afterSplitLatLong;
+    boolean isAlreadyTag=false;
     double latitude=0;
     double longitude=0;
     private Button register;
     private Button login;
-    private MapView tagShop;
+    private Button tagShop;
     //Issue 8 params
     private DatabaseReference mDbRef = FirebaseDatabase.getInstance().getReference();
     private AnimCheckBox cbBusinessAccount;
@@ -56,28 +51,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
     private String email;
     private String password;
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        tagShop.onResume();
-    }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        tagShop.onDestroy();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        tagShop.onPause();
-    }
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        tagShop.onLowMemory();
-    }
 
 
     @Override
@@ -86,19 +60,18 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         setContentView(R.layout.activity_register);
 
 
-
-
-
         register = findViewById(R.id.register_button);
         login = findViewById(R.id.login_button);
         etShopName = findViewById(R.id.etShopName);
 
         tagShop = findViewById(R.id.tagShopOnMap);
-        tagShop.onCreate(savedInstanceState);
-
-        tagShop.getMapAsync(this);
-
-
+        tagShop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mapButton = new Intent(getApplicationContext(),ChooseLocationStore.class);
+                startActivityForResult(mapButton,REQ_CODE);
+            }
+        });
 
 
         cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
@@ -112,6 +85,26 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         register.setOnClickListener(this);
         login.setOnClickListener(this);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+            if(requestCode==REQ_CODE){
+                if(resultCode==RESULT_OK) {
+
+                    latLongDataBack = data.getStringExtra("data");
+                    //Toast.makeText(getApplicationContext(), latLongDataBack + "", Toast.LENGTH_LONG).show();
+            afterSplitLatLong = latLongDataBack.split(",");
+            latitude = Double.parseDouble(afterSplitLatLong[0]);
+            longitude = Double.parseDouble(afterSplitLatLong[1]);
+                   tagShop.setEnabled(false);
+                   isAlreadyTag=true;
+
+
+                }
+            }
+    }
+
 
     @Override
     protected void onStart() {
@@ -266,53 +259,4 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         }
     }
 
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        map.setMyLocationEnabled(true);
-        map.setOnMapClickListener(this);
-        map.setOnMapLongClickListener(this);
-    }
-
-    @Override
-    public void onMapClick(LatLng latLng) {
-
-        map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-//        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-//        @SuppressLint("MissingPermission") Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//         longitude = location.getLongitude();
-//         latitude = location.getLatitude();
-
-        Toast.makeText(getApplicationContext(), latLng.toString(),
-                Toast.LENGTH_LONG).show();
-
-
-    }
-
-    @Override
-    public void onMapLongClick(LatLng latLng) {
-
-        map.addMarker(new MarkerOptions()
-                .position(latLng)
-                .title(latLng.toString())
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-//        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-//        @SuppressLint("MissingPermission") Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//        longitude = location.getLongitude();
-//        latitude = location.getLatitude();
-
-        Toast.makeText(getApplicationContext(),
-                "New marker added@" + latLng.toString(), Toast.LENGTH_LONG)
-                .show();
-        String[] latLong;
-        String[] latReal;
-        String[] longReal;
-        latLong = latLng.toString().split(",");
-        latReal = latLong[0].split("\\(");
-        longReal = latLong[1].split("\\)");
-
-        latitude = Double.parseDouble(latReal[1]);
-        longitude = Double.parseDouble(longReal[0]);
-       }
 }

@@ -1,8 +1,6 @@
 package com.tl.discountsaroundme.entities;
 
-import java.io.Serializable;
-
-public class Item implements Serializable{
+public class Item {
     private String name;
     private String type;
     private String description;

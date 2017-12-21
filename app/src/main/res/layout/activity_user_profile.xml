@@ -1,91 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryWhite"
     android:orientation="vertical">
 
-    <LinearLayout
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal">
+        android:layout_height="200dp"
+        android:background="@drawable/accent_pink_gradient" />
 
-        <ImageView
-            android:id="@+id/Image"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:contentDescription="User Image"
-            app:srcCompat="@color/black" />
-
-        <TextView
-            android:id="@+id/tvDisplayName"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="80dp"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textColor="@color/colorAccent"
-            android:textSize="26sp" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btMailChange"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
-        android:layout_marginTop="40dp"
-        android:text="Change Email"
-        android:textColor="@color/colorPrimaryWhite" />
-
-    <Button
-        android:id="@+id/btPassChange"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
-        android:text="Change Password"
-        android:textColor="@color/colorPrimaryWhite" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="210dp"
+        android:background="@drawable/bg3" />
 
     <Button
         android:id="@+id/btImageChange"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="110dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/bordered_button_transparent"
         android:text="Change Image"
+        android:layout_gravity="end"
+        android:textSize="12sp"
         android:textColor="@color/colorPrimaryWhite" />
 
-    <Button
-        android:id="@+id/btDisplayName"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
-        android:text="Change Display Name"
-        android:textColor="@color/colorPrimaryWhite" />
-
-    <Button
-        android:id="@+id/btDeleteAccount"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
-        android:layout_marginTop="15dp"
-        android:backgroundTint="@color/colorAlert"
-        android:text="Delete Account"
-        android:visibility="visible" />
+        android:orientation="vertical">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tvDisplayName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="55dp"
+            android:text="John Doe"
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="26sp" />
+
+        <TextView
+            android:id="@+id/user_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="4dp"
+            android:text="owner"
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/Image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/marker_clothing"
+            android:contentDescription="User Image" />
+
+        <Button
+            android:id="@+id/btMailChange"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:background="@drawable/orange_circled_button"
+            android:text="Change Email"
+            android:textColor="@color/colorPrimaryWhite" />
+
+        <Button
+            android:id="@+id/btPassChange"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:background="@drawable/orange_circled_button"
+            android:text="Change Password"
+            android:textColor="@color/colorPrimaryWhite" />
+
+        <Button
+            android:id="@+id/btDisplayName"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_margin="4dp"
+            android:background="@drawable/orange_circled_button"
+            android:text="Change Name"
+            android:textColor="@color/colorPrimaryWhite" />
+
+        <Button
+            android:id="@+id/btDeleteAccount"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:background="@drawable/orange_circled_button"
+            android:backgroundTint="@color/colorAlert"
+            android:text="Delete Account"
+            android:textColor="@color/colorPrimaryWhite"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|left"
+        android:padding="14dp"
+        android:src="@drawable/ic_arrow_back_black_24dp"
+        android:tint="@color/colorPrimaryWhite" />
+
+</FrameLayout>

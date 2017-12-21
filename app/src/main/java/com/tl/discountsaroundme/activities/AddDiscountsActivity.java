@@ -1,6 +1,5 @@
 package com.tl.discountsaroundme.activities;
 
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -39,6 +38,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.entities.Item;
+import com.tl.discountsaroundme.entities.ItemValidator;
+import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -47,18 +48,17 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-
-public class AddDiscountsActivity extends AppCompatActivity {
-
+public class AddDiscountsActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int SELECTED_PICTURE = 100;
     private static final int CAMERA_REQUEST = 1888;
+
     ImageView imageView;
     Button selectImg, addItem, camera;
 
     Uri imageUri;
     UploadTask uploadTask;
 
-    String name, description, category, link;
+    String name, description, category, link, shopName;
     TextView export,today;
 
     TimeZone tz = TimeZone.getTimeZone("GMT+2:00");
@@ -68,17 +68,15 @@ public class AddDiscountsActivity extends AppCompatActivity {
     int realDate,realYear,realMonth;
     double price, discount;
 
-    Boolean image = false;
-
     int MaxUploadTime = 40000; //set Max time for uploading to 40 seconds
-
-    String ShopName;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_discount);
+
+        new StatusBar(this);
 
         getShopName();
 
@@ -92,7 +90,8 @@ public class AddDiscountsActivity extends AppCompatActivity {
 
         today.setText("Today: "+realDate+"-"+(realMonth+1)+"-"+realYear+"");
 
-
+        ImageView backImage = findViewById(R.id.back_button);
+        backImage.setOnClickListener(this);
 
         imageView = findViewById(R.id.imageView);
         selectImg = findViewById(R.id.buttonSelectImage);
@@ -106,10 +105,6 @@ public class AddDiscountsActivity extends AppCompatActivity {
                 export.setText("Export: "+day+"-"+(month+1)+"-"+year+"");
             }
         });
-
-
-
-
 
         selectImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,20 +120,7 @@ public class AddDiscountsActivity extends AppCompatActivity {
             }
         });
 
-
-        addItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (checkData()) {
-                    if(isConnectedToInternet(getApplicationContext())){
-                        insertToDatabase();
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(), "Check your internet connection", Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-        });
+        addItem.setOnClickListener(this);
     }
 
     public void openGallery() {
@@ -159,16 +141,19 @@ public class AddDiscountsActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == SELECTED_PICTURE) {
             imageUri = data.getData();
             imageView.setImageURI(imageUri);
-            image = true;
         }
 
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
 
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            if (photo != null) {
+                photo.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+            }
+
             File destination = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
             FileOutputStream fo;
+
             try {
                 fo = new FileOutputStream(destination);
                 fo.write(bytes.toByteArray());
@@ -177,53 +162,51 @@ public class AddDiscountsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-
             imageUri = Uri.fromFile(new File(destination.getAbsolutePath()));
             imageView.setImageURI(imageUri);
-            image = true;
         }
     }
 
+    public boolean areDataReady() {
+        ItemValidator itemValidator = new ItemValidator();
 
-    public boolean checkData() {
-        Boolean correctData = true;
-
-        EditText nam, des, cat, pr, disc;
-
-        nam = findViewById(R.id.editTextName);
-        des = findViewById(R.id.editTextDescription);
-        cat = findViewById(R.id.editTextCategory);
-        pr = findViewById(R.id.editTextPrice);
-        disc = findViewById(R.id.editTextDiscount);
+        EditText nam = findViewById(R.id.editTextName);
+        EditText des = findViewById(R.id.editTextDescription);
+        EditText cat = findViewById(R.id.editTextCategory);
+        EditText pr = findViewById(R.id.editTextPrice);
+        EditText disc = findViewById(R.id.editTextDiscount);
 
         name = nam.getText().toString();
         description = des.getText().toString();
         category = cat.getText().toString();
 
-        if (name.isEmpty() || description.isEmpty() || category.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Complete correct the informations", Toast.LENGTH_LONG).show();
-            correctData = false;
-        }else {
-            try {
-                price = Double.parseDouble(pr.getText().toString());
-                discount = Double.parseDouble(disc.getText().toString());
-                if(discount>100 || discount<0){
-                    Toast.makeText(getApplicationContext(), "Discount must be number 1 to 100", Toast.LENGTH_LONG).show();
-                    correctData = false;
-                }
-                if (!image && correctData) {
-                    Toast.makeText(getApplicationContext(), "Select Image", Toast.LENGTH_LONG).show();
-                    System.out.println("Select Image");
-                    correctData = false;
-                }
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "Price and discount must be numbers", Toast.LENGTH_LONG).show();
-                correctData = false;
-            }
+        String priceString = pr.getText().toString();
+        String discountString = disc.getText().toString();
+
+        try {
+            price = Double.parseDouble(priceString);
+            discount = Double.parseDouble(discountString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+      
+        if (itemValidator.areStringsEmpty(name, description, category, priceString, discountString)) {
+            toast("Please fill the fields");
+        } else if (!itemValidator.isDiscountInRange(discount)) {
+            toast("Discount must be number 1 to 100");
+        } else if (imageUri == null) {
+            toast("Please add image");
+        } else if (!isConnectedToInternet()) {
+            toast("Check your internet connection");
+        } else {
+            return true;
         }
 
+        return false;
+    }
 
-        return correctData; //return true if data completed correct
+    public void toast(String messageToDisplay) {
+        Toast.makeText(getApplicationContext(), messageToDisplay, Toast.LENGTH_SHORT).show();
     }
 
     public void insertToDatabase() {
@@ -238,42 +221,38 @@ public class AddDiscountsActivity extends AppCompatActivity {
         StorageReference imageRef = storageRef.child("images/" + imageUri.getLastPathSegment());
         uploadTask = imageRef.putFile(imageUri);
 
-
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                link = downloadUrl.toString();
+                link = downloadUrl != null ? downloadUrl.toString() : null;
 
-                pd.dismiss();
-
-                Item item = new Item(name, category, price, discount, description, link, ShopName);
+                Item item = new Item(name, category, price, discount, description, link, shopName);
 
                 String id = databaseItem.push().getKey();
                 databaseItem.child(id).setValue(item);
 
-                Toast.makeText(getApplicationContext(), "Item Added Successfully", Toast.LENGTH_LONG).show();
-
+                pd.dismiss();
+                toast("Item added successfully");
+                finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 pd.dismiss();
-                Toast.makeText(getApplicationContext(), "Error while uploading", Toast.LENGTH_LONG).show();
+                toast("Error while uploading");
             }
         });
-
     }
 
-    public static boolean isConnectedToInternet(Context context) {
-
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+    public boolean isConnectedToInternet() {
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm != null ? cm.getActiveNetworkInfo() : null;
 
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
-    public void getShopName(){
+    public void getShopName() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("/shops");
         if (user != null) {
@@ -284,8 +263,8 @@ public class AddDiscountsActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                         String ID = itemSnapshot.child("ownerUID").getValue(String.class);
-                        if(ID.matches(uid)){
-                            ShopName = itemSnapshot.child("name").getValue(String.class);
+                        if (ID != null && ID.matches(uid)) {
+                            shopName = itemSnapshot.child("name").getValue(String.class);
                         }
                     }
                 }
@@ -296,5 +275,13 @@ public class AddDiscountsActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.equals(addItem) && areDataReady())
+            insertToDatabase();
+        else if (v.equals(findViewById(R.id.back_button)))
+            this.finish();
     }
 }

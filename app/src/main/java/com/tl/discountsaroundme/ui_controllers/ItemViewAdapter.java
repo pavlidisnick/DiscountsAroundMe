@@ -49,12 +49,11 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
         holder.imgString.setText(items.get(position).getPicture());
         holder.type.setText(items.get(position).getType());
 
-        String priceString = "$" + Double.toString(items.get(position).getPrice());
+        String priceString = "$" + items.get(position).getPrice();
         holder.tvPrice.setText(priceString);
 
-        int discount = (int) items.get(position).getDiscount();
-        holder.itemDiscount.setText(String.valueOf(discount));
-
+        String discount = String.valueOf(items.get(position).getDiscount());
+        holder.itemDiscount.setText(discount);
 
         GlideApp.with(context)
                 .load(items.get(position).getPicture())

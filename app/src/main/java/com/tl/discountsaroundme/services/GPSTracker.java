@@ -117,7 +117,7 @@ public class GPSTracker extends Service implements LocationListener {
         int identifier = 0;
         for (Store store : stores) {
             Item item = discountsManager.getTopItemByStore(store.getName());
-            String contentText = item.getName() + " " + (int) item.getDiscount() + "%";
+            String contentText = item.getName() + " " + item.getDiscount() + "%";
 
             Notification notification = new Notification.Builder(activity.getApplicationContext())
                     .setSmallIcon(R.mipmap.mini_icon)

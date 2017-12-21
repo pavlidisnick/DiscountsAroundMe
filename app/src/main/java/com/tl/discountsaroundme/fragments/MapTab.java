@@ -95,6 +95,7 @@ public class MapTab extends Fragment {
             public void onClick(View view) {
                 ArrayList<Store> stores = storeManager.getStores();
                 markerHelper.addMarkersFromList(stores);
+                hideMenu();
             }
         });
 
@@ -112,6 +113,7 @@ public class MapTab extends Fragment {
                     Toast.makeText(getContext(), "There are no shops nearby", Toast.LENGTH_SHORT).show();
                 else
                     markerHelper.addMarkersFromList(stores);
+                hideMenu();
             }
         });
 
@@ -199,7 +201,7 @@ public class MapTab extends Fragment {
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16.29));
                     } catch (NullPointerException e) {
                         e.printStackTrace();
-                        Toast.makeText(getContext(), "GPS disabled", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "GPS disabled", Toast.LENGTH_SHORT).show();
                     }
                 } else if (itemId == R.id.map_options) {
                     if (popupMenu.getVisibility() == View.INVISIBLE)

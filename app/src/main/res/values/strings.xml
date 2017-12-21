@@ -18,4 +18,5 @@
         <item>Technology</item>
         <item>Sport</item>
     </string-array>
+    <string name="title_activity_choose_location_store">Map</string>
 </resources>

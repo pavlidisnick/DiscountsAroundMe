@@ -32,12 +32,18 @@ import com.tl.discountsaroundme.ui_controllers.AnimCheckBox;
 import com.tl.discountsaroundme.ui_controllers.CheckBox;
 import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
-public class RegisterActivity extends Activity implements View.OnClickListener, AnimCheckBox.OnCheckedChangeListener {
+public class RegisterActivity extends Activity implements View.OnClickListener, AnimCheckBox.OnCheckedChangeListener{
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    final static int REQ_CODE = 1;
 
-
+    String latLongDataBack;
+    String[] afterSplitLatLong;
+    boolean isAlreadyTag=false;
+    double latitude=0;
+    double longitude=0;
     private Button register;
     private Button login;
+    private Button tagShop;
     //Issue 8 params
     private DatabaseReference mDbRef = FirebaseDatabase.getInstance().getReference();
     private AnimCheckBox cbBusinessAccount;
@@ -47,16 +53,30 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
     private String email;
     private String password;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
+      
         new StatusBar(this);
 
         register = findViewById(R.id.register_button);
         login = findViewById(R.id.login_button);
         etShopName = findViewById(R.id.etShopName);
+
+        tagShop = findViewById(R.id.tagShopOnMap);
+        tagShop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mapButton = new Intent(getApplicationContext(),ChooseLocationStore.class);
+                startActivityForResult(mapButton,REQ_CODE);
+            }
+        });
+
+
         cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
         sShopType = findViewById(R.id.sShopType);
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.shopTypeSpinner, R.layout.spinner_dropdown_list);
@@ -64,9 +84,30 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         sShopType.setAdapter(spinnerAdapter);
 
         cbBusinessAccount.setOnCheckedChangeListener(this);
+
         register.setOnClickListener(this);
         login.setOnClickListener(this);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+            if(requestCode==REQ_CODE){
+                if(resultCode==RESULT_OK) {
+
+                    latLongDataBack = data.getStringExtra("data");
+                    //Toast.makeText(getApplicationContext(), latLongDataBack + "", Toast.LENGTH_LONG).show();
+            afterSplitLatLong = latLongDataBack.split(",");
+            latitude = Double.parseDouble(afterSplitLatLong[0]);
+            longitude = Double.parseDouble(afterSplitLatLong[1]);
+                   tagShop.setEnabled(false);
+                   isAlreadyTag=true;
+
+
+                }
+            }
+    }
+
 
     @Override
     protected void onStart() {
@@ -186,8 +227,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         Shop.setDescription("Details");
         Shop.setName(etShopName.getText().toString());
         Shop.setImage("");
-        Shop.setLat(0);
-        Shop.setLng(0);
+        Shop.setLat(latitude);
+        Shop.setLng(longitude);
         Shop.setType(sShopType.getSelectedItem().toString());
         Shop.setOwnerUID(BAUserUID);
         // Now Shops are stored under their owner's UID
@@ -209,9 +250,12 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         if (checked) {
             etShopName.setVisibility(View.VISIBLE);
             sShopType.setVisibility(View.VISIBLE);
+            tagShop.setVisibility(View.VISIBLE);
         } else {
             etShopName.setVisibility(View.GONE);
             sShopType.setVisibility(View.GONE);
+            tagShop.setVisibility(View.GONE);
         }
     }
+
 }

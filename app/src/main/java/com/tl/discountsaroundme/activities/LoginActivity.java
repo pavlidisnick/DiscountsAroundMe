@@ -102,7 +102,7 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            showProgressBar();
+            progress.show();
             checkUserType();
         }
     }
@@ -111,12 +111,12 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
     public void onClick(View view) {
         if (view.equals(login)) {
             if (isFormFilled()) {
-                showProgressBar();
+                progress.show();
                 signIn(email, password);
             } else
                 Toast.makeText(getApplicationContext(), "Please fill the form", Toast.LENGTH_SHORT).show();
         } else if (view.equals(signInButton)) {
-            showProgressBar();
+            progress.show();
             signIn();
         } else if (view.equals(register)) {
             Intent registerActivity = new Intent(this, RegisterActivity.class);
@@ -142,7 +142,7 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
                 if (task.isSuccessful()) {
                     checkUserType();
                 } else {
-                    hideProgressBar();
+                    progress.dismiss();
                     Toast.makeText(getApplicationContext(), "Wrong email or password", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -175,9 +175,9 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
             GoogleSignInAccount account = result.getSignInAccount();
             loginSuccessful("user", account != null ? account.getId() : null);
         } else {
-            hideProgressBar();
             Toast.makeText(getApplicationContext(), "Google sign in failed", Toast.LENGTH_SHORT).show();
         }
+        progress.dismiss();
     }
 
     /**
@@ -199,7 +199,7 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
         mainActivity.putExtra("USER_ID", userId);
         startActivity(mainActivity);
 
-        hideProgressBar();
+        progress.dismiss();
     }
 
     private void checkUserType() throws NullPointerException {
@@ -227,14 +227,6 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
 
             }
         });
-    }
-
-    private void showProgressBar() {
-        progress.show();
-    }
-
-    private void hideProgressBar() {
-        progress.dismiss();
     }
 
     // Facebook Callbacks

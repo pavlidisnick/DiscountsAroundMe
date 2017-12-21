@@ -84,7 +84,7 @@
         <activity android:name=".activities.ItemDetailsActivity" />
         <activity android:name=".activities.UserProfileActivity" />
         <activity
-            android:name=".activities.ChooseLocationStore"
+            android:name=".activities.GetStoreLocationActivity"
             android:label="@string/title_activity_choose_location_store"></activity>
     </application>
 

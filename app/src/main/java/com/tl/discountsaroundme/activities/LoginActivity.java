@@ -143,7 +143,7 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
                     checkUserType();
                 } else {
                     hideProgressBar();
-                    Toast.makeText(getApplicationContext(), "LoginActivity failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Wrong email or password", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -176,7 +176,7 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
             loginSuccessful("user", account != null ? account.getId() : null);
         } else {
             hideProgressBar();
-            Toast.makeText(getApplicationContext(), "LoginActivity failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Google sign in failed", Toast.LENGTH_SHORT).show();
         }
     }
 

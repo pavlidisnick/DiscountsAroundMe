@@ -1,14 +1,9 @@
 package com.tl.discountsaroundme.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -29,18 +24,14 @@ import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.entities.User;
 import com.tl.discountsaroundme.ui_controllers.AnimCheckBox;
-import com.tl.discountsaroundme.ui_controllers.CheckBox;
 import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
-public class RegisterActivity extends Activity implements View.OnClickListener, AnimCheckBox.OnCheckedChangeListener{
+public class RegisterActivity extends Activity implements View.OnClickListener, AnimCheckBox.OnCheckedChangeListener {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     final static int REQ_CODE = 1;
 
-    String latLongDataBack;
-    String[] afterSplitLatLong;
-    boolean isAlreadyTag=false;
-    double latitude=0;
-    double longitude=0;
+    double latitude = Double.NaN;
+    double longitude = Double.NaN;
     private Button register;
     private Button login;
     private Button tagShop;
@@ -53,15 +44,19 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
     private String email;
     private String password;
 
-
-
+    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-      
+
         new StatusBar(this);
+
+        progress = new ProgressDialog(this);
+        progress.setMessage("Signing in");
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
 
         register = findViewById(R.id.register_button);
         login = findViewById(R.id.login_button);
@@ -71,15 +66,16 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         tagShop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mapButton = new Intent(getApplicationContext(),ChooseLocationStore.class);
-                startActivityForResult(mapButton,REQ_CODE);
+                Intent chooseStoreLocation = new Intent(getApplicationContext(), GetStoreLocationActivity.class);
+                startActivityForResult(chooseStoreLocation, REQ_CODE);
             }
         });
 
-
         cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
+
         sShopType = findViewById(R.id.sShopType);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.shopTypeSpinner, R.layout.spinner_dropdown_list);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter
+                .createFromResource(this, R.array.shopTypeSpinner, R.layout.spinner_dropdown_list);
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_dropdown_list);
         sShopType.setAdapter(spinnerAdapter);
 
@@ -92,59 +88,23 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-            if(requestCode==REQ_CODE){
-                if(resultCode==RESULT_OK) {
 
-                    latLongDataBack = data.getStringExtra("data");
-                    //Toast.makeText(getApplicationContext(), latLongDataBack + "", Toast.LENGTH_LONG).show();
-            afterSplitLatLong = latLongDataBack.split(",");
-            latitude = Double.parseDouble(afterSplitLatLong[0]);
-            longitude = Double.parseDouble(afterSplitLatLong[1]);
-                   tagShop.setEnabled(false);
-                   isAlreadyTag=true;
-
-
-                }
-            }
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if (!isOnline()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("No internet connection")
-                    .setCancelable(false)
-                    .setMessage("Please open wifi or mobile data.")
-                    .setPositiveButton("Settings",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    Intent i = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                                    startActivity(i);
-                                }
-                            });
-            AlertDialog alert = builder.create();
-            alert.show();
+        if (requestCode == REQ_CODE && resultCode == RESULT_OK) {
+            latitude = data.getDoubleExtra("lat", 0);
+            longitude = data.getDoubleExtra("lng", 0);
         }
     }
 
     @Override
     public void onClick(View view) {
         if (view.equals(register)) {
-            if (isFormFilled())
+            if (isFormFilled()) {
                 signUp(email, password);
-            else {
-                Context context = getApplicationContext();
-                CharSequence text = "Please fill the form";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-            }
+                progress.show();
+            } else
+                toast("Please fill all the fields");
         } else if (view.equals(login)) {
-            Intent LoginActivity = new Intent(this, com.tl.discountsaroundme.activities.LoginActivity.class);
-            startActivity(LoginActivity);
+            this.finish();
         }
     }
 
@@ -152,26 +112,23 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                Context context = getApplicationContext();
-                CharSequence text;
-                int duration = Toast.LENGTH_SHORT;
-
                 if (task.isSuccessful()) {
-                    //Issue 8  in case the user is a shop owner
+                    String userType = "user";
+                    FirebaseUser user = task.getResult().getUser();
+
                     if (cbBusinessAccount.isChecked()) {
-                        OnBusinessAccountCreation(task);
+                        userType = "owner";
+                        onBusinessAccountCreation(user);
                     }
-                    StoreAccountIntoDB(task);
-                    // Sign in success, update UI with the signed-in user's information and store the user in the database
-                    text = "RegisterActivity successful! Welcome " + task.getResult().getUser().getEmail();
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
+                    storeAccountIntoDB(user, userType);
+
+                    toast("Registered successfully");
+
+                    goToMain(userType, user.getUid());
                 } else {
-                    // If sign in fails, display a message to the user.
-                    text = "RegisterActivity Failed";
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
+                    toast("Register failed");
                 }
+                progress.dismiss();
             }
         });
     }
@@ -180,49 +137,35 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
      * Checks if all fields are filled and the user is ready to be created
      */
     private boolean isFormFilled() {
-        //Issue 8 changes need when the business account cb is checked
-        CheckBox cbBusinessAccount = findViewById(R.id.cbBusinessAccount);
-        EditText etShopName = findViewById(R.id.etShopName);
-        Spinner sShopType = findViewById(R.id.sShopType);
-
         TextView email = findViewById(R.id.email);
         TextView password = findViewById(R.id.password);
 
+        this.email = email.getText().toString();
+        this.password = password.getText().toString();
+
+        boolean isFilled = !this.email.isEmpty() && !this.password.isEmpty();
+
         if (cbBusinessAccount.isChecked()) {
             String shopName = etShopName.getText().toString();
-            this.email = email.getText().toString();
-            this.password = password.getText().toString();
-            Boolean itemSelected = sShopType.getSelectedItemPosition() != 0;
-            return !this.email.isEmpty() && !this.password.isEmpty() && !shopName.isEmpty() && itemSelected;
-        } else {
-            this.email = email.getText().toString();
-            this.password = password.getText().toString();
+            String shopType = sShopType.getSelectedItem().toString();
 
-            return !this.email.isEmpty() && !this.password.isEmpty();
+            boolean isBusinessFormFilled = !shopName.isEmpty() && !shopType.equals("Choose a type");
+            boolean locationCheck = !Double.isNaN(latitude) && !Double.isNaN(longitude);
+
+            return isBusinessFormFilled && locationCheck && isFilled;
         }
-    }
 
-    /**
-     * Checks if there is internet connection
-     *
-     * @return true if it has internet connection
-     */
-    private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm != null ? cm.getActiveNetworkInfo() : null;
-        return netInfo != null && netInfo.isConnectedOrConnecting();
+        return isFilled;
     }
 
     /**
      * Issue 8
      * On creation of a business account the Shop is stored into the database with its details and the account owner's UID
      * Currently the location of the shop is on default value
-     * TODO Give the  owner the option to set the shop's location
      */
-
-    public void OnBusinessAccountCreation(Task<AuthResult> task) {
-        FirebaseUser user = task.getResult().getUser();
+    private void onBusinessAccountCreation(FirebaseUser user) {
         String BAUserUID = user.getUid();
+
         Store Shop = new Store();
         Shop.setDescription("Details");
         Shop.setName(etShopName.getText().toString());
@@ -235,12 +178,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         mDbRef.child("shops").child(user.getUid()).setValue(Shop);
     }
 
-    public void StoreAccountIntoDB(Task<AuthResult> task) {
-        FirebaseUser user = task.getResult().getUser();
-        String userType = "Customer";
-        if (cbBusinessAccount.isChecked()) {
-            userType = "Store owner";
-        }
+    private void storeAccountIntoDB(FirebaseUser user, String userType) {
         User newUser = new User(user.getEmail(), user.getEmail(), userType, "imgURL");
         mDbRef.child("users").child(user.getUid()).setValue(newUser);
     }
@@ -258,4 +196,15 @@ public class RegisterActivity extends Activity implements View.OnClickListener, 
         }
     }
 
+    private void toast(String display) {
+        Toast.makeText(getApplicationContext(), display, Toast.LENGTH_SHORT).show();
+    }
+
+    private void goToMain(String userType, String userId) {
+        Intent mainActivity = new Intent(RegisterActivity.this, MainActivity.class);
+        mainActivity.putExtra("USER_TYPE", userType);
+        mainActivity.putExtra("USER_ID", userId);
+        startActivity(mainActivity);
+        finish();
+    }
 }

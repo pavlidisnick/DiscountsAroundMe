@@ -1,0 +1,104 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.tl.discountsaroundme.activities.GetStoreLocationActivity" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:background="#ef0f0f1f"
+        android:elevation="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Where is your shop?"
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="22sp" />
+
+        <LinearLayout
+            android:id="@+id/linear_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="8dp">
+
+            <Button
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:background="@drawable/button_circle"
+                android:text="1"
+                android:textColor="@color/colorPrice"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/editTextAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="2dp"
+                android:ems="14"
+                android:hint="Enter address"
+                android:inputType="textPostalAddress"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:textColor="@color/colorPrimaryWhite"
+                android:textColorHint="#bfffffff" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_marker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="8dp">
+
+            <Button
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:background="@drawable/button_circle"
+                android:text="2"
+                android:textColor="@color/colorPrice"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Click on the map"
+                android:textColor="@color/colorPrimaryWhite"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/confirm"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/orange_circled_button"
+        android:elevation="4dp"
+        android:text="Confirm"
+        android:textColor="@color/colorPrimaryWhite" />
+
+</FrameLayout>
+
+

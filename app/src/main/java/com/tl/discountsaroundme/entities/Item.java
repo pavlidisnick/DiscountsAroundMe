@@ -1,5 +1,8 @@
 package com.tl.discountsaroundme.entities;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class Item {
     private String name;
     private String type;
@@ -49,5 +52,18 @@ public class Item {
 
     public String getStore() {
         return store;
+    }
+
+    private BigDecimal getFinalPrice(double price, double discount) {
+        BigDecimal priceBD = new BigDecimal(price);
+        BigDecimal discountBD = new BigDecimal(discount);
+        return priceBD.subtract(priceBD.multiply(discountBD).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
+    }
+
+    public String getFinalPrice(String priceString, String discountString) {
+        priceString = priceString.replace("$", "").trim();
+        double price = Double.parseDouble(priceString);
+        double discount = Double.parseDouble(discountString);
+        return "$" + String.valueOf(getFinalPrice(price, discount).setScale(2, RoundingMode.HALF_UP));
     }
 }

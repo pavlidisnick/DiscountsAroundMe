@@ -9,9 +9,11 @@
          location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera"></uses-feature>
+
+    <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
@@ -60,12 +62,12 @@
         </service>
         <service android:name=".services.GPSTracker" />
 
-        <activity android:name=".services.Notifications.NotificationReceiverActivity"></activity>
-  
+        <activity android:name=".services.Notifications.NotificationReceiverActivity" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-      
+
         <activity android:name=".activities.RegisterActivity" />
       
         <activity android:name=".activities.LoginActivity">
@@ -79,19 +81,22 @@
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme"
-            tools:ignore="InnerclassSeparator">
-        </activity>
+            tools:ignore="InnerclassSeparator" />
       
-        <activity android:name=".activities.AddDiscountsActivity"></activity>
-      
-        <activity android:name=".activities.ItemDetailsActivity"></activity>
-      
-        <activity android:name=".activities.UserProfileActivity"></activity>
-
+        <activity android:name=".activities.AddDiscountsActivity" />
+  
+        <activity android:name=".activities.ItemDetailsActivity" />
+  
+        <activity android:name=".activities.UserProfileActivity" />
+  
         <activity android:name=".activities.MyDiscountsActivity"></activity>
-
+  
         <activity android:name=".activities.StoreItemDetailsActivity"></activity>
   
+        <activity
+            android:name=".activities.GetStoreLocationActivity"
+            android:label="@string/title_activity_choose_location_store"></activity>
+      
     </application>
 
 </manifest>

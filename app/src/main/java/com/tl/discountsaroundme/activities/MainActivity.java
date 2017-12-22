@@ -59,10 +59,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         DrawerLayout mDrawerLayout = findViewById(R.id.drawer_layout);
+
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            // TODO: Add dialog to confirm exit
         }
     }
 

@@ -6,7 +6,7 @@ import static junit.framework.Assert.assertEquals;
 
 public class ItemTest {
 
-    private Item item = new Item("Sweater", "Clothing",
+    private Item item = new Item("1", "Sweater", "Clothing",
             100, 25, "Description", "Picture", "Store");
 
     @Test
@@ -46,8 +46,6 @@ public class ItemTest {
 
     @Test
     public void getFinalPrice() throws Exception {
-        String priceString = "$" + item.getPrice();
-        String discountString = String.valueOf(item.getDiscount());
-        assertEquals("$75.00", item.getFinalPrice(priceString, discountString));
+        assertEquals("75.00", item.getFinalPrice());
     }
 }

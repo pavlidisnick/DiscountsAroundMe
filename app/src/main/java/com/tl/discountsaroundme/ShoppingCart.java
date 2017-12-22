@@ -36,8 +36,10 @@ public class ShoppingCart {
 
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Item item = child.getValue(Item.class);
-                    if (item != null)
+                    if (item != null) {
+                        item.setInCart(true);
                         cartItems.add(item);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -49,27 +51,13 @@ public class ShoppingCart {
     }
 
     public void addToCart(Item item) {
+        item.setInCart(true);
         shoppingCartRef.child(item.getId()).setValue(item);
     }
 
     public void removeFromCart(Item item) {
+        item.setInCart(false);
         cartItems.remove(item);
         shoppingCartRef.child(item.getId()).removeValue();
-    }
-
-    public boolean isItemInCart(final String id) {
-        final boolean[] doesExist = new boolean[1];
-
-        shoppingCartRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                doesExist[0] = dataSnapshot.hasChild(id);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-        return doesExist[0];
     }
 }

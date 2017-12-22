@@ -97,6 +97,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
                 @Override
                 public void onClick(View v) {
                     PopupMenu popupMenu = new PopupMenu(context, v);
+                    popupMenu.inflate(R.menu.item_options_menu);
 
                     String itemId = idTextView.getText().toString();
                     final Item discountItem = getItemById(itemId);
@@ -124,7 +125,6 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
                             return false;
                         }
                     });
-                    popupMenu.inflate(R.menu.item_options_menu);
                     popupMenu.show();
                 }
             });

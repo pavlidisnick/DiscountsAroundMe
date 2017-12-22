@@ -17,11 +17,11 @@ public class DiscountsManagerTest {
 
     @Before
     public void setup() {
-        itemList.add(new Item("abc", "Clothing", 23,
+        itemList.add(new Item("1", "abc", "Clothing", 23,
                 35, "Empty", "Empty", "abcStore"));
-        itemList.add(new Item("cde", "Technology", 23,
+        itemList.add(new Item("2", "cde", "Technology", 23,
                 40, "Empty", "Empty", "abcStore"));
-        itemList.add(new Item("qwerty", "Food", 23,
+        itemList.add(new Item("3", "qwerty", "Food", 23,
                 45, "Empty", "Empty", "cdeStore"));
         discountsManager.showTopDiscounts(itemList);
     }

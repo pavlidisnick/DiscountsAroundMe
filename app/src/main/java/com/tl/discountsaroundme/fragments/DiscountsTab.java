@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.BuildConfig;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.ShoppingCart;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
@@ -80,7 +81,7 @@ public class DiscountsTab extends Fragment {
         AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, getActivity(), discountsManager);
         new FetchCategories(addCategoryToLayout);
 
-        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), discountValue);
+        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), discountValue, MainActivity.USER_ID);
 
         // FloatingSearchView actions
         FloatingSearchView mSearchView = rootView.findViewById(R.id.floating_search_view);

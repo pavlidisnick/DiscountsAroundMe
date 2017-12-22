@@ -1,4 +1,4 @@
-package com.tl.discountsaroundme;
+package com.tl.discountsaroundme.discounts;
 
 import android.app.Activity;
 import android.content.res.Resources;
@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.tl.discountsaroundme.discounts.AddCategoryToLayout;
+import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 
 import org.junit.Before;

@@ -17,18 +17,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.ShoppingCart;
 import com.tl.discountsaroundme.entities.Item;
-import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
 public class ItemDetailsActivity extends Activity implements View.OnClickListener {
     private Item item;
     private Button addToCartButton;
+    private ShoppingCart shoppingCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_details);
 
-        new StatusBar(this);
+        shoppingCart = new ShoppingCart(FirebaseDatabase.getInstance(), MainActivity.USER_ID);
 
         ImageView backImage = findViewById(R.id.back_button);
         backImage.setOnClickListener(this);
@@ -38,6 +38,10 @@ public class ItemDetailsActivity extends Activity implements View.OnClickListene
 
         Intent intent = getIntent();
         item = (Item) intent.getSerializableExtra("ID");
+
+        if (item.isInCart()) {
+            blueButtonWithCheck();
+        }
 
         TextView price = findViewById(R.id.price);
         TextView itemDetails = findViewById(R.id.description);
@@ -67,14 +71,21 @@ public class ItemDetailsActivity extends Activity implements View.OnClickListene
                 this.finish();
                 break;
             case R.id.add_to_cart_button:
-                addToCart();
+                if (item.isInCart()) {
+                    normalButtonWithCart();
+                    shoppingCart.removeFromCart(item);
+                } else {
+                    blueButtonWithCheck();
+                    shoppingCart.addToCart(item);
+                }
         }
     }
 
-    private void addToCart() {
-        ShoppingCart shoppingCart = new ShoppingCart(FirebaseDatabase.getInstance(), MainActivity.USER_ID);
-        shoppingCart.addToCart(item);
-
+    /**
+     * Change the way the right button in the details looks to show that the item is added to the shopping cart
+     * and it's ready to be removed
+     */
+    private void blueButtonWithCheck() {
         // icon change
         Drawable drawable = getResources().getDrawable(R.drawable.ic_done);
         int color = Color.parseColor("#FFFFFF");
@@ -90,5 +101,27 @@ public class ItemDetailsActivity extends Activity implements View.OnClickListene
         addToCartButton.setBackground(backgroundDrawable);
 
         addToCartButton.setText("Added to cart");
+    }
+
+    /**
+     * Change the way the right button in the details looks to show that the item isn't in the shopping cart
+     * and it's ready to be added
+     */
+    private void normalButtonWithCart() {
+        // icon change
+        Drawable drawable = getResources().getDrawable(R.drawable.ic_shopping_cart_add);
+        int color = Color.parseColor("#FFFFFF");
+        PorterDuff.Mode mode = PorterDuff.Mode.SRC_ATOP;
+        drawable.setColorFilter(color, mode);
+        addToCartButton.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+
+        // background color change
+        Drawable backgroundDrawable = getResources().getDrawable(R.drawable.orange_circled_button);
+        int bgColor = Color.parseColor("#faa688");
+        PorterDuff.Mode bgMode = PorterDuff.Mode.SRC_ATOP;
+        backgroundDrawable.setColorFilter(bgColor, bgMode);
+        addToCartButton.setBackground(backgroundDrawable);
+
+        addToCartButton.setText("Add to cart");
     }
 }

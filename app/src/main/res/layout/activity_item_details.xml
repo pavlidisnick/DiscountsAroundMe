@@ -148,13 +148,13 @@
                 android:textSize="10sp" />
 
             <Button
-                android:id="@+id/cartButton"
+                android:id="@+id/add_to_cart_button"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_margin="5dp"
                 android:background="@drawable/orange_circled_button"
-                android:drawableLeft="@drawable/ic_shopping_cart"
+                android:drawableLeft="@drawable/ic_shopping_cart_add"
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
                 android:text="Add to cart"

@@ -5,6 +5,12 @@
     android:background="@drawable/item_style"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/item_id_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -128,5 +134,16 @@
             android:textStyle="bold" />
 
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/item_options_view"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="22dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:background="@drawable/white_blury_rounded"
+        android:src="@drawable/ic_more_vert_black_24dp"/>
 
 </FrameLayout>

@@ -1,9 +1,11 @@
 package com.tl.discountsaroundme.entities;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Item {
+public class Item implements Serializable {
+    private String id;
     private String name;
     private String type;
     private String description;
@@ -12,10 +14,13 @@ public class Item {
     private String picture;
     private String store;
 
+    private boolean isInCart = false;
+
     public Item() {
     }
 
-    public Item(String name, String type, double price, double discount, String description, String picture, String store) {
+    public Item(String id, String name, String type, double price, double discount, String description, String picture, String store) {
+        this.id = id;
         this.name = name;
         this.type = type;
         this.price = price;
@@ -24,7 +29,6 @@ public class Item {
         this.picture = picture;
         this.store = store;
     }
-
 
     public String getName() {
         return name;
@@ -54,16 +58,26 @@ public class Item {
         return store;
     }
 
-    private BigDecimal getFinalPrice(double price, double discount) {
+    public String getFinalPrice() {
         BigDecimal priceBD = new BigDecimal(price);
         BigDecimal discountBD = new BigDecimal(discount);
-        return priceBD.subtract(priceBD.multiply(discountBD).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
+        BigDecimal result = priceBD.subtract(priceBD.multiply(discountBD).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
+        return String.valueOf(result.setScale(2, RoundingMode.HALF_EVEN));
     }
 
-    public String getFinalPrice(String priceString, String discountString) {
-        priceString = priceString.replace("$", "").trim();
-        double price = Double.parseDouble(priceString);
-        double discount = Double.parseDouble(discountString);
-        return "$" + String.valueOf(getFinalPrice(price, discount).setScale(2, RoundingMode.HALF_UP));
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isInCart() {
+        return isInCart;
+    }
+
+    public void setInCart(boolean inCart) {
+        isInCart = inCart;
     }
 }

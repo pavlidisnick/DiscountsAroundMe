@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/add_to_cart_item"
+        android:enabled="true"
+        android:icon="@drawable/ic_shopping_cart_add"
+        android:iconTint="@color/black"
+        android:title="Add To Cart"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/add_to_favorites_item"
+        android:enabled="true"
+        android:icon="@drawable/ic_favorite"
+        android:title="Add to Favorites"
+        app:showAsAction="always" />
+</menu>

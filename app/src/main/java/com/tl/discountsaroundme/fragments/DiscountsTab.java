@@ -28,6 +28,7 @@ import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
+import com.tl.discountsaroundme.activities.ShoppingCartActivity;
 import com.tl.discountsaroundme.discounts.AddCategoryToLayout;
 import com.tl.discountsaroundme.discounts.FetchCategories;
 import com.tl.discountsaroundme.discounts.Search;
@@ -147,8 +148,11 @@ public class DiscountsTab extends Fragment {
                     login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(login);
                 } else if (id == R.id.nav_profile) {
-                    Intent UserProfileActivity = new Intent(getActivity(), com.tl.discountsaroundme.activities.UserProfileActivity.class);
-                    startActivity(UserProfileActivity);
+                    Intent userProfileActivity = new Intent(getActivity(), com.tl.discountsaroundme.activities.UserProfileActivity.class);
+                    startActivity(userProfileActivity);
+                } else if (id == R.id.nav_shopping_cart) {
+                    Intent shoppingCartActivity = new Intent(getActivity(), ShoppingCartActivity.class);
+                    startActivity(shoppingCartActivity);
                 }
 
                 DrawerLayout drawer = mDrawerLayout.findViewById(R.id.drawer_layout);

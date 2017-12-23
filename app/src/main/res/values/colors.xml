@@ -12,4 +12,5 @@
     <color name="description">#545454</color>
     <color name="orange">#faa688</color>
     <color name="pink">#fa6db5</color>
+    <color name="black_with_blue_accent">#ef0f0f1f</color>
 </resources>

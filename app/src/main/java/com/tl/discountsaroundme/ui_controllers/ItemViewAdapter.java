@@ -91,43 +91,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
             setViews();
 
             ImageView moreOptions = itemView.findViewById(R.id.item_options_view);
-            moreOptions.setOnClickListener(new View.OnClickListener() {
-                ShoppingCart shoppingCart = new ShoppingCart(FirebaseDatabase.getInstance(), MainActivity.USER_ID);
-
-                @Override
-                public void onClick(View v) {
-                    PopupMenu popupMenu = new PopupMenu(context, v);
-                    popupMenu.inflate(R.menu.item_options_menu);
-
-                    String itemId = idTextView.getText().toString();
-                    final Item discountItem = getItemById(itemId);
-                    final boolean isInCart = discountItem != null && discountItem.isInCart();
-
-                    if (isInCart) {
-                        popupMenu.getMenu().getItem(0).setTitle("Remove from Cart");
-                    }
-
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            switch (item.getItemId()) {
-                                case R.id.add_to_cart_item:
-                                    if (isInCart) {
-                                        shoppingCart.removeFromCart(discountItem);
-                                    } else {
-                                        shoppingCart.addToCart(discountItem);
-                                    }
-                                    return true;
-                                case R.id.add_to_favorites_item:
-                                    return true;
-                            }
-
-                            return false;
-                        }
-                    });
-                    popupMenu.show();
-                }
-            });
+            moreOptions.setOnClickListener(this);
 
             itemView.setOnClickListener(this);
         }
@@ -156,7 +120,10 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
 
         @Override
         public void onClick(View v) {
-            itemClick();
+            if (v.getId() == R.id.item_options_view)
+                moreOptions(v);
+            else
+                itemClick();
         }
 
         private void itemClick() {
@@ -165,6 +132,40 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
             Intent itemDetailsActivity = new Intent(context, ItemDetailsActivity.class);
             itemDetailsActivity.putExtra("ID", getItemById(itemId));
             context.startActivity(itemDetailsActivity);
+        }
+
+        private void moreOptions(View v) {
+            final ShoppingCart shoppingCart = new ShoppingCart(FirebaseDatabase.getInstance(), MainActivity.USER_ID);
+
+            PopupMenu popupMenu = new PopupMenu(context, v);
+            popupMenu.inflate(R.menu.item_options_menu);
+
+            String itemId = idTextView.getText().toString();
+            final Item discountItem = getItemById(itemId);
+            final boolean isInCart = discountItem != null && discountItem.isInCart();
+
+            if (isInCart) {
+                popupMenu.getMenu().getItem(0).setTitle("Remove from Cart");
+            }
+
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.add_to_cart_item:
+                            if (isInCart) {
+                                shoppingCart.removeFromCart(discountItem);
+                            } else {
+                                shoppingCart.addToCart(discountItem);
+                            }
+                            return true;
+                        case R.id.add_to_favorites_item:
+                            return true;
+                    }
+                    return false;
+                }
+            });
+            popupMenu.show();
         }
     }
 }

@@ -27,7 +27,6 @@ import java.util.ArrayList;
 public class MyDiscountsActivity extends AppCompatActivity {
 
     private ArrayList<Item> shopDiscounts = new ArrayList<>();
-    private String shopName;
     private ProgressDialog pd;
     private DiscountsAdapter adapter;
     private ListView listView;
@@ -59,8 +58,8 @@ public class MyDiscountsActivity extends AppCompatActivity {
                         String id = itemSnapshot.child("ownerUID").getValue(String.class);
 
                         if (id != null && id.matches(uid)) {
-                            shopName = itemSnapshot.child("name").getValue(String.class);
-                            getStoreDiscounts();
+                            String shopName = itemSnapshot.child("name").getValue(String.class);
+                            getStoreDiscounts(shopName);
                         }
                     }
                 }
@@ -73,7 +72,7 @@ public class MyDiscountsActivity extends AppCompatActivity {
         }
     }
 
-    private void getStoreDiscounts() {
+    private void getStoreDiscounts(String shopName) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/items");
         Query query = ref.orderByChild("store").equalTo(shopName);
 

@@ -14,6 +14,10 @@
             android:id="@+id/nav_shopping_cart"
             android:icon="@drawable/ic_shopping_cart"
             android:title="Shopping cart" />
+        <item
+            android:id="@+id/nav_my_discounts"
+            android:icon="@drawable/ic_view_list"
+            android:title="My Discounts" />
     </group>
 
     <item android:title="Others">

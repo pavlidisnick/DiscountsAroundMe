@@ -30,6 +30,7 @@ import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.activities.ShoppingCartActivity;
+import com.tl.discountsaroundme.activities.MyDiscountsActivity;
 import com.tl.discountsaroundme.discounts.AddCategoryToLayout;
 import com.tl.discountsaroundme.discounts.FetchCategories;
 import com.tl.discountsaroundme.discounts.Search;
@@ -49,6 +50,7 @@ public class DiscountsTab extends Fragment {
     DrawerLayout mDrawerLayout;
     DiscountsManager discountsManager = new DiscountsManager();
     private Search search;
+
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -124,7 +126,9 @@ public class DiscountsTab extends Fragment {
         if (MainActivity.USER_TYPE.equals("user")) {
             Menu menu = nav.getMenu();
             MenuItem target = menu.findItem(R.id.nav_insert_item);
+            MenuItem target2 = menu.findItem(R.id.nav_my_discounts);
             target.setVisible(false);
+            target2.setVisible(false);
         }
 
         String versionName = "v" + BuildConfig.VERSION_NAME;
@@ -141,6 +145,9 @@ public class DiscountsTab extends Fragment {
                 if (id == R.id.nav_insert_item) {
                     Intent addDiscount = new Intent(getContext(), AddDiscountsActivity.class);
                     startActivity(addDiscount);
+                } else if (id == R.id.nav_my_discounts) {
+                    Intent MyDiscounts = new Intent(getContext(), MyDiscountsActivity.class);
+                    startActivity(MyDiscounts);
                 } else if (id == R.id.nav_logout) {
                     FirebaseAuth mAuth = FirebaseAuth.getInstance();
                     mAuth.signOut();
@@ -201,4 +208,5 @@ public class DiscountsTab extends Fragment {
             }
         });
     }
+
 }

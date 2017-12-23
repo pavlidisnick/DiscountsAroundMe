@@ -7,7 +7,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.entities.Item;
 
@@ -16,10 +15,9 @@ import java.util.ArrayList;
 
 public class DiscountsAdapter extends BaseAdapter {
 
+    private ImageView imageView;
     private Context mContext;
-    private ArrayList<Item> sDiscounts = new ArrayList<>();
-
-    ImageView imageView;
+    private ArrayList<Item> sDiscounts;
 
     public DiscountsAdapter(Context mContext, ArrayList<Item> sDiscounts) {
         this.mContext = mContext;
@@ -43,10 +41,10 @@ public class DiscountsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        View customView = View.inflate(mContext, R.layout.adapter_custom_row,null);
+        View customView = View.inflate(mContext, R.layout.adapter_custom_row, null);
 
-        TextView textView = (TextView) customView.findViewById(R.id.textViewDiscounts);
-        imageView = (ImageView) customView.findViewById(R.id.imageViewDiscounts);
+        TextView textView = customView.findViewById(R.id.textViewDiscounts);
+        imageView = customView.findViewById(R.id.imageViewDiscounts);
 
         textView.setText(sDiscounts.get(i).getName());
         loadImageFromUrl(sDiscounts.get(i).getPicture());
@@ -54,7 +52,7 @@ public class DiscountsAdapter extends BaseAdapter {
         return customView;
     }
 
-    public void loadImageFromUrl(String url){
-        Picasso.with(mContext).load(url).into(imageView);
+    private void loadImageFromUrl(String url) {
+        GlideApp.with(mContext).load(url).into(imageView);
     }
 }

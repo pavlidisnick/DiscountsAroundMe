@@ -43,8 +43,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Objects;
 
 public class AddDiscountsActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int SELECTED_PICTURE = 100;
@@ -62,8 +61,6 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
 
     int MaxUploadTime = 40000; //set Max time for uploading to 40 seconds
 
-    String ShopName;
-  
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -120,11 +117,10 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
         }
 
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            String datetime = getDatetime();
+            Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
 
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-          
+
             if (photo != null) {
                 photo.compress(Bitmap.CompressFormat.PNG, 100, bytes);
             }

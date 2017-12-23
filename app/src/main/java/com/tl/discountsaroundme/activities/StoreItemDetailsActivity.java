@@ -76,7 +76,7 @@ public class StoreItemDetailsActivity extends Activity {
         return "$" + String.valueOf(finalPrice);
     }
 
-    private void deleteDiscount(){
+    private void deleteDiscount() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("items");
         ref.child(key).removeValue();
     }

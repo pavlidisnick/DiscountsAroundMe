@@ -106,7 +106,7 @@ public class MyDiscountsActivity extends AppCompatActivity{
     private void setDiscountsToListview(){
 
         adapter = new DiscountsAdapter(this, shopDiscounts);
-        listView = (ListView) findViewById(R.id.list_discounts);
+        listView = findViewById(R.id.list_discounts);
 
         listView.clearChoices();
         listView.setAdapter(adapter);

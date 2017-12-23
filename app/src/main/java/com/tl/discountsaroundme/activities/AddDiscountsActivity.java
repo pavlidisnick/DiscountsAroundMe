@@ -202,9 +202,9 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 link = downloadUrl != null ? downloadUrl.toString() : null;
 
-                Item item = new Item(name, category, price, discount, description, link, shopName);
-
                 String id = databaseItem.push().getKey();
+                Item item = new Item(id, name, category, price, discount, description, link, shopName);
+
                 databaseItem.child(id).setValue(item);
 
                 pd.dismiss();

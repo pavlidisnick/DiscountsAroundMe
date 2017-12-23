@@ -95,7 +95,9 @@
   
         <activity
             android:name=".activities.GetStoreLocationActivity"
-            android:label="@string/title_activity_choose_location_store"></activity>
+            android:label="@string/title_activity_choose_location_store" />
+      
+        <activity android:name=".activities.ShoppingCartActivity" />
       
     </application>
 

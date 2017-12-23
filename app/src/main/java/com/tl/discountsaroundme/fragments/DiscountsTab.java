@@ -25,9 +25,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.BuildConfig;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.ShoppingCart;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
+import com.tl.discountsaroundme.activities.ShoppingCartActivity;
 import com.tl.discountsaroundme.activities.MyDiscountsActivity;
 import com.tl.discountsaroundme.discounts.AddCategoryToLayout;
 import com.tl.discountsaroundme.discounts.FetchCategories;
@@ -81,7 +83,7 @@ public class DiscountsTab extends Fragment {
         AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, getActivity(), discountsManager);
         new FetchCategories(addCategoryToLayout);
 
-        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), discountValue);
+        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), discountValue, MainActivity.USER_ID);
 
         // FloatingSearchView actions
         FloatingSearchView mSearchView = rootView.findViewById(R.id.floating_search_view);
@@ -154,8 +156,11 @@ public class DiscountsTab extends Fragment {
                     login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(login);
                 } else if (id == R.id.nav_profile) {
-                    Intent UserProfileActivity = new Intent(getActivity(), com.tl.discountsaroundme.activities.UserProfileActivity.class);
-                    startActivity(UserProfileActivity);
+                    Intent userProfileActivity = new Intent(getActivity(), com.tl.discountsaroundme.activities.UserProfileActivity.class);
+                    startActivity(userProfileActivity);
+                } else if (id == R.id.nav_shopping_cart) {
+                    Intent shoppingCartActivity = new Intent(getActivity(), ShoppingCartActivity.class);
+                    startActivity(shoppingCartActivity);
                 }
 
                 DrawerLayout drawer = mDrawerLayout.findViewById(R.id.drawer_layout);

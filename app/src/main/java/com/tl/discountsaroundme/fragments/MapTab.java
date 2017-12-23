@@ -27,6 +27,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;
@@ -52,7 +53,7 @@ public class MapTab extends Fragment {
         final StoreManager storeManager = new StoreManager();
 
         final DiscountsManager discountsManager = new DiscountsManager();
-        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue);
+        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue, MainActivity.USER_ID);
 
         mMapView = rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);

@@ -6,26 +6,24 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.ShoppingCart;
 import com.tl.discountsaroundme.activities.ItemDetailsActivity;
+import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.entities.Item;
 
 import java.util.ArrayList;
 
 
 public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemView> {
-    public final static String DATA_ITEM_NAME = "NAME";
-    public final static String DATA_ITEM_DETAILS = "DETAILS";
-    public final static String DATA_ITEM_PRICE = "PRICE";
-    public final static String DATA_ITEM_STORE = "STORE";
-    public final static String DATA_IMAGE = "BitmapImage";
-    public final static String DATA_TYPE = "TYPE";
-    public final static String DATA_DISCOUNT = "DISCOUNT";
     private Context context;
     private ArrayList<Item> items;
 
@@ -43,20 +41,22 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(ItemView holder, int position) {
-        holder.tvItemName.setText(items.get(position).getName());
-        holder.tvItemDetails.setText(items.get(position).getDescription());
-        holder.tvStoreName.setText(items.get(position).getStore());
-        holder.imgString.setText(items.get(position).getPicture());
-        holder.type.setText(items.get(position).getType());
+        Item item = items.get(position);
 
-        String priceString = "$" + items.get(position).getPrice();
+        holder.tvItemName.setText(item.getName());
+        holder.tvItemDetails.setText(item.getDescription());
+        holder.tvStoreName.setText(item.getStore());
+        holder.imgString.setText(item.getPicture());
+        holder.type.setText(item.getType());
+
+        String priceString = "$" + item.getPrice();
         holder.tvPrice.setText(priceString);
 
-        String discount = String.valueOf(items.get(position).getDiscount());
+        String discount = String.valueOf(item.getDiscount());
         holder.itemDiscount.setText(discount);
 
         GlideApp.with(context)
-                .load(items.get(position).getPicture())
+                .load(item.getPicture())
                 .encodeQuality(10)
                 .into(holder.imageView);
 
@@ -66,7 +66,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
                 .circleCrop()
                 .into(holder.shopImage);
 
-        holder.imageView.animate();
+        holder.idTextView.setText(item.getId());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
         return items.size();
     }
 
-    class ItemView extends RecyclerView.ViewHolder {
+    class ItemView extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
         TextView tvItemName;
         TextView tvItemDetails;
@@ -84,10 +84,55 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
         TextView type;
         TextView itemDiscount;
         ImageView shopImage;
+        TextView idTextView;
 
         ItemView(final View itemView) {
             super(itemView);
+            setViews();
 
+            ImageView moreOptions = itemView.findViewById(R.id.item_options_view);
+            moreOptions.setOnClickListener(new View.OnClickListener() {
+                ShoppingCart shoppingCart = new ShoppingCart(FirebaseDatabase.getInstance(), MainActivity.USER_ID);
+
+                @Override
+                public void onClick(View v) {
+                    PopupMenu popupMenu = new PopupMenu(context, v);
+                    popupMenu.inflate(R.menu.item_options_menu);
+
+                    String itemId = idTextView.getText().toString();
+                    final Item discountItem = getItemById(itemId);
+                    final boolean isInCart = discountItem != null && discountItem.isInCart();
+
+                    if (isInCart) {
+                        popupMenu.getMenu().getItem(0).setTitle("Remove from Cart");
+                    }
+
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.add_to_cart_item:
+                                    if (isInCart) {
+                                        shoppingCart.removeFromCart(discountItem);
+                                    } else {
+                                        shoppingCart.addToCart(discountItem);
+                                    }
+                                    return true;
+                                case R.id.add_to_favorites_item:
+                                    return true;
+                            }
+
+                            return false;
+                        }
+                    });
+                    popupMenu.show();
+                }
+            });
+
+            itemView.setOnClickListener(this);
+        }
+
+        private void setViews() {
             imageView = itemView.findViewById(R.id.img);
             tvItemName = itemView.findViewById(R.id.tvItemName);
             tvItemDetails = itemView.findViewById(R.id.tvItemDetail);
@@ -97,30 +142,29 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
             type = itemView.findViewById(R.id.type);
             itemDiscount = itemView.findViewById(R.id.itemDiscount);
             shopImage = itemView.findViewById(R.id.shop_image);
+            idTextView = itemView.findViewById(R.id.item_id_text_view);
+        }
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String details = tvItemDetails.getText().toString();
-                    String itemName = tvItemName.getText().toString();
-                    String price = tvPrice.getText().toString();
-                    String storeName = tvStoreName.getText().toString();
-                    String img = imgString.getText().toString();
-                    String discountData = itemDiscount.getText().toString();
-                    String itemType = type.getText().toString();
-
-                    Intent itemDetailsActivity = new Intent(context, ItemDetailsActivity.class);
-
-                    itemDetailsActivity.putExtra(DATA_ITEM_DETAILS, details);
-                    itemDetailsActivity.putExtra(DATA_ITEM_NAME, itemName);
-                    itemDetailsActivity.putExtra(DATA_ITEM_STORE, storeName);
-                    itemDetailsActivity.putExtra(DATA_ITEM_PRICE, price);
-                    itemDetailsActivity.putExtra(DATA_IMAGE, img);
-                    itemDetailsActivity.putExtra(DATA_TYPE, itemType);
-                    itemDetailsActivity.putExtra(DATA_DISCOUNT, discountData);
-                    context.startActivity(itemDetailsActivity);
+        private Item getItemById(String id) {
+            for (Item item : items) {
+                if (item.getId().equals(id)) {
+                    return item;
                 }
-            });
+            }
+            return null;
+        }
+
+        @Override
+        public void onClick(View v) {
+            itemClick();
+        }
+
+        private void itemClick() {
+            String itemId = idTextView.getText().toString();
+
+            Intent itemDetailsActivity = new Intent(context, ItemDetailsActivity.class);
+            itemDetailsActivity.putExtra("ID", getItemById(itemId));
+            context.startActivity(itemDetailsActivity);
         }
     }
 }

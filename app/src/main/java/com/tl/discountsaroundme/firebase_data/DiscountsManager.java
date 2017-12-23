@@ -109,7 +109,7 @@ public class DiscountsManager {
     /**
      * @param firebaseDatabase FirebaseDatabase instance
      */
-    public void showTopDiscounts(FirebaseDatabase firebaseDatabase, final int discountThreshold) {
+    public void showTopDiscounts(final FirebaseDatabase firebaseDatabase, final int discountThreshold, final String userId) {
         DatabaseReference mDBDiscountItems = firebaseDatabase.getReference("/items");
 
         mDBDiscountItems.addValueEventListener(new ValueEventListener() {
@@ -118,11 +118,30 @@ public class DiscountsManager {
                 showingItems.clear();
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Item item = child.getValue(Item.class);
-                    if (item != null && item.getDiscount() >= discountThreshold)
+                    if (item != null && item.getDiscount() >= discountThreshold) {
                         showingItems.add(item);
+                        isItemInCart(firebaseDatabase, item, userId);
+                    }
                 }
                 allItems.clear();
                 allItems.addAll(showingItems);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void isItemInCart(FirebaseDatabase firebaseDatabase, final Item item, String userId) {
+        String dbPath = "/user_references/shopping_cart/" + userId;
+        DatabaseReference shoppingCartRef = firebaseDatabase.getReference(dbPath);
+
+        shoppingCartRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean isInCart = dataSnapshot.hasChild(item.getId());
+                item.setInCart(isInCart);
             }
 
             @Override

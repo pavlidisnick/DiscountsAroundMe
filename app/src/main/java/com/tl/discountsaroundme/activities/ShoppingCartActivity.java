@@ -5,9 +5,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
@@ -15,10 +17,11 @@ import com.tl.discountsaroundme.ShoppingCart;
 import com.tl.discountsaroundme.ui_controllers.ItemSpaceDecoration;
 import com.tl.discountsaroundme.ui_controllers.ItemViewAdapter;
 
-public class ShoppingCartActivity extends AppCompatActivity implements View.OnClickListener {
+public class ShoppingCartActivity extends AppCompatActivity implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
     // TODO if there are no items in the cart set this visible
     private LinearLayout emptyCartMessage;
+    private ShoppingCart shoppingCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +29,7 @@ public class ShoppingCartActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_shopping_cart);
 
         String userId = MainActivity.USER_ID;
-        final ShoppingCart shoppingCart = new ShoppingCart(FirebaseDatabase.getInstance(), userId);
+        shoppingCart = new ShoppingCart(FirebaseDatabase.getInstance(), userId);
         shoppingCart.retrieveCartItems();
 
         RecyclerView mRecyclerView = findViewById(R.id.shopping_cart_items);
@@ -41,6 +44,9 @@ public class ShoppingCartActivity extends AppCompatActivity implements View.OnCl
 
         ImageView backImage = findViewById(R.id.back_button);
         backImage.setOnClickListener(this);
+
+        ImageView moreImage = findViewById(R.id.cart_more_options);
+        moreImage.setOnClickListener(this);
 
         emptyCartMessage = findViewById(R.id.empty_cart_message);
 
@@ -67,6 +73,23 @@ public class ShoppingCartActivity extends AppCompatActivity implements View.OnCl
             case R.id.back_button:
                 this.finish();
                 break;
+            case R.id.cart_more_options:
+                showPopupMenu(v);
+                break;
         }
+    }
+
+    private void showPopupMenu(View v) {
+        PopupMenu popupMenu = new PopupMenu(this, v);
+        popupMenu.inflate(R.menu.shopping_cart_menu);
+
+        popupMenu.setOnMenuItemClickListener(this);
+        popupMenu.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        shoppingCart.removeAllCartItems();
+        return true;
     }
 }

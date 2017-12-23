@@ -4,6 +4,6 @@
     <item
         android:id="@+id/add_to_cart_item"
         android:enabled="true"
-        android:title="Select all"
+        android:title="Remove all"
         app:showAsAction="ifRoom" />
 </menu>

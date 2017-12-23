@@ -60,4 +60,12 @@ public class ShoppingCart {
         cartItems.remove(item);
         shoppingCartRef.child(item.getId()).removeValue();
     }
+
+    public void removeAllCartItems() {
+        int i = cartItems.size() - 1;
+        while (!cartItems.isEmpty()) {
+            removeFromCart(cartItems.get(i));
+            i--;
+        }
+    }
 }

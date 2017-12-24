@@ -109,7 +109,31 @@ public class DiscountsManager {
     /**
      * @param firebaseDatabase FirebaseDatabase instance
      */
-    public void showTopDiscounts(final FirebaseDatabase firebaseDatabase, final int discountThreshold, final String userId) {
+    public void fillListWithDiscounts(final FirebaseDatabase firebaseDatabase, final int discountThreshold, final String userId) {
+        DatabaseReference mDBDiscountItems = firebaseDatabase.getReference("/items");
+
+        mDBDiscountItems.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                allItems.clear();
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Item item = child.getValue(Item.class);
+                    if (item != null && item.getDiscount() >= discountThreshold) {
+                        allItems.add(item);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    /**
+     * @param firebaseDatabase FirebaseDatabase instance
+     */
+    public void showTopDiscountsAndNotify(final FirebaseDatabase firebaseDatabase, final int discountThreshold, final String userId) {
         DatabaseReference mDBDiscountItems = firebaseDatabase.getReference("/items");
 
         mDBDiscountItems.addValueEventListener(new ValueEventListener() {
@@ -123,6 +147,7 @@ public class DiscountsManager {
                         isItemInCart(firebaseDatabase, item, userId);
                     }
                 }
+                adapter.notifyDataSetChanged();
                 allItems.clear();
                 allItems.addAll(showingItems);
             }

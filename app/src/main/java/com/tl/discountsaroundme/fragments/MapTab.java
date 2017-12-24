@@ -53,7 +53,7 @@ public class MapTab extends Fragment {
         final StoreManager storeManager = new StoreManager();
 
         final DiscountsManager discountsManager = new DiscountsManager();
-        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue, MainActivity.USER_ID);
+        discountsManager.fillListWithDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue, MainActivity.USER_ID);
 
         mMapView = rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);

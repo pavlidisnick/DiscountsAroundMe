@@ -19,7 +19,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -55,6 +54,7 @@ public class AddDiscountsActivity extends AppCompatActivity {
     ImageView imageView;
     Button selectImg, addItem, camera;
 
+
     Uri imageUri;
     UploadTask uploadTask;
 
@@ -63,7 +63,7 @@ public class AddDiscountsActivity extends AppCompatActivity {
 
     TimeZone tz = TimeZone.getTimeZone("GMT+2:00");
     Calendar calendar = Calendar.getInstance(tz);
-    CalendarView calendarApp;
+    Button exportDayButton;
 
     int realDate,realYear,realMonth;
     double price, discount;
@@ -82,14 +82,13 @@ public class AddDiscountsActivity extends AppCompatActivity {
 
         getShopName();
 
-        calendarApp = findViewById(R.id.calendarDateMonthYear);
 
         today = findViewById(R.id.todayDate);
 
         realDate = calendar.get(Calendar.DATE);
         realMonth = calendar.get((Calendar.MONTH));
         realYear = calendar.get(Calendar.YEAR);
-
+        exportDayButton = findViewById(R.id.exportButton);
         today.setText("Today: "+realDate+"-"+(realMonth+1)+"-"+realYear+"");
 
 
@@ -98,16 +97,15 @@ public class AddDiscountsActivity extends AppCompatActivity {
         selectImg = findViewById(R.id.buttonSelectImage);
         addItem = findViewById(R.id.buttonAddItem);
         camera = findViewById(R.id.buttonCamera);
-        export = findViewById(R.id.exportText);
 
-        calendarApp.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+
+        exportDayButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
-                export.setText("Export: "+day+"-"+(month+1)+"-"+year+"");
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),ExpirationDateDialogActivity.class);
+                startActivity(intent);
             }
         });
-
-
 
 
 

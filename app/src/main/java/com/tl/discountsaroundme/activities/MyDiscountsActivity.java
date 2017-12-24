@@ -3,6 +3,9 @@ package com.tl.discountsaroundme.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -25,12 +28,13 @@ import com.tl.discountsaroundme.ui_controllers.ManageMyDiscountsAdapter;
 import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
 import com.yalantis.contextmenu.lib.MenuObject;
 import com.yalantis.contextmenu.lib.MenuParams;
+import com.yalantis.contextmenu.lib.interfaces.OnMenuItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
+// TODO: add a waiting period when removing items so the recycler view can be notified for the changes
 public class MyDiscountsActivity extends AppCompatActivity implements View.OnClickListener,
-        AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+        AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, OnMenuItemClickListener {
 
     private ArrayList<Item> shopDiscounts = new ArrayList<>();
     private ArrayList<Item> selectedItems = new ArrayList<>();
@@ -116,7 +120,12 @@ public class MyDiscountsActivity extends AppCompatActivity implements View.OnCli
 
     private void contextMenu() {
         MenuObject empty = new MenuObject();
+        Drawable emptyDrawable = getResources().getDrawable(R.drawable.ic_more_vert_black_24dp);
+        int color = Color.parseColor("#FFFFFF");
+        emptyDrawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        empty.setDrawable(emptyDrawable);
         empty.setBgColor(getResources().getColor(R.color.black_with_blue_accent));
+
 
         MenuObject delete = new MenuObject("Delete");
         delete.setResource(R.drawable.ic_close);
@@ -127,15 +136,17 @@ public class MyDiscountsActivity extends AppCompatActivity implements View.OnCli
         edit.setBgColor(getResources().getColor(R.color.black_with_blue_accent));
 
         List<MenuObject> menuObjects = new ArrayList<>();
+        menuObjects.add(empty);
         menuObjects.add(delete);
         menuObjects.add(edit);
 
         MenuParams menuParams = new MenuParams();
-        menuParams.setActionBarSize(150);
+        menuParams.setActionBarSize(120);
         menuParams.setMenuObjects(menuObjects);
         menuParams.setClosableOutside(true);
         // set other settings to meet your needs
         contextMenuDialogFragment = ContextMenuDialogFragment.newInstance(menuParams);
+        contextMenuDialogFragment.setItemClickListener(this);
     }
 
     @Override
@@ -188,5 +199,19 @@ public class MyDiscountsActivity extends AppCompatActivity implements View.OnCli
             selectedViews.clear();
             selectedItems.clear();
         }
+    }
+
+    @Override
+    public void onMenuItemClick(View clickedView, int position) {
+        if (position == 1) {
+            for (Item item : selectedItems) {
+                deleteDiscount(item);
+            }
+        }
+    }
+
+    private void deleteDiscount(Item item) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("items");
+        ref.child(item.getId()).removeValue();
     }
 }

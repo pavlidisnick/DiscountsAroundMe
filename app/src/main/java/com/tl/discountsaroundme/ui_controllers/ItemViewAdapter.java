@@ -52,7 +52,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
         String priceString = "$" + item.getPrice();
         holder.tvPrice.setText(priceString);
 
-        String discount = String.valueOf(item.getDiscount());
+        String discount = String.valueOf((int) item.getDiscount() + "% off");
         holder.itemDiscount.setText(discount);
 
         GlideApp.with(context)

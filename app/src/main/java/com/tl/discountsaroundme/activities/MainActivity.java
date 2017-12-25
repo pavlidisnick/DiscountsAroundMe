@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -9,8 +10,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.fragments.DiscountsTab;
@@ -18,7 +23,7 @@ import com.tl.discountsaroundme.fragments.MapTab;
 import com.tl.discountsaroundme.fragments.UserTab;
 import com.tl.discountsaroundme.ui_controllers.ZoomOutPageTransformer;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static String USER_TYPE;
     public static String USER_ID;
     private ViewPager mViewPager;
@@ -45,12 +50,17 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         int id = item.getItemId();
-                        if (id == R.id.menu_discounts)
-                            mViewPager.setCurrentItem(0);
-                        else if (id == R.id.menu_map)
-                            mViewPager.setCurrentItem(1);
-                        else if (id == R.id.menu_user_options)
-                            mViewPager.setCurrentItem(2);
+                        switch (id) {
+                            case R.id.menu_discounts:
+                                mViewPager.setCurrentItem(0);
+                                break;
+                            case R.id.menu_map:
+                                mViewPager.setCurrentItem(1);
+                                break;
+                            case R.id.menu_user_options:
+                                mViewPager.setCurrentItem(2);
+                                break;
+                        }
                         return true;
                     }
                 });
@@ -63,8 +73,18 @@ public class MainActivity extends AppCompatActivity {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            // TODO: Add dialog to confirm exit
+            @SuppressLint("InflateParams")
+            LinearLayout linearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.dialog_exit_app, null);
+            Button exitButton = (Button) linearLayout.getChildAt(2);
+            exitButton.setOnClickListener(this);
+
+            new AlertDialog.Builder(this).setView(linearLayout).create().show();
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        this.finishAffinity();
     }
 
     /**

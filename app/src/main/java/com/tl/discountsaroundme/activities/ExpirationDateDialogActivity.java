@@ -1,10 +1,12 @@
 package com.tl.discountsaroundme.activities;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 
@@ -54,7 +56,14 @@ public class ExpirationDateDialogActivity extends AppCompatActivity{
 
             }
         });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.putExtra("date",yearMonthDate);
 
+            }
+        });
 
 
     }

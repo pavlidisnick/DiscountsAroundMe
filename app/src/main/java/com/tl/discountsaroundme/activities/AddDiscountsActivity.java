@@ -218,6 +218,9 @@ public class AddDiscountsActivity extends AppCompatActivity {
                     System.out.println("Select Image");
                     correctData = false;
                 }
+                if( exportDateText.toString().contains("Choose")){
+                    Toast.makeText(getApplicationContext(),"Select Export Date",Toast.LENGTH_LONG).show();
+                }
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "Price and discount must be numbers", Toast.LENGTH_LONG).show();
                 correctData = false;

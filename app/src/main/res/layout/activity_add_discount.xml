@@ -261,7 +261,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
-                android:text="Export date:" />
+                android:text="Choose Export Date" />
         </LinearLayout>
         <Button
             android:id="@+id/exportButton"

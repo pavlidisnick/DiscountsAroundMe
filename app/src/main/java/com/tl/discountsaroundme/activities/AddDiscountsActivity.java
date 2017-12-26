@@ -17,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,6 +53,7 @@ public class AddDiscountsActivity extends AppCompatActivity {
 
     private static final int SELECTED_PICTURE = 100;
     private static final int CAMERA_REQUEST = 1888;
+    private static final int EXPORT_DATE = 9999;
     ImageView imageView;
     Button selectImg, addItem, camera;
 
@@ -60,7 +62,7 @@ public class AddDiscountsActivity extends AppCompatActivity {
     UploadTask uploadTask;
 
     String name, description, category, link;
-    TextView export,today;
+    TextView exportDateText;
 
     TimeZone tz = TimeZone.getTimeZone("GMT+2:00");
     Calendar calendar = Calendar.getInstance(tz);
@@ -84,16 +86,8 @@ public class AddDiscountsActivity extends AppCompatActivity {
 
         getShopName();
 
-
-        today = findViewById(R.id.todayDate);
-
-        realDate = calendar.get(Calendar.DATE);
-        realMonth = calendar.get((Calendar.MONTH));
-        realYear = calendar.get(Calendar.YEAR);
         exportDayButton = findViewById(R.id.exportButton);
-        today.setText("Today: "+realDate+"-"+(realMonth+1)+"-"+realYear+"");
-
-
+        exportDateText = findViewById(R.id.exportText);
 
         imageView = findViewById(R.id.imageView);
         selectImg = findViewById(R.id.buttonSelectImage);
@@ -105,7 +99,7 @@ public class AddDiscountsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),ExpirationDateDialogActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,EXPORT_DATE);
             }
         });
 
@@ -155,6 +149,14 @@ public class AddDiscountsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (requestCode == EXPORT_DATE && resultCode == RESULT_OK) {
+            experienceDate = (Date)data.getSerializableExtra("date");
+            exportDateText.setText("Export Date: "+String.valueOf(experienceDate));
+            Log.d("DATE Transfer DONE", "DATE of export :  "+String.valueOf(experienceDate));
+
+        }
 
         if (resultCode == RESULT_OK && requestCode == SELECTED_PICTURE) {
             imageUri = data.getData();
@@ -272,6 +274,7 @@ public class AddDiscountsActivity extends AppCompatActivity {
 
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
+
 
     public void getShopName(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

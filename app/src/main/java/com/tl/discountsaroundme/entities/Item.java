@@ -1,5 +1,7 @@
 package com.tl.discountsaroundme.entities;
 
+import java.util.Date;
+
 public class Item {
     private String name;
     private String type;
@@ -8,11 +10,12 @@ public class Item {
     private double discount;
     private String picture;
     private String store;
+    private Date experienceDate;
 
     public Item() {
     }
 
-    public Item(String name, String type, double price, double discount, String description, String picture, String store) {
+    public Item(String name, String type, double price, double discount, String description, String picture, String store, Date experinceDate) {
         this.name = name;
         this.type = type;
         this.price = price;
@@ -20,6 +23,7 @@ public class Item {
         this.description = description;
         this.picture = picture;
         this.store = store;
+        this.experienceDate = experinceDate;
     }
 
 
@@ -49,5 +53,9 @@ public class Item {
 
     public String getStore() {
         return store;
+    }
+
+    public Date getExperienceDate() {
+        return experienceDate;
     }
 }

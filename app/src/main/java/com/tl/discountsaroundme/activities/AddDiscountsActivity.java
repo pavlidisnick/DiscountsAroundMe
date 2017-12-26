@@ -44,6 +44,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 
@@ -64,6 +65,7 @@ public class AddDiscountsActivity extends AppCompatActivity {
     TimeZone tz = TimeZone.getTimeZone("GMT+2:00");
     Calendar calendar = Calendar.getInstance(tz);
     Button exportDayButton;
+    Date experienceDate;
 
     int realDate,realYear,realMonth;
     double price, discount;
@@ -245,7 +247,7 @@ public class AddDiscountsActivity extends AppCompatActivity {
 
                 pd.dismiss();
 
-                Item item = new Item(name, category, price, discount, description, link, ShopName);
+                Item item = new Item(name, category, price, discount, description, link, ShopName, experienceDate);
 
                 String id = databaseItem.push().getKey();
                 databaseItem.child(id).setValue(item);

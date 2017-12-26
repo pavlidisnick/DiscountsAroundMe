@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/accent_pink_gradient">
+    android:background="@drawable/blue_gradient">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
         android:layout_gravity="bottom"
         android:background="@drawable/bg3" />
 

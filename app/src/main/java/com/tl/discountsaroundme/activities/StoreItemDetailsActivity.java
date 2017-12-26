@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.entities.Item;
+import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
 public class StoreItemDetailsActivity extends Activity {
 
@@ -22,6 +23,7 @@ public class StoreItemDetailsActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_item_details);
+        new StatusBar(this);
 
         Intent intent = getIntent();
         final Item item = (Item) intent.getSerializableExtra("ITEM");

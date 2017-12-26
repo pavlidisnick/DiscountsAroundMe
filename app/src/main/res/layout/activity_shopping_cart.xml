@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="#ef0f0f1f"
+        android:background="@drawable/accent_pink_gradient_reversed"
         android:elevation="12dp"
         android:paddingBottom="14dp"
         android:paddingTop="14dp"
@@ -21,7 +21,8 @@
         android:id="@+id/shopping_cart_swipe"
         android:layout_width="match_parent"
         android:layout_marginTop="60dp"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/blue_gradient">
 
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/shopping_cart_coordinator"

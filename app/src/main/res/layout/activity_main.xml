@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            app:itemBackground="@drawable/accent_pink_gradient_reversed"
+            app:itemBackground="@drawable/blue_gradient2"
             app:itemIconTint="@color/colorPrimaryWhite"
             app:itemTextColor="@color/colorPrimaryWhite"
             app:menu="@menu/bottom_navigation_main" />

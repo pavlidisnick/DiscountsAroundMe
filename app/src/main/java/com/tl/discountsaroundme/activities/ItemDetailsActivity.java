@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,16 +18,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.ShoppingCart;
 import com.tl.discountsaroundme.entities.Item;
+import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
 public class ItemDetailsActivity extends Activity implements View.OnClickListener {
     private Item item;
     private Button addToCartButton;
     private ShoppingCart shoppingCart;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_details);
+        new StatusBar(this);
 
         shoppingCart = new ShoppingCart(FirebaseDatabase.getInstance(), MainActivity.USER_ID);
 
@@ -51,9 +55,9 @@ public class ItemDetailsActivity extends Activity implements View.OnClickListene
         TextView type = findViewById(R.id.type);
         TextView discount = findViewById(R.id.correctPrice);
 
-        price.setText(String.valueOf(item.getPrice()));
+        price.setText("$" + item.getPrice());
         price.setPaintFlags(price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        discount.setText(String.valueOf(item.getFinalPrice()));
+        discount.setText("$" + item.getFinalPrice());
         itemDetails.setText(item.getDescription());
         itemName.setText(item.getName());
         storeName.setText(item.getStore());
@@ -117,9 +121,6 @@ public class ItemDetailsActivity extends Activity implements View.OnClickListene
 
         // background color change
         Drawable backgroundDrawable = getResources().getDrawable(R.drawable.orange_circled_button);
-        int bgColor = Color.parseColor("#faa688");
-        PorterDuff.Mode bgMode = PorterDuff.Mode.SRC_ATOP;
-        backgroundDrawable.setColorFilter(bgColor, bgMode);
         addToCartButton.setBackground(backgroundDrawable);
 
         addToCartButton.setText("Add to cart");

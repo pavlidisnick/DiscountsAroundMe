@@ -57,12 +57,12 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
 
         GlideApp.with(context)
                 .load(item.getPicture())
-                .encodeQuality(10)
+                .encodeQuality(1)
                 .into(holder.imageView);
 
         GlideApp.with(context)
                 .load("https://grandmall-varna.com/pictures/original_1373.jpg")
-                .encodeQuality(5)
+                .encodeQuality(1)
                 .circleCrop()
                 .into(holder.shopImage);
 

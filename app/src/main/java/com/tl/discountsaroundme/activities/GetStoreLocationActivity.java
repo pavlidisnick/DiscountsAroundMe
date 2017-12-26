@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
 public class GetStoreLocationActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleMap.OnCircleClickListener, GoogleMap.OnMapClickListener,
@@ -31,6 +32,7 @@ public class GetStoreLocationActivity extends FragmentActivity implements OnMapR
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_location);
+        new StatusBar(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

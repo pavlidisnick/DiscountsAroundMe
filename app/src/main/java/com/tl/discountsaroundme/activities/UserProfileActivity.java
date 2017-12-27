@@ -2,7 +2,10 @@ package com.tl.discountsaroundme.activities;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -24,7 +27,10 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     TextView tvUserDisplayName;
     ImageView imageView;
     UserInfoManager userInfoManager;
+    Uri imageUri;
     String[] userInput = new String[2];
+
+    private static final int SELECTED_PICTURE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +77,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btImageChange:
+                openGalery();
                 break;
             case R.id.btMailChange:
                 createDialog(btMailChange.getText().toString(), "Email", "Password confirmation",
@@ -118,6 +125,14 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    private void openGalery() {
+
+            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(i, SELECTED_PICTURE);
+
+        }
+
+
     private void createDialog(String title, String hint1, String hint2, DialogInterface.OnDismissListener dismissListener) {
         @SuppressLint("InflateParams")
         LinearLayout linearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.profile_dialog, null);
@@ -141,5 +156,13 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                         dialog.cancel();
                     }
                 }).create().show();
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == SELECTED_PICTURE) {
+            imageUri = data.getData();
+
+        }
     }
 }

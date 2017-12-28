@@ -126,9 +126,26 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void openGalery() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Do you want to change your Image?")
+                .setTitle("Alert Edit");
+// Add the buttons
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, SELECTED_PICTURE);
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                finish();
+            }
+        });
+// Create the AlertDialog
+        AlertDialog dialog = builder.create();
+        dialog.setIcon(android.R.drawable.ic_dialog_alert);
+        dialog.show();
 
-            Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(i, SELECTED_PICTURE);
 
         }
 
@@ -162,6 +179,9 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
         if (resultCode == RESULT_OK && requestCode == SELECTED_PICTURE) {
             imageUri = data.getData();
+
+            imageView.setImageURI(imageUri);
+
 
         }
     }

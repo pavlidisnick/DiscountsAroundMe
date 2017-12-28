@@ -120,24 +120,23 @@
         android:tint="@color/black" />
 
     <FrameLayout
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_gravity="end">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/item_style">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="end|top"
             android:adjustViewBounds="true"
             android:src="@drawable/decoration" />
 
         <TextView
             android:id="@+id/itemDiscount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="end|top"
+            android:paddingTop="13dp"
             android:rotation="45"
             android:text="50% off"
             android:textAlignment="center"
@@ -145,10 +144,5 @@
             android:textStyle="bold" />
 
     </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/item_style" />
 
 </FrameLayout>

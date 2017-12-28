@@ -17,12 +17,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -63,7 +61,6 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
     UploadTask uploadTask;
 
     String name, description, category, link, shopName;
-    TextView exportDateText;
 
     Button exportDayButton;
     Date expirationDate;
@@ -79,7 +76,6 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_add_discount);
 
         exportDayButton = findViewById(R.id.exportButton);
-        exportDateText = findViewById(R.id.exportText);
 
         new StatusBar(this);
 
@@ -136,8 +132,6 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
 
         if (requestCode == EXPORT_DATE && resultCode == RESULT_OK) {
             expirationDate = (Date) data.getSerializableExtra("date");
-            exportDateText.setText("Export Date: " + String.valueOf(expirationDate));
-            Log.d("DATE Transfer DONE", "DATE of export :  " + String.valueOf(expirationDate));
         }
 
         if (resultCode == RESULT_OK && requestCode == SELECTED_PICTURE) {
@@ -202,6 +196,8 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
             toast("Please add image");
         } else if (!isConnectedToInternet()) {
             toast("Check your internet connection");
+        } else if (expirationDate == null) {
+            toast("Set expiration date for your discount");
         } else {
             return true;
         }

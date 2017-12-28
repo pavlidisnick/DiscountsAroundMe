@@ -98,7 +98,7 @@ public class ItemDetailsActivity extends Activity implements View.OnClickListene
         addToCartButton.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
 
         // background color change
-        Drawable backgroundDrawable = getResources().getDrawable(R.drawable.orange_circled_button);
+        Drawable backgroundDrawable = getResources().getDrawable(R.drawable.button_main_style);
         int bgColor = Color.parseColor("#0080ff");
         PorterDuff.Mode bgMode = PorterDuff.Mode.SRC_ATOP;
         backgroundDrawable.setColorFilter(bgColor, bgMode);
@@ -120,7 +120,7 @@ public class ItemDetailsActivity extends Activity implements View.OnClickListene
         addToCartButton.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
 
         // background color change
-        Drawable backgroundDrawable = getResources().getDrawable(R.drawable.orange_circled_button);
+        Drawable backgroundDrawable = getResources().getDrawable(R.drawable.button_main_style);
         addToCartButton.setBackground(backgroundDrawable);
 
         addToCartButton.setText("Add to cart");

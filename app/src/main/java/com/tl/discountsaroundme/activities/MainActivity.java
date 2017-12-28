@@ -21,7 +21,6 @@ import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.fragments.DiscountsTab;
 import com.tl.discountsaroundme.fragments.MapTab;
 import com.tl.discountsaroundme.fragments.UserTab;
-import com.tl.discountsaroundme.ui_controllers.StatusBar;
 import com.tl.discountsaroundme.ui_controllers.ZoomOutPageTransformer;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {

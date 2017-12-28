@@ -67,7 +67,6 @@ public class MarkerHelper {
                 .position(new LatLng(store.getLat(), store.getLng()))
                 .title(store.getName())
                 .snippet(store.getType())
-                .flat(true)
                 .icon(markerIcon);
         googleMap.addMarker(marker);
     }

@@ -31,7 +31,7 @@
         android:layout_height="320dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/blue_gradient"
+        android:background="@drawable/gradient_blue"
         android:elevation="8dp"
         android:gravity="center_vertical|center_horizontal"
         android:visibility="visible">
@@ -53,7 +53,7 @@
             android:layout_height="35dp"
             android:layout_gravity="end|top"
             android:layout_margin="14dp"
-            android:background="@drawable/category_tags"
+            android:background="@drawable/button_category"
             app:srcCompat="@drawable/ic_close" />
 
         <LinearLayout
@@ -69,7 +69,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="6dp"
-                android:background="@drawable/orange_circled_button"
+                android:background="@drawable/button_main_style"
                 android:elevation="8dp"
                 android:text="Show All Shops"
                 android:textColor="@color/colorPrimaryWhite" />
@@ -81,7 +81,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/orange_circled_button"
+                android:background="@drawable/button_main_style"
                 android:elevation="8dp"
                 android:text="Nearby Shops"
                 android:textColor="@color/colorPrimaryWhite" />

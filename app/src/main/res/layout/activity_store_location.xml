@@ -13,7 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="160dp"
-        android:background="@drawable/blue_gradient"
+        android:background="@drawable/gradient_blue"
         android:elevation="20dp"
         android:orientation="vertical">
 
@@ -94,7 +94,7 @@
         android:layout_height="40dp"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/orange_circled_button"
+        android:background="@drawable/button_main_style"
         android:elevation="4dp"
         android:text="Confirm"
         android:textColor="@color/colorPrimaryWhite" />

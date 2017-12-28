@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/blue_gradient"
+    android:background="@drawable/gradient_blue"
     tools:context="com.tl.discountsaroundme.activities.ItemDetailsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg3"
+        android:background="@drawable/bg_white_wavy_overlay"
         android:orientation="vertical">
 
         <ImageView
@@ -127,7 +127,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_margin="5dp"
-                android:background="@drawable/orange_circled_button"
+                android:background="@drawable/button_main_style"
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
                 android:text="Delete Discount"

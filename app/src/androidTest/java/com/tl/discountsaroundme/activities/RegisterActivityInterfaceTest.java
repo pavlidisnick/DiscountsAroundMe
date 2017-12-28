@@ -40,7 +40,7 @@ public class RegisterActivityInterfaceTest {
     public ActivityTestRule<RegisterActivity> mActivityRule = new ActivityTestRule<>(RegisterActivity.class);
 
     @Test
-    public void useAppContext() throws Exception {
+    public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
@@ -185,7 +185,7 @@ public class RegisterActivityInterfaceTest {
     }
 
     @Test
-    public void loginActivityIntentTest() throws Exception {
+    public void loginActivityIntentTest() {
         Intents.release();
         Intents.init();
         mActivityRule.launchActivity(new Intent());

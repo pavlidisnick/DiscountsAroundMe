@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -16,10 +17,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,19 +46,27 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Objects;
 
 public class AddDiscountsActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int SELECTED_PICTURE = 100;
     private static final int CAMERA_REQUEST = 1888;
 
+    private static final int EXPORT_DATE = 9999;
+
     ImageView imageView;
     Button selectImg, addItem, camera;
+
 
     Uri imageUri;
     UploadTask uploadTask;
 
     String name, description, category, link, shopName;
+    TextView exportDateText;
+
+    Button exportDayButton;
+    Date expirationDate;
 
     double price, discount;
 
@@ -66,6 +77,9 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_discount);
+
+        exportDayButton = findViewById(R.id.exportButton);
+        exportDateText = findViewById(R.id.exportText);
 
         new StatusBar(this);
 
@@ -78,6 +92,14 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
         selectImg = findViewById(R.id.buttonSelectImage);
         addItem = findViewById(R.id.buttonAddItem);
         camera = findViewById(R.id.buttonCamera);
+
+        exportDayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ExpirationDateDialogActivity.class);
+                startActivityForResult(intent, EXPORT_DATE);
+            }
+        });
 
         selectImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,9 +129,16 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == EXPORT_DATE && resultCode == RESULT_OK) {
+            expirationDate = (Date) data.getSerializableExtra("date");
+            exportDateText.setText("Export Date: " + String.valueOf(expirationDate));
+            Log.d("DATE Transfer DONE", "DATE of export :  " + String.valueOf(expirationDate));
+        }
 
         if (resultCode == RESULT_OK && requestCode == SELECTED_PICTURE) {
             imageUri = data.getData();
@@ -203,7 +232,7 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
                 link = downloadUrl != null ? downloadUrl.toString() : null;
 
                 String id = databaseItem.push().getKey();
-                Item item = new Item(id, name, category, price, discount, description, link, shopName);
+                Item item = new Item(id, name, category, price, discount, description, link, shopName, expirationDate);
 
                 databaseItem.child(id).setValue(item);
 

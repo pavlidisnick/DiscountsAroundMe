@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
@@ -18,11 +19,11 @@ public class DiscountsManagerTest {
     @Before
     public void setup() {
         itemList.add(new Item("1", "abc", "Clothing", 23,
-                35, "Empty", "Empty", "abcStore"));
+                35, "Empty", "Empty", "abcStore", new Date()));
         itemList.add(new Item("2", "cde", "Technology", 23,
-                40, "Empty", "Empty", "abcStore"));
+                40, "Empty", "Empty", "abcStore", new Date()));
         itemList.add(new Item("3", "qwerty", "Food", 23,
-                45, "Empty", "Empty", "cdeStore"));
+                45, "Empty", "Empty", "cdeStore", new Date()));
         discountsManager.showTopDiscounts(itemList);
     }
 

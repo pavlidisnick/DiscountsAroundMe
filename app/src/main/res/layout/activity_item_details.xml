@@ -3,13 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryWhite"
+    android:background="@drawable/accent_pink_gradient"
     tools:context="com.tl.discountsaroundme.activities.ItemDetailsActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg3"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_2"
         android:orientation="vertical">
 
         <ImageView
@@ -29,6 +34,14 @@
             android:text="ItemName"
             android:textColor="@color/colorPrimaryWhite"
             android:textSize="30sp" />
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="false"
+            android:progressTint="@color/colorPrimaryWhite"
+            android:stepSize="1"
+            android:progressBackgroundTint="#220f0f0f" />
 
 
         <LinearLayout
@@ -135,13 +148,13 @@
                 android:textSize="10sp" />
 
             <Button
-                android:id="@+id/cartButton"
+                android:id="@+id/add_to_cart_button"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_margin="5dp"
                 android:background="@drawable/orange_circled_button"
-                android:drawableLeft="@drawable/ic_shopping_cart"
+                android:drawableLeft="@drawable/ic_shopping_cart_add"
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
                 android:text="Add to cart"
@@ -151,5 +164,13 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="14dp"
+        android:layout_gravity="start|left"
+        android:src="@drawable/ic_arrow_back_black_24dp"/>
 
 </FrameLayout>

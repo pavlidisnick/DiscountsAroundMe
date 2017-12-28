@@ -9,6 +9,7 @@
          location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -79,12 +80,28 @@
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme"
-            tools:ignore="InnerclassSeparator"></activity>
+            tools:ignore="InnerclassSeparator" />
+
         <activity android:name=".activities.AddDiscountsActivity" />
+
         <activity android:name=".activities.ItemDetailsActivity" />
+
         <activity android:name=".activities.UserProfileActivity" />
-        <activity android:name=".activities.ExpirationDateDialogActivity"
-            android:theme="@style/Theme.AppCompat.Dialog"></activity>
+
+        <activity android:name=".activities.MyDiscountsActivity" />
+
+        <activity android:name=".activities.StoreItemDetailsActivity" />
+
+        <activity
+            android:name=".activities.GetStoreLocationActivity"
+            android:label="@string/title_activity_choose_location_store" />
+
+        <activity android:name=".activities.ShoppingCartActivity" />
+
+        <activity
+            android:name=".activities.ExpirationDateDialogActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+
     </application>
 
 </manifest>

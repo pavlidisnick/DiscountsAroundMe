@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#ef0f0f1f"
+        android:elevation="12dp"
+        android:paddingBottom="14dp"
+        android:paddingTop="14dp"
+        android:text="Shopping Cart"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryWhite"
+        android:textSize="24sp" />
+
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/shopping_cart_swipe"
+        android:layout_width="match_parent"
+        android:layout_marginTop="60dp"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/shopping_cart_coordinator"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.tl.discountsaroundme.activities.ShoppingCartActivity">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/shopping_cart_items"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+        </android.support.design.widget.CoordinatorLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/empty_cart_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:contentDescription="Empty shopping cart"
+            android:src="@drawable/ic_shopping_cart" />
+
+        <TextView
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="Your shopping cart is empty"
+            android:textAlignment="center"
+            android:textColor="#2f2f2f"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="start|left"
+        android:elevation="18dp"
+        android:padding="14dp"
+        android:src="@drawable/ic_arrow_back_black_24dp"
+        android:tint="@color/colorPrimaryWhite" />
+
+    <ImageView
+        android:id="@+id/cart_more_options"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="top|right"
+        android:elevation="18dp"
+        android:padding="14dp"
+        android:src="@drawable/ic_more_vert_black_24dp"
+        android:tint="@color/colorPrimaryWhite" />
+
+    <Button
+        android:id="@+id/checkout_button"
+        android:layout_width="200dp"
+        android:layout_height="42dp"
+        android:background="@drawable/orange_circled_button"
+        android:text="Checkout"
+        android:elevation="8dp"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="12dp"
+        android:textColor="@color/colorPrimaryWhite"
+        android:textSize="14sp" />
+
+</FrameLayout>

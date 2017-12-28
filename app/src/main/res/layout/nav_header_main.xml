@@ -1,54 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="170dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/accent_pink_gradient"
-    android:gravity="bottom"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="horizontal"
+    android:paddingTop="14dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="80dp"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/textViewUserType"
-        android:paddingTop="10dp"
-        app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
-        tools:layout_editor_absoluteX="50dp"
-        tools:layout_editor_absoluteY="0dp" />
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="32dp"
+        android:scaleType="fitXY"
+        android:tint="@color/colorPrimaryWhite"
+        app:srcCompat="@drawable/ic_account_circle" />
 
-    <TextView
-        android:id="@+id/drawerUserType"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textViewEmail"
-        android:paddingTop="5dp"
-        android:text="Android Studio"
-        android:textAlignment="viewStart"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="14sp"
-        tools:layout_editor_absoluteX="30dp"
-        tools:layout_editor_absoluteY="50dp" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="41dp"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/drawerEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="23dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:text="android.studio@android.com"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="84dp"
-        android:textAlignment="viewStart"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="14sp"/>
+        <TextView
+            android:id="@+id/drawerUserType"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:text="User Type"
+            android:layout_marginBottom="4dp"
+            android:textAlignment="viewStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/drawerEmail"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:text="email@gmail.com"
+            android:textAlignment="viewStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="14sp" />
+
+    </LinearLayout>
 
 </LinearLayout>

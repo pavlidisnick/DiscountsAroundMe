@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_2">
+    android:background="@drawable/accent_pink_gradient">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg3" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center"
         android:orientation="vertical">
 
         <TextView
@@ -22,7 +27,7 @@
             android:gravity="center"
             android:text="Login"
             android:textColor="@color/colorPrimaryWhite"
-            android:textSize="36sp"
+            android:textSize="42sp"
             android:textStyle="bold"
             android:typeface="sans"
             tools:ignore="ObsoleteLayoutParam" />
@@ -51,7 +56,10 @@
             android:id="@+id/login"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:background="@drawable/bordered_button_transparent"
             android:text="login"
             android:textColor="@color/colorPrimaryWhite" />
 
@@ -74,13 +82,12 @@
 
     <Button
         android:id="@+id/register"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom|left"
         android:layout_marginBottom="14dp"
         android:layout_marginStart="13dp"
+        android:background="@drawable/orange_circled_button"
         android:text="signup"
         android:textColor="@color/colorPrimaryWhite" />
-</RelativeLayout>
+</FrameLayout>

@@ -41,7 +41,6 @@ public class NumberPickerAnimated extends FrameLayout implements SeekBar.OnSeekB
 
     private int number;
 
-    private int red = 255;
     private int blue = 0;
 
     public NumberPickerAnimated(Context context, AttributeSet attrs) {
@@ -201,7 +200,7 @@ public class NumberPickerAnimated extends FrameLayout implements SeekBar.OnSeekB
     @SuppressWarnings("deprecation")
     private void gradientChange() {
         // only red and blue changes
-        String red = Integer.toHexString(this.red);
+        String red = Integer.toHexString(255);
         String green = Integer.toHexString(107);
         String blue = Integer.toHexString(this.blue);
         String color = "#" + red + green + blue;
@@ -215,15 +214,11 @@ public class NumberPickerAnimated extends FrameLayout implements SeekBar.OnSeekB
 
     private void leftGradientChange() {
         if (blue > 0)
-            blue -= 15;
-        else if (red < 255)
-            red += 15;
+            blue -= 5;
     }
 
     private void rightGradientChange() {
         if (blue < 255)
-            blue += 15;
-        else if (red > 0)
-            red -= 15;
+            blue += 5;
     }
 }

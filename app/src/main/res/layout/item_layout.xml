@@ -2,23 +2,27 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/item_style"
+    android:background="@drawable/item_background"
     android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/item_id_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/img"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_marginTop="6dp"
             android:adjustViewBounds="true"
             android:contentDescription="ItemImage"
+            android:padding="4dp"
             android:scaleType="fitXY" />
 
         <TextView
@@ -72,8 +76,7 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/badge" />
-
+                android:src="@drawable/ic_home" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -102,12 +105,23 @@
 
         </LinearLayout>
 
-
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/item_options_view"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="22dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:background="@drawable/white_blury_rounded"
+        android:src="@drawable/ic_more_vert_black_24dp"
+        android:tint="@color/black" />
+
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_gravity="end">
 
         <ImageView
@@ -115,18 +129,26 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:src="@mipmap/badge" />
+            android:src="@drawable/decoration" />
 
         <TextView
             android:id="@+id/itemDiscount"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="50"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:rotation="45"
+            android:text="50% off"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryWhite"
             android:textStyle="bold" />
 
     </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/item_style" />
 
 </FrameLayout>

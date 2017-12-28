@@ -4,23 +4,39 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_account_circle"
             android:title="Profile" />
         <item
             android:id="@+id/nav_insert_item"
+            android:icon="@drawable/ic_add_circle"
             android:title="Add Discount" />
         <item
-            android:id="@+id/temp"
-            android:title="Temp" />
-
+            android:id="@+id/nav_shopping_cart"
+            android:icon="@drawable/ic_shopping_cart"
+            android:title="Shopping cart" />
+        <item
+            android:id="@+id/nav_my_discounts"
+            android:icon="@drawable/ic_view_list"
+            android:title="My Discounts" />
     </group>
 
     <item android:title="Others">
         <menu>
             <item
-                android:id="@+id/nav_info"
-                android:title="Info" />
+                android:id="@+id/report_bug"
+                android:icon="@drawable/ic_bug_report"
+                android:title="Report a bug" />
+            <item
+                android:id="@+id/feedback"
+                android:icon="@drawable/ic_feedback"
+                android:title="Feedback" />
+            <item
+                android:id="@+id/version"
+                android:icon="@drawable/ic_info"
+                android:title="Version" />
             <item
                 android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_sign_out"
                 android:title="Logout" />
         </menu>
     </item>

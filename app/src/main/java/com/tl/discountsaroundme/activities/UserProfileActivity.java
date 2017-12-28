@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.activities;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.firebase_data.UserInfoManager;
+import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
 public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener {
     Button btMailChange, btPassChange, btImageChange, btDisplayName, btDeleteAcc;
@@ -28,6 +30,11 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+
+        new StatusBar(this);
+
+        ImageView backImage = findViewById(R.id.back_button);
+        backImage.setOnClickListener(this);
 
         imageView = findViewById(R.id.Image);
 
@@ -105,10 +112,14 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                             }
                         });
                 break;
+            case R.id.back_button:
+                this.finish();
+                break;
         }
     }
 
     private void createDialog(String title, String hint1, String hint2, DialogInterface.OnDismissListener dismissListener) {
+        @SuppressLint("InflateParams")
         LinearLayout linearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.profile_dialog, null);
         final EditText editText1 = (EditText) linearLayout.getChildAt(0);
         final EditText editText2 = (EditText) linearLayout.getChildAt(1);

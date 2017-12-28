@@ -27,6 +27,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;
@@ -52,7 +53,7 @@ public class MapTab extends Fragment {
         final StoreManager storeManager = new StoreManager();
 
         final DiscountsManager discountsManager = new DiscountsManager();
-        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue);
+        discountsManager.fillListWithDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue, MainActivity.USER_ID);
 
         mMapView = rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
@@ -95,6 +96,7 @@ public class MapTab extends Fragment {
             public void onClick(View view) {
                 ArrayList<Store> stores = storeManager.getStores();
                 markerHelper.addMarkersFromList(stores);
+                hideMenu();
             }
         });
 
@@ -112,6 +114,7 @@ public class MapTab extends Fragment {
                     Toast.makeText(getContext(), "There are no shops nearby", Toast.LENGTH_SHORT).show();
                 else
                     markerHelper.addMarkersFromList(stores);
+                hideMenu();
             }
         });
 
@@ -199,7 +202,7 @@ public class MapTab extends Fragment {
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, (float) 16.29));
                     } catch (NullPointerException e) {
                         e.printStackTrace();
-                        Toast.makeText(getContext(), "GPS disabled", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "GPS disabled", Toast.LENGTH_SHORT).show();
                     }
                 } else if (itemId == R.id.map_options) {
                     if (popupMenu.getVisibility() == View.INVISIBLE)

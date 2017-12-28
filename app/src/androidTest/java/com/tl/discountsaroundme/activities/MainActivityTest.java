@@ -1,41 +1,65 @@
 package com.tl.discountsaroundme.activities;
 
 
+import android.content.Intent;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
 import com.tl.discountsaroundme.R;
 
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.action.ViewActions.swipeRight;
+import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.tl.discountsaroundme.activities.LoginActivityInterfaceTest.waitFor;
 import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MainActivityTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<LoginActivity> mActivityTestRule = new ActivityTestRule<>(LoginActivity.class);
 
     @Test
-    public void TestMenuMap() {
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+    public void activate() {
+        try {
+            Intents.init();
+            mActivityTestRule.launchActivity(new Intent());
+            onView(withId(R.id.emailText)).perform(typeText("busines@gmail.com"));
+            onView(withId(R.id.passwordText)).perform(typeText("123456"));
+            pressBack();
+            onView(withId(R.id.login)).perform(click());
+            onView(isRoot()).perform(waitFor(5000));
+            intended(hasComponent(MainActivity.class.getName()));
+            Intents.release();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testMenuMap() {
         try {
             Thread.sleep(336);
         } catch (InterruptedException e) {
@@ -52,7 +76,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void TestSlideOnMenu() {
+    public void testSlideOnMenu() {
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
@@ -89,7 +113,7 @@ public class MainActivityTest {
 
 
     @Test
-    public void TestTopDiscountsMenu() {
+    public void testTopDiscountsMenu() {
         try {
             Thread.sleep(3597);
         } catch (InterruptedException e) {
@@ -107,7 +131,6 @@ public class MainActivityTest {
                         withParent(withId(R.id.search_input_parent)),
                         isDisplayed()));
         searchInputView2.perform(replaceText("test"), closeSoftKeyboard());
-
     }
 
 }

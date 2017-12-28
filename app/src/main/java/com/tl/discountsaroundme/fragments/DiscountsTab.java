@@ -18,16 +18,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tl.discountsaroundme.BuildConfig;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
+import com.tl.discountsaroundme.activities.MyDiscountsActivity;
+import com.tl.discountsaroundme.activities.ShoppingCartActivity;
 import com.tl.discountsaroundme.discounts.AddCategoryToLayout;
 import com.tl.discountsaroundme.discounts.FetchCategories;
 import com.tl.discountsaroundme.discounts.Search;
@@ -43,11 +45,11 @@ import static android.app.Activity.RESULT_OK;
 public class DiscountsTab extends Fragment {
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
 
-    //
     public static int discountValue = 30;
     DrawerLayout mDrawerLayout;
     DiscountsManager discountsManager = new DiscountsManager();
     private Search search;
+
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,6 +66,10 @@ public class DiscountsTab extends Fragment {
         decorate(mRecyclerView);
 
         final SwipeRefreshLayout swipeRefreshLayout = rootView.findViewById(R.id.swiperefresh);
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.pink,
+                R.color.orange,
+                R.color.colorPrice);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -76,7 +82,7 @@ public class DiscountsTab extends Fragment {
         AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, getActivity(), discountsManager);
         new FetchCategories(addCategoryToLayout);
 
-        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), discountValue);
+        discountsManager.showTopDiscountsAndNotify(FirebaseDatabase.getInstance(), discountValue, MainActivity.USER_ID);
 
         // FloatingSearchView actions
         FloatingSearchView mSearchView = rootView.findViewById(R.id.floating_search_view);
@@ -119,8 +125,15 @@ public class DiscountsTab extends Fragment {
         if (MainActivity.USER_TYPE.equals("user")) {
             Menu menu = nav.getMenu();
             MenuItem target = menu.findItem(R.id.nav_insert_item);
+            MenuItem target2 = menu.findItem(R.id.nav_my_discounts);
             target.setVisible(false);
+            target2.setVisible(false);
         }
+
+        String versionName = "v" + BuildConfig.VERSION_NAME;
+        Menu menu = nav.getMenu();
+        MenuItem versionMenuItem = menu.findItem(R.id.version);
+        versionMenuItem.setTitle(versionName);
 
         nav.bringToFront();
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -131,10 +144,9 @@ public class DiscountsTab extends Fragment {
                 if (id == R.id.nav_insert_item) {
                     Intent addDiscount = new Intent(getContext(), AddDiscountsActivity.class);
                     startActivity(addDiscount);
-                } else if (id == R.id.temp) {
-                    Toast.makeText(getContext(), "temp", Toast.LENGTH_LONG).show();
-                } else if (id == R.id.nav_info) {
-                    Toast.makeText(getContext(), "info", Toast.LENGTH_LONG).show();
+                } else if (id == R.id.nav_my_discounts) {
+                    Intent MyDiscounts = new Intent(getContext(), MyDiscountsActivity.class);
+                    startActivity(MyDiscounts);
                 } else if (id == R.id.nav_logout) {
                     FirebaseAuth mAuth = FirebaseAuth.getInstance();
                     mAuth.signOut();
@@ -143,8 +155,11 @@ public class DiscountsTab extends Fragment {
                     login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(login);
                 } else if (id == R.id.nav_profile) {
-                    Intent UserProfileActivity = new Intent(getActivity(), com.tl.discountsaroundme.activities.UserProfileActivity.class);
-                    startActivity(UserProfileActivity);
+                    Intent userProfileActivity = new Intent(getActivity(), com.tl.discountsaroundme.activities.UserProfileActivity.class);
+                    startActivity(userProfileActivity);
+                } else if (id == R.id.nav_shopping_cart) {
+                    Intent shoppingCartActivity = new Intent(getActivity(), ShoppingCartActivity.class);
+                    startActivity(shoppingCartActivity);
                 }
 
                 DrawerLayout drawer = mDrawerLayout.findViewById(R.id.drawer_layout);
@@ -152,7 +167,7 @@ public class DiscountsTab extends Fragment {
                 return false;
             }
         });
-        drawerInformations();
+        drawerInformation();
     }
 
     public void startVoiceRecognitionActivity() {
@@ -172,7 +187,8 @@ public class DiscountsTab extends Fragment {
         }
     }
 
-    public void drawerInformations(){
+    @SuppressWarnings("deprecation")
+    public void drawerInformation() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         mDrawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
@@ -181,14 +197,15 @@ public class DiscountsTab extends Fragment {
                 if (user != null) {
                     final String email = user.getEmail();
 
-                    TextView ut = (TextView) mDrawerLayout.findViewById(R.id.drawerUserType);
+                    TextView ut = mDrawerLayout.findViewById(R.id.drawerUserType);
                     ut.setText(MainActivity.USER_TYPE);
 
-                    TextView userEmail = (TextView) mDrawerLayout.findViewById(R.id.drawerEmail);
+                    TextView userEmail = mDrawerLayout.findViewById(R.id.drawerEmail);
                     userEmail.setText(email);
                 }
                 super.onDrawerOpened(drawerView);
             }
         });
     }
+
 }

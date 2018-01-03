@@ -1,11 +1,13 @@
 package com.tl.discountsaroundme.activities;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,10 +16,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.firebase_data.UserInfoManager;
 import com.tl.discountsaroundme.ui_controllers.StatusBar;
@@ -28,9 +37,12 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     ImageView imageView;
     UserInfoManager userInfoManager;
     Uri imageUri;
+    int MaxUploadTime = 40000; //set Max time for uploading to 40 seconds
+    UploadTask uploadTask;
     String[] userInput = new String[2];
 
     private static final int SELECTED_PICTURE = 100;
+    public static Uri uriDrawerImage = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +159,43 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         dialog.show();
 
 
+
+        }
+        private void UploadImage(){
+
+
+
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            FirebaseStorage.getInstance().setMaxUploadRetryTimeMillis(MaxUploadTime);
+            final StorageReference storageRef = storage.getReference();
+
+            final ProgressDialog pd = ProgressDialog.show(this, "", "Uploading...");
+
+            final DatabaseReference databaseUserImage = FirebaseDatabase.getInstance().getReference("users");
+
+            StorageReference imageRef = storageRef.child("userPictures/" + imageUri.getLastPathSegment());
+            uploadTask = imageRef.putFile(imageUri);
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                   String link = downloadUrl != null ? downloadUrl.toString() : null;
+
+                    String id = databaseUserImage.push().getKey();
+
+                    databaseUserImage.child(id).setValue(imageUri.getLastPathSegment());
+
+                    pd.dismiss();
+                    Toast.makeText(getApplicationContext(),"upload successful",Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    pd.dismiss();
+                    Toast.makeText(getApplicationContext(),"Error while uploading...",Toast.LENGTH_LONG).show();
+                }
+            });
         }
 
 
@@ -181,6 +230,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             imageUri = data.getData();
 
             imageView.setImageURI(imageUri);
+            uriDrawerImage=imageUri;
 
 
         }

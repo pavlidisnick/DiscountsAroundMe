@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,12 +26,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.BuildConfig;
 import com.tl.discountsaroundme.R;
-import com.tl.discountsaroundme.ShoppingCart;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
-import com.tl.discountsaroundme.activities.ShoppingCartActivity;
 import com.tl.discountsaroundme.activities.MyDiscountsActivity;
+import com.tl.discountsaroundme.activities.ShoppingCartActivity;
 import com.tl.discountsaroundme.discounts.AddCategoryToLayout;
 import com.tl.discountsaroundme.discounts.FetchCategories;
 import com.tl.discountsaroundme.discounts.Search;
@@ -42,6 +42,7 @@ import com.tl.discountsaroundme.ui_controllers.ItemViewAdapter;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
+import static com.tl.discountsaroundme.activities.UserProfileActivity.uriDrawerImage;
 
 public class DiscountsTab extends Fragment {
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
@@ -203,6 +204,11 @@ public class DiscountsTab extends Fragment {
 
                     TextView userEmail = mDrawerLayout.findViewById(R.id.drawerEmail);
                     userEmail.setText(email);
+
+                    //TODO: change setImageURI and set image Profile
+                    ImageView imageDrawer = mDrawerLayout.findViewById(R.id.imageViewDrawerUser);
+                    imageDrawer.setImageURI(uriDrawerImage);
+
                 }
                 super.onDrawerOpened(drawerView);
             }

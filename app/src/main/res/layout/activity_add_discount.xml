@@ -246,7 +246,7 @@
             android:layout_width="140dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            android:background="@drawable/bordered_button_transparent"
+            android:background="@drawable/button_bordered_transparent"
             android:text="Expires"
             android:textColor="@color/colorPrimaryWhite" />
 

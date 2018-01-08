@@ -16,7 +16,7 @@
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
         android:layout_margin="25dp"
-        android:background="@drawable/orange_circled_button"
+        android:background="@drawable/button_main_style"
         android:text="Confirm"
         android:textColor="@color/colorPrimaryWhite" />
 

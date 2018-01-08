@@ -39,10 +39,11 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     Uri imageUri;
     int MaxUploadTime = 40000; //set Max time for uploading to 40 seconds
     UploadTask uploadTask;
+    String link;
     String[] userInput = new String[2];
 
     private static final int SELECTED_PICTURE = 100;
-    public static Uri uriDrawerImage = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,11 +180,11 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                   String link = downloadUrl != null ? downloadUrl.toString() : null;
+                    link = downloadUrl != null ? downloadUrl.toString() : null;
 
                     String id = databaseUserImage.push().getKey();
 
-                    databaseUserImage.child(id).setValue(imageUri.getLastPathSegment());
+                    databaseUserImage.child(id).child("image").setValue(link);
 
                     pd.dismiss();
                     Toast.makeText(getApplicationContext(),"upload successful",Toast.LENGTH_LONG).show();
@@ -230,7 +231,6 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             imageUri = data.getData();
 
             imageView.setImageURI(imageUri);
-            uriDrawerImage=imageUri;
 
 
         }

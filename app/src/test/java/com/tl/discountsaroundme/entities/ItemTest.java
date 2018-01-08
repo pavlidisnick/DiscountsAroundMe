@@ -2,12 +2,14 @@ package com.tl.discountsaroundme.entities;
 
 import org.junit.Test;
 
+import java.util.Date;
+
 import static junit.framework.Assert.assertEquals;
 
 public class ItemTest {
 
     private Item item = new Item("1", "Sweater", "Clothing",
-            100, 25, "Description", "Picture", "Store");
+            100, 25, "Description", "Picture", "Store", new Date());
 
     @Test
     public void getName() throws Exception {

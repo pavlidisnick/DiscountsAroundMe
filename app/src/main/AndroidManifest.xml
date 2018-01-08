@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
@@ -69,7 +70,6 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".activities.RegisterActivity" />
-      
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -77,28 +77,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-      
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme"
             tools:ignore="InnerclassSeparator" />
-      
+
         <activity android:name=".activities.AddDiscountsActivity" />
-  
+
         <activity android:name=".activities.ItemDetailsActivity" />
-  
+
         <activity android:name=".activities.UserProfileActivity" />
-  
-        <activity android:name=".activities.MyDiscountsActivity"></activity>
-  
-        <activity android:name=".activities.StoreItemDetailsActivity"></activity>
-  
+
+        <activity android:name=".activities.MyDiscountsActivity" />
+
+        <activity android:name=".activities.StoreItemDetailsActivity" />
+
         <activity
             android:name=".activities.GetStoreLocationActivity"
             android:label="@string/title_activity_choose_location_store" />
-      
+
         <activity android:name=".activities.ShoppingCartActivity" />
-      
+
+        <activity
+            android:name=".activities.ExpirationDateDialogActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+
     </application>
 
 </manifest>

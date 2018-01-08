@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.ui_controllers.ManageMyDiscountsAdapter;
+import com.tl.discountsaroundme.ui_controllers.StatusBar;
 import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
 import com.yalantis.contextmenu.lib.MenuObject;
 import com.yalantis.contextmenu.lib.MenuParams;
@@ -50,6 +51,7 @@ public class MyDiscountsActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_discounts);
+        new StatusBar(this);
 
         listView = findViewById(R.id.list_discounts);
         adapter = new ManageMyDiscountsAdapter(this, shopDiscounts);

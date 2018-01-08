@@ -8,12 +8,12 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@drawable/accent_pink_gradient" />
+        android:background="@drawable/gradient_blue" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="210dp"
-        android:background="@drawable/bg3" />
+        android:background="@drawable/bg_white_wavy_overlay" />
 
     <Button
         android:id="@+id/btImageChange"
@@ -22,7 +22,7 @@
         android:layout_marginTop="110dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/bordered_button_transparent"
+        android:background="@drawable/button_bordered_transparent"
         android:text="Change Image"
         android:layout_gravity="end"
         android:textSize="12sp"
@@ -69,7 +69,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_margin="4dp"
-            android:background="@drawable/orange_circled_button"
+            android:background="@drawable/button_main_style"
             android:text="Change Email"
             android:textColor="@color/colorPrimaryWhite" />
 
@@ -79,7 +79,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_margin="4dp"
-            android:background="@drawable/orange_circled_button"
+            android:background="@drawable/button_main_style"
             android:text="Change Password"
             android:textColor="@color/colorPrimaryWhite" />
 
@@ -88,7 +88,7 @@
             android:layout_width="180dp"
             android:layout_height="40dp"
             android:layout_margin="4dp"
-            android:background="@drawable/orange_circled_button"
+            android:background="@drawable/button_main_style"
             android:text="Change Name"
             android:textColor="@color/colorPrimaryWhite" />
 
@@ -98,7 +98,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_margin="4dp"
-            android:background="@drawable/orange_circled_button"
+            android:background="@drawable/button_main_style"
             android:backgroundTint="@color/colorAlert"
             android:text="Delete Account"
             android:textColor="@color/colorPrimaryWhite"

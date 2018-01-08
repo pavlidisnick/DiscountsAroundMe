@@ -46,10 +46,9 @@ public class DiscountsTab extends Fragment {
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
 
     public static int discountValue = 30;
-    DrawerLayout mDrawerLayout;
-    DiscountsManager discountsManager = new DiscountsManager();
+    private DrawerLayout mDrawerLayout;
+    private DiscountsManager discountsManager = new DiscountsManager();
     private Search search;
-
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

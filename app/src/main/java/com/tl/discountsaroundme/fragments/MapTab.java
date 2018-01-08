@@ -10,10 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
@@ -25,6 +23,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.MainActivity;
@@ -44,7 +43,7 @@ public class MapTab extends Fragment {
     private GPSTracker gps;
     private GoogleMap googleMap;
     private MarkerHelper markerHelper;
-    private LinearLayout popupMenu;
+    private FrameLayout popupMenu;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,6 +81,7 @@ public class MapTab extends Fragment {
                 try {
                     googleMap.setMyLocationEnabled(true);
                     googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+                    googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.blue_style));
                 } catch (SecurityException e) {
                     e.printStackTrace();
                 }
@@ -115,61 +115,6 @@ public class MapTab extends Fragment {
                 else
                     markerHelper.addMarkersFromList(stores);
                 hideMenu();
-            }
-        });
-
-        SeekBar radiusSeekBar = rootView.findViewById(R.id.radius_seekBar);
-        final TextView radiusTextView = rootView.findViewById(R.id.radius_textView);
-        radiusSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (progress < 1) {
-                    String displayText = "Shop Radius: <1 km";
-                    radiusTextView.setText(displayText);
-                    distance = 0.5;
-                } else {
-                    String displayText = "Shop Radius: " + progress + "km";
-                    radiusTextView.setText(displayText);
-                    distance = progress;
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-
-        final SeekBar offersSeekBar = rootView.findViewById(R.id.offer_seekBar);
-        final TextView offersTextView = rootView.findViewById(R.id.offers_textView);
-        offersSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                DiscountsTab.discountValue = progress;
-                String displayText = "Offers above " + progress + "0%";
-                offersTextView.setText(displayText);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-
-        CheckBox topOffersCheck = rootView.findViewById(R.id.topOffers_check);
-        topOffersCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!isChecked)
-                    offersSeekBar.setEnabled(false);
-                else
-                    offersSeekBar.setEnabled(true);
             }
         });
 

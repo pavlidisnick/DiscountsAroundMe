@@ -56,6 +56,7 @@ public class AddCategoryTest {
 
         AddCategoryToLayout addCategoryToLayout1 = PowerMockito.spy(addCategoryToLayout);
         PowerMockito.doNothing().when(addCategoryToLayout1, "addSpace");
+        PowerMockito.doReturn(null).when(addCategoryToLayout1, "getDrawableByType", "CLOTHING");
 
         Button button = mock(Button.class);
         LayoutInflater layoutInflater = mock(LayoutInflater.class);

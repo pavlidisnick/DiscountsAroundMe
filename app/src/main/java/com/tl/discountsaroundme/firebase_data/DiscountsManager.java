@@ -1,5 +1,7 @@
 package com.tl.discountsaroundme.firebase_data;
 
+import android.provider.ContactsContract;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -174,6 +176,9 @@ public class DiscountsManager {
             }
         });
     }
+
+
+
 
     void showTopDiscounts(ArrayList<Item> itemList) {
         allItems = itemList;

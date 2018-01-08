@@ -104,6 +104,11 @@
             android:textColor="@color/colorPrimaryWhite"
             android:visibility="visible" />
 
+
+
+
+
+
     </LinearLayout>
 
     <ImageView

@@ -1,7 +1,13 @@
 package com.tl.discountsaroundme.fragments;
 
 import android.animation.Animator;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -27,6 +33,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.WeatherApi.WeatherApiCommon;
+import com.tl.discountsaroundme.WeatherApi.WeatherBasedItemSuggestion;
+import com.tl.discountsaroundme.WeatherApi.WeatherNotificationPublisher;
+import com.tl.discountsaroundme.WeatherApi.WeatherTask;
 import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
@@ -55,6 +65,10 @@ public class MapTab extends Fragment {
         final DiscountsManager discountsManager = new DiscountsManager();
         discountsManager.fillListWithDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue, MainActivity.USER_ID);
 
+        CheckBox cbWeather = rootView.findViewById(R.id.cbWeather);
+        if (cbWeather.isChecked()) {
+            new WeatherTask().execute(WeatherApiCommon.apiRequest(String.valueOf(gps.getLatitude()), String.valueOf(gps.getLongitude())));
+        }
         mMapView = rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
@@ -87,6 +101,7 @@ public class MapTab extends Fragment {
                 }
             }
         });
+
 
         Button shopsButton = rootView.findViewById(R.id.shopsButton);
         Button nearbyButton = rootView.findViewById(R.id.nearbyButton);
@@ -181,6 +196,17 @@ public class MapTab extends Fragment {
             }
         });
 
+        cbWeather.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //Weather
+                if (isChecked) {
+                    new WeatherTask().execute(WeatherApiCommon.apiRequest(String.valueOf(gps.getLatitude()), String.valueOf(gps.getLongitude())));
+                }
+            }
+
+        });
+
         popupMenu = rootView.findViewById(R.id.popup_menu);
 
         ImageButton closePopup = rootView.findViewById(R.id.close_popup);
@@ -263,4 +289,6 @@ public class MapTab extends Fragment {
     public void onStop() {
         super.onStop();
     }
+
+
 }

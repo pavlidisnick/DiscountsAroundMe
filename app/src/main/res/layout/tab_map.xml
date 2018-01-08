@@ -34,8 +34,7 @@
         android:background="@drawable/gradient_blue"
         android:elevation="8dp"
         android:gravity="center_vertical|center_horizontal"
-        android:visibility="visible">
-
+        android:visibility="invisible">
 
         <TextView
             android:layout_width="wrap_content"

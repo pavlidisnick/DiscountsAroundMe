@@ -1,6 +1,7 @@
 package com.tl.discountsaroundme.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
@@ -23,7 +24,10 @@ import android.widget.TextView;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.tl.discountsaroundme.BuildConfig;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
@@ -42,7 +46,6 @@ import com.tl.discountsaroundme.ui_controllers.ItemViewAdapter;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
-import static com.tl.discountsaroundme.activities.UserProfileActivity.uriDrawerImage;
 
 public class DiscountsTab extends Fragment {
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
@@ -207,7 +210,14 @@ public class DiscountsTab extends Fragment {
 
                     //TODO: change setImageURI and set image Profile
                     ImageView imageDrawer = mDrawerLayout.findViewById(R.id.imageViewDrawerUser);
-                    imageDrawer.setImageURI(uriDrawerImage);
+                    DatabaseReference databaseUserImage = FirebaseDatabase.getInstance().getReference("users");
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageRef = storage.getReference();
+                    String id = databaseUserImage.push().getKey();
+                   String uri = databaseUserImage.child(id).child("image").getDatabase().toString();
+                    Uri uriImage = Uri.parse(uri);
+                   imageDrawer.setImageURI(uriImage);
+                   // Toast.makeText(getContext(),uri,Toast.LENGTH_LONG).show();
 
                 }
                 super.onDrawerOpened(drawerView);

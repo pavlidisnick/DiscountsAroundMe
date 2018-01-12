@@ -166,46 +166,46 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
 
 
-        }
-        private void UploadImage(){
+    }
+    private void UploadImage(){
 
 
 
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            FirebaseStorage.getInstance().setMaxUploadRetryTimeMillis(MaxUploadTime);
-            final StorageReference storageRef = storage.getReference();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        FirebaseStorage.getInstance().setMaxUploadRetryTimeMillis(MaxUploadTime);
+        final StorageReference storageRef = storage.getReference();
 
-            final ProgressDialog pd = ProgressDialog.show(this, "", "Uploading...");
+        final ProgressDialog pd = ProgressDialog.show(this, "", "Uploading...");
 
 
-            mAuth = FirebaseAuth.getInstance();
-            final FirebaseUser user = mAuth.getCurrentUser();
-            StorageReference imageRef = storageRef.child("userPictures/" + imageUri.getLastPathSegment());
-            uploadTask = imageRef.putFile(imageUri);
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    link = downloadUrl != null ? downloadUrl.toString() : null;
+        mAuth = FirebaseAuth.getInstance();
+        final FirebaseUser user = mAuth.getCurrentUser();
+        StorageReference imageRef = storageRef.child("userPictures/" + imageUri.getLastPathSegment());
+        uploadTask = imageRef.putFile(imageUri);
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                link = downloadUrl != null ? downloadUrl.toString() : null;
 
-                    String id = user.getUid();
+                String id = user.getUid();
 
-                    mFirebaseDatabase = FirebaseDatabase.getInstance();
-                    myRef = mFirebaseDatabase.getReference("users");
+                mFirebaseDatabase = FirebaseDatabase.getInstance();
+                myRef = mFirebaseDatabase.getReference("users");
 
-                    myRef.child(id).child("image").setValue(link);
-                    pd.dismiss();
-                    Toast.makeText(getApplicationContext(),"upload successful",Toast.LENGTH_LONG).show();
-                    finish();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    pd.dismiss();
-                    Toast.makeText(getApplicationContext(),"Error while uploading...",Toast.LENGTH_LONG).show();
-                }
-            });
-        }
+                myRef.child(id).child("image").setValue(link);
+                pd.dismiss();
+                Toast.makeText(getApplicationContext(),"upload successful",Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                pd.dismiss();
+                Toast.makeText(getApplicationContext(),"Error while uploading...",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
 
     private void createDialog(String title, String hint1, String hint2, DialogInterface.OnDismissListener dismissListener) {

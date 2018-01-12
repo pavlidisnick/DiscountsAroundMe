@@ -32,6 +32,10 @@ import com.tl.discountsaroundme.firebase_data.UserInfoManager;
 import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
 public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener {
+    FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference myRef;
+    FirebaseAuth mAuth ;
+
     Button btMailChange, btPassChange, btImageChange, btDisplayName, btDeleteAcc;
     TextView tvUserDisplayName;
     ImageView imageView;
@@ -147,6 +151,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             public void onClick(DialogInterface dialog, int id) {
                 Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(i, SELECTED_PICTURE);
+                UploadImage();
             }
         });
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -172,8 +177,9 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
             final ProgressDialog pd = ProgressDialog.show(this, "", "Uploading...");
 
-            final DatabaseReference databaseUserImage = FirebaseDatabase.getInstance().getReference("users");
 
+            mAuth = FirebaseAuth.getInstance();
+            final FirebaseUser user = mAuth.getCurrentUser();
             StorageReference imageRef = storageRef.child("userPictures/" + imageUri.getLastPathSegment());
             uploadTask = imageRef.putFile(imageUri);
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -182,10 +188,12 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                     link = downloadUrl != null ? downloadUrl.toString() : null;
 
-                    String id = databaseUserImage.push().getKey();
+                    String id = user.getUid();
 
-                    databaseUserImage.child(id).child("image").setValue(link);
+                    mFirebaseDatabase = FirebaseDatabase.getInstance();
+                    myRef = mFirebaseDatabase.getReference("users");
 
+                    myRef.child(id).child("image").setValue(link);
                     pd.dismiss();
                     Toast.makeText(getApplicationContext(),"upload successful",Toast.LENGTH_LONG).show();
                     finish();

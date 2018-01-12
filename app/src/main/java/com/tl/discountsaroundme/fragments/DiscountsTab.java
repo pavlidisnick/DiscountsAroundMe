@@ -241,7 +241,7 @@ public class DiscountsTab extends Fragment {
 //                    Uri uriImage = Uri.parse(uri);
 //                    imageDrawer.setImageURI(null);
 //                   imageDrawer.setImageURI(uriImage);
-                   // Toast.makeText(getContext(),uri,Toast.LENGTH_LONG).show();
+                    // Toast.makeText(getContext(),uri,Toast.LENGTH_LONG).show();
 
                 }
                 super.onDrawerOpened(drawerView);

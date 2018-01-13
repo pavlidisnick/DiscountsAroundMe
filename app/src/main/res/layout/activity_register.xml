@@ -5,13 +5,13 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/accent_pink_gradient">
+    android:background="@drawable/gradient_blue">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
-        android:background="@drawable/bg3" />
+        android:background="@drawable/bg_white_wavy_overlay" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -100,7 +100,7 @@
             android:dropDownSelector="@color/colorPrimaryWhite"
             android:dropDownWidth="match_parent"
             android:textAlignment="center"
-            android:background="@drawable/bordered_button_transparent"
+            android:background="@drawable/button_bordered_transparent"
             android:visibility="gone" />
 
         <Button
@@ -109,7 +109,7 @@
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:background="@drawable/bordered_button_transparent"
+            android:background="@drawable/button_bordered_transparent"
             android:text="Location"
             android:textColor="@color/colorPrimaryWhite"
             android:textSize="15sp"
@@ -129,7 +129,7 @@
             android:id="@+id/register_button"
             android:layout_width="200dp"
             android:layout_height="42dp"
-            android:background="@drawable/orange_circled_button"
+            android:background="@drawable/button_main_style"
             android:text="register"
             android:textColor="@color/colorPrimaryWhite"
             android:textSize="12sp" />
@@ -139,7 +139,7 @@
             android:layout_width="200dp"
             android:layout_height="42dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/orange_circled_button"
+            android:background="@drawable/button_main_style"
             android:text="Already have an account"
             android:textColor="@color/colorPrimaryWhite"
             android:textSize="12sp" />

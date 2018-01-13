@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,8 +25,12 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.UserPreferences;
+import com.tl.discountsaroundme.WeatherApi.WeatherApiCommon;
+import com.tl.discountsaroundme.WeatherApi.WeatherTask;
 import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
@@ -44,7 +48,9 @@ public class MapTab extends Fragment {
     private GPSTracker gps;
     private GoogleMap googleMap;
     private MarkerHelper markerHelper;
-    private LinearLayout popupMenu;
+
+    private CheckBox nearbyOffersCheck;
+    private FrameLayout popupMenu;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,8 +59,15 @@ public class MapTab extends Fragment {
         final StoreManager storeManager = new StoreManager();
 
         final DiscountsManager discountsManager = new DiscountsManager();
-        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue, MainActivity.USER_ID);
+        discountsManager.fillListWithDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue, MainActivity.USER_ID);
 
+        new UserPreferences();
+        nearbyOffersCheck = rootView.findViewById(R.id.nearbyOffers_check);
+
+        CheckBox cbWeather = rootView.findViewById(R.id.cbWeather);
+        if (cbWeather.isChecked()) {
+            new WeatherTask().execute(WeatherApiCommon.apiRequest(String.valueOf(gps.getLatitude()), String.valueOf(gps.getLongitude())));
+        }
         mMapView = rootView.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
@@ -79,14 +92,20 @@ public class MapTab extends Fragment {
 
                 gps = new GPSTracker(getActivity(), storeManager, discountsManager, markerHelper);
 
+                //Get User Preferences on nearby offers checkbox and function accordingly
+                nearbyOffersCheck.setChecked(UserPreferences.getDataBool("NearbyOffersCheck"));
+                gps.toggleNotifications(UserPreferences.getDataBool("NearbyOffersCheck"));
+
                 try {
                     googleMap.setMyLocationEnabled(true);
                     googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+                    googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.blue_style));
                 } catch (SecurityException e) {
                     e.printStackTrace();
                 }
             }
         });
+
 
         Button shopsButton = rootView.findViewById(R.id.shopsButton);
         Button nearbyButton = rootView.findViewById(R.id.nearbyButton);
@@ -118,20 +137,23 @@ public class MapTab extends Fragment {
             }
         });
 
-        SeekBar radiusSeekBar = rootView.findViewById(R.id.radius_seekBar);
+        final SeekBar radiusSeekBar = rootView.findViewById(R.id.radius_seekBar);
         final TextView radiusTextView = rootView.findViewById(R.id.radius_textView);
+
+        // Get user's saved preferences  and set the text view ,progress bar and distance.
+        radiusSeekBar.setProgress(UserPreferences.getDataInt("RadiusSeekBar"));
+        String displayText = "Shop Radius: " + radiusSeekBar.getProgress() + "m";
+        radiusTextView.setText(displayText);
+        distance = radiusSeekBar.getProgress();
+
+        // On progress bar changes save the new Values
         radiusSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (progress < 1) {
-                    String displayText = "Shop Radius: <1 km";
-                    radiusTextView.setText(displayText);
-                    distance = 0.5;
-                } else {
-                    String displayText = "Shop Radius: " + progress + "km";
-                    radiusTextView.setText(displayText);
-                    distance = progress;
-                }
+                UserPreferences.saveDataInt("RadiusSeekBar", progress);
+                String displayText = "Shop Radius: " + progress + "m";
+                radiusTextView.setText(displayText);
+                distance = progress;
             }
 
             @Override
@@ -140,36 +162,6 @@ public class MapTab extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-
-        final SeekBar offersSeekBar = rootView.findViewById(R.id.offer_seekBar);
-        final TextView offersTextView = rootView.findViewById(R.id.offers_textView);
-        offersSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                DiscountsTab.discountValue = progress;
-                String displayText = "Offers above " + progress + "0%";
-                offersTextView.setText(displayText);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-
-        CheckBox topOffersCheck = rootView.findViewById(R.id.topOffers_check);
-        topOffersCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!isChecked)
-                    offersSeekBar.setEnabled(false);
-                else
-                    offersSeekBar.setEnabled(true);
             }
         });
 
@@ -177,8 +169,22 @@ public class MapTab extends Fragment {
         nearbyOffersCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //Save User prefs on nearby offers cb
+                UserPreferences.saveDataBool("NearbyOffersCheck", isChecked);
                 gps.toggleNotifications(isChecked);
             }
+        });
+        //Get User Preferences on Weather checked.
+        cbWeather.setChecked(UserPreferences.getDataBool("WeatherCheck"));
+        cbWeather.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                UserPreferences.saveDataBool("WeatherCheck", isChecked);
+                if (isChecked) {
+                    new WeatherTask().execute(WeatherApiCommon.apiRequest(String.valueOf(gps.getLatitude()), String.valueOf(gps.getLongitude())));
+                }
+            }
+
         });
 
         popupMenu = rootView.findViewById(R.id.popup_menu);
@@ -263,4 +269,6 @@ public class MapTab extends Fragment {
     public void onStop() {
         super.onStop();
     }
+
+
 }

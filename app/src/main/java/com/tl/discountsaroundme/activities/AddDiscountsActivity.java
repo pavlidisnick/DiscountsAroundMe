@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -43,19 +44,26 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Objects;
 
 public class AddDiscountsActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int SELECTED_PICTURE = 100;
     private static final int CAMERA_REQUEST = 1888;
 
+    private static final int EXPORT_DATE = 9999;
+
     ImageView imageView;
     Button selectImg, addItem, camera;
+
 
     Uri imageUri;
     UploadTask uploadTask;
 
     String name, description, category, link, shopName;
+
+    Button exportDayButton;
+    Date expirationDate;
 
     double price, discount;
 
@@ -66,6 +74,8 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_discount);
+
+        exportDayButton = findViewById(R.id.exportButton);
 
         new StatusBar(this);
 
@@ -78,6 +88,14 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
         selectImg = findViewById(R.id.buttonSelectImage);
         addItem = findViewById(R.id.buttonAddItem);
         camera = findViewById(R.id.buttonCamera);
+
+        exportDayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ExpirationDateDialogActivity.class);
+                startActivityForResult(intent, EXPORT_DATE);
+            }
+        });
 
         selectImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,9 +125,14 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == EXPORT_DATE && resultCode == RESULT_OK) {
+            expirationDate = (Date) data.getSerializableExtra("date");
+        }
 
         if (resultCode == RESULT_OK && requestCode == SELECTED_PICTURE) {
             imageUri = data.getData();
@@ -173,6 +196,8 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
             toast("Please add image");
         } else if (!isConnectedToInternet()) {
             toast("Check your internet connection");
+        } else if (expirationDate == null) {
+            toast("Set expiration date for your discount");
         } else {
             return true;
         }
@@ -203,7 +228,7 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
                 link = downloadUrl != null ? downloadUrl.toString() : null;
 
                 String id = databaseItem.push().getKey();
-                Item item = new Item(id, name, category, price, discount, description, link, shopName);
+                Item item = new Item(id, name, category, price, discount, description, link, shopName, expirationDate);
 
                 databaseItem.child(id).setValue(item);
 

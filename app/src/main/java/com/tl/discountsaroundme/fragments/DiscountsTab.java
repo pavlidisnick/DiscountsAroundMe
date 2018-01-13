@@ -57,11 +57,10 @@ public class DiscountsTab extends Fragment {
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
 
     public static int discountValue = 30;
-    DrawerLayout mDrawerLayout;
-    DiscountsManager discountsManager = new DiscountsManager();
+    private DrawerLayout mDrawerLayout;
+    private DiscountsManager discountsManager = new DiscountsManager();
     private Search search;
     String uri;
-
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,7 +93,7 @@ public class DiscountsTab extends Fragment {
         AddCategoryToLayout addCategoryToLayout = new AddCategoryToLayout(linearLayout, getActivity(), discountsManager);
         new FetchCategories(addCategoryToLayout);
 
-        discountsManager.showTopDiscounts(FirebaseDatabase.getInstance(), discountValue, MainActivity.USER_ID);
+        discountsManager.showTopDiscountsAndNotify(FirebaseDatabase.getInstance(), discountValue, MainActivity.USER_ID);
 
         // FloatingSearchView actions
         FloatingSearchView mSearchView = rootView.findViewById(R.id.floating_search_view);

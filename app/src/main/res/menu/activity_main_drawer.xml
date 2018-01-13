@@ -35,9 +35,15 @@
                 android:icon="@drawable/ic_info"
                 android:title="Version" />
             <item
+                android:id="@+id/weather"
+                android:icon="@drawable/ic_sun_day_weather_symbol"
+                android:title="Weather" />
+            <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_sign_out"
                 android:title="Logout" />
+
+
         </menu>
     </item>
 

@@ -5,7 +5,7 @@
     android:id="@+id/root_frame_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/accent_pink_gradient_reversed"
+    android:background="@drawable/gradient_accent_pink_reversed"
     android:orientation="vertical"
     tools:context="com.tl.discountsaroundme.activities.MainActivity">
 
@@ -45,7 +45,7 @@
         android:layout_marginTop="340dp"
         android:background="@color/colorPrimaryWhite"
         android:orientation="vertical"
-        tools:background="@drawable/accent_pink_gradient">
+        tools:background="@drawable/gradient_accent_pink">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -69,6 +69,7 @@
                 android:layout_height="44dp"
                 android:layout_gravity="center" />
 
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -79,6 +80,7 @@
                 tools:ignore="RtlCompat" />
 
         </LinearLayout>
+
 
     </LinearLayout>
 
@@ -97,6 +99,7 @@
         android:progressBackgroundTint="#00ffffff"
         android:progressTint="#00ffffff"
         android:thumb="@drawable/scroller_complete" />
+
 
 
 </FrameLayout>

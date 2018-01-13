@@ -2,6 +2,7 @@ package com.tl.discountsaroundme.discounts;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.support.v4.widget.Space;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -43,6 +44,8 @@ public class AddCategoryToLayout {
 
         button.setText(buttonText);
         button.setPadding(padding, 0, padding, 0);
+        button.setCompoundDrawablesWithIntrinsicBounds(getDrawableByType(buttonText.toUpperCase()), null, null, null);
+        button.setCompoundDrawablePadding(4);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,6 +56,25 @@ public class AddCategoryToLayout {
 
         addSpace();
         linearLayout.addView(button, linearLayout.getChildCount());
+    }
+
+    private Drawable getDrawableByType(String code) {
+        return activity.getResources().getDrawable(getDrawableId(code));
+    }
+
+    private int getDrawableId(String code) {
+        int i = -1;
+        for (String cc : activity.getResources().getStringArray(R.array.codes)) {
+            i++;
+            if (cc.equals(code))
+                break;
+        }
+        try {
+            String resource = activity.getResources().getStringArray(R.array.names)[i];
+            return activity.getResources().getIdentifier(resource, "drawable", activity.getPackageName());
+        } catch (Exception e) {
+            return R.drawable.marker_shop;
+        }
     }
 
     private void addSpace() {

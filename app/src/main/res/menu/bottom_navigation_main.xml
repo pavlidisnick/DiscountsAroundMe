@@ -4,19 +4,19 @@
     <item
         android:id="@+id/menu_discounts"
         android:enabled="true"
-        android:icon="@drawable/ic_discount"
+        android:icon="@drawable/ic_home"
         android:title="Discounts"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/menu_map"
         android:enabled="true"
         android:icon="@drawable/ic_map"
         android:title="Map"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/menu_user_options"
         android:enabled="true"
         android:icon="@drawable/ic_hot"
         android:title="Hot Notifier"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 </menu>

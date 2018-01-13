@@ -29,6 +29,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.firebase_data.UserInfoManager;
+import com.tl.discountsaroundme.ui_controllers.CheckBox;
 import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
 public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener {
@@ -232,6 +233,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     }
                 }).create().show();
     }
+  
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 

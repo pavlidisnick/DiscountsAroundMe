@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <DatePicker
+        android:id="@+id/datePickerChoose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:calendarTextColor="@color/colorPrimaryWhite" />
+
+    <Button
+        android:id="@+id/confirmExportButton"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="25dp"
+        android:background="@drawable/button_main_style"
+        android:text="Confirm"
+        android:textColor="@color/colorPrimaryWhite" />
+
+</LinearLayout>

@@ -16,6 +16,7 @@ import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.ShoppingCart;
 import com.tl.discountsaroundme.ui_controllers.ItemSpaceDecoration;
 import com.tl.discountsaroundme.ui_controllers.ItemViewAdapter;
+import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
 public class ShoppingCartActivity extends AppCompatActivity implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
@@ -27,6 +28,8 @@ public class ShoppingCartActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_cart);
+
+        new StatusBar(this);
 
         String userId = MainActivity.USER_ID;
         shoppingCart = new ShoppingCart(FirebaseDatabase.getInstance(), userId);

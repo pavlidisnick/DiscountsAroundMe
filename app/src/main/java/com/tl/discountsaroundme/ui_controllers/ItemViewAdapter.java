@@ -46,13 +46,12 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
         holder.tvItemName.setText(item.getName());
         holder.tvItemDetails.setText(item.getDescription());
         holder.tvStoreName.setText(item.getStore());
-        holder.imgString.setText(item.getPicture());
         holder.type.setText(item.getType());
 
         String priceString = "$" + item.getPrice();
         holder.tvPrice.setText(priceString);
 
-        String discount = String.valueOf(item.getDiscount());
+        String discount = String.valueOf((int) item.getDiscount() + "% off");
         holder.itemDiscount.setText(discount);
 
         GlideApp.with(context)
@@ -62,7 +61,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
 
         GlideApp.with(context)
                 .load("https://grandmall-varna.com/pictures/original_1373.jpg")
-                .encodeQuality(5)
+                .encodeQuality(10)
                 .circleCrop()
                 .into(holder.shopImage);
 
@@ -80,7 +79,6 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
         TextView tvItemDetails;
         TextView tvStoreName;
         TextView tvPrice;
-        TextView imgString;
         TextView type;
         TextView itemDiscount;
         ImageView shopImage;
@@ -102,7 +100,6 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
             tvItemDetails = itemView.findViewById(R.id.tvItemDetail);
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvStoreName = itemView.findViewById(R.id.tvStoreName);
-            imgString = itemView.findViewById(R.id.imgString);
             type = itemView.findViewById(R.id.type);
             itemDiscount = itemView.findViewById(R.id.itemDiscount);
             shopImage = itemView.findViewById(R.id.shop_image);

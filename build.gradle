@@ -18,6 +18,11 @@ buildscript {
 
 allprojects {
     apply plugin: 'jacoco'
+
+
+    jacoco{
+        toolVersion "0.7.6.201602180812"
+    }
     repositories {
         jcenter()
         maven {
@@ -26,6 +31,14 @@ allprojects {
 
     }
 }
+    task jacocoTestReport(type: JacocoReport, dependsOn: "testDebugUnitTest") {
+        group = "Reporting"
+        description = "Generate Jacoco coverage reports"
+        reports {
+            xml.enabled = true
+            html.enabled = true
+        }
+    }
 
 task codeCoverageReport(type: JacocoReport) {
     executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
@@ -33,10 +46,21 @@ task codeCoverageReport(type: JacocoReport) {
     reports {
         xml.enabled true
         xml.destination "${buildDir}/reports/jacoco/report.xml"
-        html.enabled false
+        html.enabled true
         csv.enabled false
     }
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugTree])
+    executionData = fileTree(dir: "$buildDir", includes: [
+            "jacoco/testDebugUnitTest.exec",
+            "outputs/code-coverage/connected/*coverage.ec"
+    ])
 }
+
 
 codeCoverageReport.dependsOn {
     subprojects*.test

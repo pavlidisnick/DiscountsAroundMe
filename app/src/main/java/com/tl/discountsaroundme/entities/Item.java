@@ -3,6 +3,7 @@ package com.tl.discountsaroundme.entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Date;
 
 public class Item implements Serializable {
     private String id;
@@ -13,6 +14,7 @@ public class Item implements Serializable {
     private double discount;
     private String picture;
     private String store;
+    private Date expirationDate;
 
     private boolean isInCart = false;
 
@@ -20,7 +22,7 @@ public class Item implements Serializable {
     }
 
     public Item(String id, String name, String type, double price, double discount,
-                String description, String picture, String store) {
+                String description, String picture, String store, Date expirationDate) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -29,6 +31,7 @@ public class Item implements Serializable {
         this.description = description;
         this.picture = picture;
         this.store = store;
+        this.expirationDate = expirationDate;
     }
 
     public String getName() {
@@ -57,6 +60,10 @@ public class Item implements Serializable {
 
     public String getStore() {
         return store;
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
     }
 
     public String getFinalPrice() {

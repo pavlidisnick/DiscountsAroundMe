@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/accent_pink_gradient"
+    android:background="@drawable/gradient_blue"
     android:orientation="vertical">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
-        android:background="@drawable/bg3" />
+        android:background="@drawable/bg_white_wavy_overlay" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:layout_marginBottom="4dp"
-                android:background="@drawable/bordered_button_transparent"
+                android:background="@drawable/button_bordered_transparent"
                 android:drawableStart="@drawable/ic_collections"
                 android:drawableTint="@color/colorPrimaryWhite"
                 android:onClick="SelectImg"
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
-                android:background="@drawable/bordered_button_transparent"
+                android:background="@drawable/button_bordered_transparent"
                 android:drawableStart="@drawable/ic_camera_alt"
                 android:drawableTint="@color/colorPrimaryWhite"
                 android:padding="6dp"
@@ -80,7 +80,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
         android:orientation="vertical"
         android:padding="8dp">
 
@@ -239,12 +241,14 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/exportButton"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@drawable/button_bordered_transparent"
+            android:text="Expires"
+            android:textColor="@color/colorPrimaryWhite" />
 
     </LinearLayout>
 
@@ -254,7 +258,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="40dp"
-        android:background="@drawable/orange_circled_button"
+        android:background="@drawable/button_main_style"
         android:text="Add Discount"
         android:textColor="@color/colorPrimaryWhite" />
 

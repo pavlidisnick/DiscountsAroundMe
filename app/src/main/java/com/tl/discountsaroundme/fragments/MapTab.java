@@ -140,31 +140,20 @@ public class MapTab extends Fragment {
         final SeekBar radiusSeekBar = rootView.findViewById(R.id.radius_seekBar);
         final TextView radiusTextView = rootView.findViewById(R.id.radius_textView);
 
-        // Get user's saved preferences  and set the textview ,progress bar and distance.
+        // Get user's saved preferences  and set the text view ,progress bar and distance.
         radiusSeekBar.setProgress(UserPreferences.getDataInt("RadiusSeekBar"));
-        if (radiusSeekBar.getProgress() < 1) {
-            String displayText = "Shop Radius: <1 km";
-            radiusTextView.setText(displayText);
-            distance = 0.5;
-        } else {
-            String displayText = "Shop Radius: " + radiusSeekBar.getProgress() + "km";
-            radiusTextView.setText(displayText);
-            distance = radiusSeekBar.getProgress();
-        }
+        String displayText = "Shop Radius: " + radiusSeekBar.getProgress() + "m";
+        radiusTextView.setText(displayText);
+        distance = radiusSeekBar.getProgress();
+
         // On progress bar changes save the new Values
         radiusSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 UserPreferences.saveDataInt("RadiusSeekBar", progress);
-                if (progress < 1) {
-                    String displayText = "Shop Radius: <1 km";
-                    radiusTextView.setText(displayText);
-                    distance = 0.5;
-                } else {
-                    String displayText = "Shop Radius: " + progress + "km";
-                    radiusTextView.setText(displayText);
-                    distance = progress;
-                }
+                String displayText = "Shop Radius: " + progress + "m";
+                radiusTextView.setText(displayText);
+                distance = progress;
             }
 
             @Override

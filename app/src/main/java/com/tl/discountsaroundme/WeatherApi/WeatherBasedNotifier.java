@@ -8,7 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+import android.widget.ImageView;
+import android.widget.RemoteViews;
 
+import com.bumptech.glide.Glide;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.entities.Item;
@@ -45,7 +48,7 @@ public class WeatherBasedNotifier {
 
     public static void RepeatingNotification (){
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY,20);
+        calendar.set(Calendar.HOUR_OF_DAY,16);
         calendar.set(Calendar.MINUTE,00);
         calendar.set(Calendar.SECOND,1);
         Intent intent = new Intent(getApplicationContext(),WeatherNotificationPublisher.class);
@@ -74,7 +77,7 @@ public class WeatherBasedNotifier {
         Notification.Builder builder = new Notification.Builder(getApplicationContext());
         builder.setContentTitle(Title + " " + WeatherBasedItemSuggestion.suggestionPerDayList.get(ThreeHourInterval).getWeatherCondition());
         builder.setContentText("Check this out! "+WeatherBasedItemSuggestion.suggestionPerDayList.get(ThreeHourInterval).getItemSuggestion());
-        builder.setSmallIcon(R.mipmap.mini_icon);
+        builder.setSmallIcon(R.drawable.ic_sun_day_weather_symbol);
         builder.setColor(getApplicationContext().getResources().getColor(R.color.colorAccent));
         builder.setStyle(new Notification.BigTextStyle()
                 .bigText(sb.toString()));
@@ -84,4 +87,5 @@ public class WeatherBasedNotifier {
         builder.addAction(R.mipmap.mini_icon,"Save to Cart!",actionPendingIntent);
         return builder.build();
     }
+
 }

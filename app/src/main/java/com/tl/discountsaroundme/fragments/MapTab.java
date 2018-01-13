@@ -33,12 +33,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.UserPreferences;
 import com.tl.discountsaroundme.WeatherApi.WeatherApiCommon;
 import com.tl.discountsaroundme.WeatherApi.WeatherBasedItemSuggestion;
 import com.tl.discountsaroundme.WeatherApi.WeatherNotificationPublisher;
 import com.tl.discountsaroundme.WeatherApi.WeatherTask;
 import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.entities.Store;
+import com.tl.discountsaroundme.entities.User;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;
 import com.tl.discountsaroundme.map.MarkerHelper;
@@ -55,6 +57,7 @@ public class MapTab extends Fragment {
     private GoogleMap googleMap;
     private MarkerHelper markerHelper;
     private LinearLayout popupMenu;
+    private CheckBox nearbyOffersCheck;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,6 +67,9 @@ public class MapTab extends Fragment {
 
         final DiscountsManager discountsManager = new DiscountsManager();
         discountsManager.fillListWithDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue, MainActivity.USER_ID);
+
+        new UserPreferences();
+        nearbyOffersCheck = rootView.findViewById(R.id.nearbyOffers_check);
 
         CheckBox cbWeather = rootView.findViewById(R.id.cbWeather);
         if (cbWeather.isChecked()) {
@@ -92,6 +98,10 @@ public class MapTab extends Fragment {
                 mSearchView.setOnBindSuggestionCallback(setSearchBar);
 
                 gps = new GPSTracker(getActivity(), storeManager, discountsManager, markerHelper);
+
+                //Get User Preferences on nearby offers checkbox and function accordingly
+                nearbyOffersCheck.setChecked(UserPreferences.getDataBool("NearbyOffersCheck"));
+                gps.toggleNotifications(UserPreferences.getDataBool("NearbyOffersCheck"));
 
                 try {
                     googleMap.setMyLocationEnabled(true);
@@ -133,11 +143,25 @@ public class MapTab extends Fragment {
             }
         });
 
-        SeekBar radiusSeekBar = rootView.findViewById(R.id.radius_seekBar);
+        final SeekBar radiusSeekBar = rootView.findViewById(R.id.radius_seekBar);
         final TextView radiusTextView = rootView.findViewById(R.id.radius_textView);
+
+        // Get user's saved preferences  and set the textview ,progress bar and distance.
+        radiusSeekBar.setProgress(UserPreferences.getDataInt("RadiusSeekBar"));
+        if (radiusSeekBar.getProgress() < 1) {
+            String displayText = "Shop Radius: <1 km";
+            radiusTextView.setText(displayText);
+            distance = 0.5;
+        } else {
+            String displayText = "Shop Radius: " + radiusSeekBar.getProgress() + "km";
+            radiusTextView.setText(displayText);
+            distance = radiusSeekBar.getProgress();
+        }
+        // On progress bar changes save the new Values
         radiusSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                UserPreferences.saveDataInt("RadiusSeekBar", progress);
                 if (progress < 1) {
                     String displayText = "Shop Radius: <1 km";
                     radiusTextView.setText(displayText);
@@ -160,10 +184,19 @@ public class MapTab extends Fragment {
 
         final SeekBar offersSeekBar = rootView.findViewById(R.id.offer_seekBar);
         final TextView offersTextView = rootView.findViewById(R.id.offers_textView);
+
+        //Get user preferences for offers progress bar and set the text view and discount value
+        offersSeekBar.setProgress(UserPreferences.getDataInt("OffersSeekBar"));
+        DiscountsTab.discountValue = offersSeekBar.getProgress() * 10;
+        String displayText = "Offers above " + offersSeekBar.getProgress() + "0%";
+        offersTextView.setText(displayText);
+
         offersSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                DiscountsTab.discountValue = progress;
+                //Save Offers progress on user preferences
+                UserPreferences.saveDataInt("OffersSeekBar",progress);
+                DiscountsTab.discountValue = progress*10;
                 String displayText = "Offers above " + progress + "0%";
                 offersTextView.setText(displayText);
             }
@@ -178,9 +211,18 @@ public class MapTab extends Fragment {
         });
 
         CheckBox topOffersCheck = rootView.findViewById(R.id.topOffers_check);
+        //Get  User preferences on top offers checkbox and function accordingly
+        topOffersCheck.setChecked(UserPreferences.getDataBool("TopOffersCheck"));
+        if (!topOffersCheck.isChecked())
+            offersSeekBar.setEnabled(false);
+        else
+            offersSeekBar.setEnabled(true);
+
         topOffersCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //Save User preference on top offers checkbox
+                UserPreferences.saveDataBool("TopOffersCheck",isChecked);
                 if (!isChecked)
                     offersSeekBar.setEnabled(false);
                 else
@@ -188,18 +230,21 @@ public class MapTab extends Fragment {
             }
         });
 
-        CheckBox nearbyOffersCheck = rootView.findViewById(R.id.nearbyOffers_check);
+
         nearbyOffersCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //Save User prefs on nearby offers cb
+                UserPreferences.saveDataBool("NearbyOffersCheck",isChecked);
                 gps.toggleNotifications(isChecked);
             }
         });
-
+        //Get User Preferences on Weather checked.
+        cbWeather.setChecked(UserPreferences.getDataBool("WeatherCheck"));
         cbWeather.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //Weather
+                UserPreferences.saveDataBool("WeatherCheck",isChecked);
                 if (isChecked) {
                     new WeatherTask().execute(WeatherApiCommon.apiRequest(String.valueOf(gps.getLatitude()), String.valueOf(gps.getLongitude())));
                 }

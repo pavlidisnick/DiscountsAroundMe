@@ -49,7 +49,7 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     @SuppressLint("MissingPermission")
-    public void getLocation() {
+    public  void getLocation() {
         try {
             AtomicReference<LocationManager> atomicReference;
             atomicReference = new AtomicReference<>((LocationManager) activity.getSystemService(Context.LOCATION_SERVICE));
@@ -68,7 +68,7 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     // Function to get latitude
-    public double getLatitude() throws NullPointerException {
+    public  double getLatitude() throws NullPointerException {
         return location.getLatitude();
     }
 

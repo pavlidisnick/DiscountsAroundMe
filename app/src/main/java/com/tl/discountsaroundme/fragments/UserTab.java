@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.UserPreferences;
 import com.tl.discountsaroundme.ui_controllers.CheckBox;
 import com.tl.discountsaroundme.ui_controllers.NumberPickerAnimated;
 
@@ -24,6 +25,7 @@ public class UserTab extends Fragment {
 
         SeekBar seekBar = rootView.findViewById(R.id.seekBar);
         seekBar.setOnSeekBarChangeListener(numberPickerAnimated);
+
 
         CheckBox checkBox = rootView.findViewById(R.id.my_checkbox);
 

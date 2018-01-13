@@ -2,6 +2,7 @@ package com.tl.discountsaroundme.activities;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.firebase_data.UserInfoManager;
+import com.tl.discountsaroundme.ui_controllers.CheckBox;
 import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
 public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener {
@@ -142,4 +144,6 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     }
                 }).create().show();
     }
+
+
 }

@@ -50,10 +50,36 @@
             android:id="@+id/close_popup"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_gravity="end|top"
+                     android:layout_gravity="end|top"
             android:layout_margin="14dp"
             android:background="@drawable/button_category"
             app:srcCompat="@drawable/ic_close" />
+
+        <CheckBox
+            android:id="@+id/topOffers_check"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+            android:layout_width="185dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:checked="true"
+            android:text="Show only top offers" />
+
+        <CheckBox
+            android:id="@+id/nearbyOffers_check"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+            android:layout_width="185dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:checked="false"
+            android:text="Notify me for offers" />
+        <CheckBox
+            android:id="@+id/cbWeather"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+            android:layout_width="185dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:checked="false"
+            android:text="Weather based offers" />
 
         <LinearLayout
             android:layout_width="wrap_content"

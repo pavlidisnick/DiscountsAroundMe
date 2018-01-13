@@ -45,13 +45,14 @@ android {
         unitTests.returnDefaultValues = true
     }
 }
+apply plugin: 'jacoco-android'
 configurations.all {
     resolutionStrategy.force "com.android.support:support-annotations:25.3.1"
 }
 dependencies {
     compile 'com.wdullaer:materialdatetimepicker:3.4.1'
     //implementation 'com.google.firebase:firebase-storage:11.0.4'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     //noinspection GradleCompatible
     compile 'com.android.support:support-v4:26.1.0'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -95,5 +96,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
+    compile 'com.google.code.gson:gson:2.2.4'
 }
 apply plugin: 'com.google.gms.google-services'

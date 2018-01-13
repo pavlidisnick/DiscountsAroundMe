@@ -41,7 +41,7 @@
         android:layout_width="110dp"
         android:layout_height="36dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/orange_circled_button"
+        android:background="@drawable/button_main_style"
         android:backgroundTint="@color/colorAlert"
         android:elevation="12dp"
         android:paddingLeft="25dp"

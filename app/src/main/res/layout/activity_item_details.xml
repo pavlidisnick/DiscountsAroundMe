@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/accent_pink_gradient"
+    android:background="@drawable/gradient_blue"
     tools:context="com.tl.discountsaroundme.activities.ItemDetailsActivity">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
-        android:background="@drawable/bg3"/>
+        android:background="@drawable/bg_white_wavy_overlay"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,15 +34,6 @@
             android:text="ItemName"
             android:textColor="@color/colorPrimaryWhite"
             android:textSize="30sp" />
-
-        <RatingBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:isIndicator="false"
-            android:progressTint="@color/colorPrimaryWhite"
-            android:stepSize="1"
-            android:progressBackgroundTint="#220f0f0f" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -140,7 +131,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_margin="5dp"
-                android:background="@drawable/orange_circled_button"
+                android:background="@drawable/button_main_style"
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
                 android:text="Add to favorites"
@@ -153,7 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_margin="5dp"
-                android:background="@drawable/orange_circled_button"
+                android:background="@drawable/button_main_style"
                 android:drawableLeft="@drawable/ic_shopping_cart_add"
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"

@@ -16,10 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
@@ -31,6 +29,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.UserPreferences;
@@ -56,8 +55,9 @@ public class MapTab extends Fragment {
     private GPSTracker gps;
     private GoogleMap googleMap;
     private MarkerHelper markerHelper;
-    private LinearLayout popupMenu;
+  
     private CheckBox nearbyOffersCheck;
+    private FrameLayout popupMenu;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -106,6 +106,7 @@ public class MapTab extends Fragment {
                 try {
                     googleMap.setMyLocationEnabled(true);
                     googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+                    googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.blue_style));
                 } catch (SecurityException e) {
                     e.printStackTrace();
                 }
@@ -229,8 +230,8 @@ public class MapTab extends Fragment {
                     offersSeekBar.setEnabled(true);
             }
         });
-
-
+      
+        CheckBox nearbyOffersCheck = rootView.findViewById(R.id.nearbyOffers_check);
         nearbyOffersCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

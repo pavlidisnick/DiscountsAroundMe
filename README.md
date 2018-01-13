@@ -1,7 +1,5 @@
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/pavlidisnick/DiscountsAroundMe.svg?columns=Done)](https://waffle.io/pavlidisnick/DiscountsAroundMe)
 [![Build Status](https://travis-ci.org/pavlidisnick/DiscountsAroundMe.svg?branch=master)](https://travis-ci.org/pavlidisnick/DiscountsAroundMe)
-[![codecov](https://codecov.io/gh/pavlidisnick/DiscountsAroundMe/branch/master/graph/badge.svg)](https://codecov.io/gh/pavlidisnick/DiscountsAroundMe/branch/master)
-[![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=59fa449914e70700019b5de2&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/59fa449914e70700019b5de2/build/latest?branch=master)
 
 # Discounts Around Me 
 Android Application for checking product discounts and notifying you whenever a shop with discount is nearby.

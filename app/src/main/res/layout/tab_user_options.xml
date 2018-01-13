@@ -5,7 +5,7 @@
     android:id="@+id/root_frame_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/accent_pink_gradient_reversed"
+    android:background="@drawable/gradient_accent_pink_reversed"
     android:orientation="vertical"
     tools:context="com.tl.discountsaroundme.activities.MainActivity">
 
@@ -45,7 +45,7 @@
         android:layout_marginTop="340dp"
         android:background="@color/colorPrimaryWhite"
         android:orientation="vertical"
-        tools:background="@drawable/accent_pink_gradient">
+        tools:background="@drawable/gradient_accent_pink">
 
         <LinearLayout
             android:layout_width="wrap_content"

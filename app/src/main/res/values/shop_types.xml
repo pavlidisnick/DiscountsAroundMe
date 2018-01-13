@@ -7,6 +7,10 @@
         <item>RESTAURANT</item>
         <item>SHOP</item>
         <item>SHOES</item>
+        <item>MEN SHOES</item>
+        <item>JEWELRY</item>
+        <item>SUITS</item>
+        <item>OTHER</item>
     </string-array>
 
     <!--VALUE-->
@@ -16,5 +20,9 @@
         <item>marker_restaurant</item>
         <item>marker_shop</item>
         <item>marker_woman_shoe</item>
+        <item>marker_men_shoes</item>
+        <item>marker_jewelry</item>
+        <item>marker_suits</item>
+        <item>marker_shop</item>
     </string-array>
 </resources>

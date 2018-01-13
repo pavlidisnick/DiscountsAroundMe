@@ -16,13 +16,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.BuildConfig;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
@@ -43,12 +49,18 @@ import java.util.ArrayList;
 import static android.app.Activity.RESULT_OK;
 
 public class DiscountsTab extends Fragment {
+
+    FirebaseDatabase  mFirebaseDatabase;
+    DatabaseReference myRef;
+    String userID;
+
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
 
     public static int discountValue = 30;
     private DrawerLayout mDrawerLayout;
     private DiscountsManager discountsManager = new DiscountsManager();
     private Search search;
+    String uri;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -201,10 +213,38 @@ public class DiscountsTab extends Fragment {
 
                     TextView userEmail = mDrawerLayout.findViewById(R.id.drawerEmail);
                     userEmail.setText(email);
+
+                    //TODO: change setImageURI and set image Profile
+                    ImageView imageDrawer = mDrawerLayout.findViewById(R.id.imageViewDrawerUser);
+
+
+
+                    mFirebaseDatabase = FirebaseDatabase.getInstance();
+                    myRef = mFirebaseDatabase.getReference("users");
+
+                    userID = user.getUid();
+
+                    myRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            uri = (String) dataSnapshot.child(userID).child("image").getValue();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                    Glide.with(getContext()).load(uri).into(imageDrawer);
+
+//                    Uri uriImage = Uri.parse(uri);
+//                    imageDrawer.setImageURI(null);
+//                   imageDrawer.setImageURI(uriImage);
+                    // Toast.makeText(getContext(),uri,Toast.LENGTH_LONG).show();
+
                 }
                 super.onDrawerOpened(drawerView);
             }
         });
     }
-
 }

@@ -56,23 +56,6 @@
             app:srcCompat="@drawable/ic_close" />
 
         <CheckBox
-            android:id="@+id/topOffers_check"
-            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
-            android:layout_width="185dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:checked="true"
-            android:text="Show only top offers" />
-
-        <CheckBox
-            android:id="@+id/nearbyOffers_check"
-            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
-            android:layout_width="185dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:checked="false"
-            android:text="Notify me for offers" />
-        <CheckBox
             android:id="@+id/cbWeather"
             style="@style/Widget.AppCompat.CompoundButton.CheckBox"
             android:layout_width="185dp"
@@ -122,6 +105,23 @@
                 android:checked="true"
                 android:text="Notify me for offers"
                 android:textColor="@color/colorPrimaryWhite" />
+
+            <TextView
+                android:id="@+id/radius_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shop radius"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryWhite"
+                android:textSize="20sp" />
+
+            <SeekBar
+                android:id="@+id/radius_seekBar"
+                style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="10dp"/>
 
         </LinearLayout>
 

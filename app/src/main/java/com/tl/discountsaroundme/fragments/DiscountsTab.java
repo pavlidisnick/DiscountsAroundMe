@@ -33,6 +33,7 @@ import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.activities.MyDiscountsActivity;
+import com.tl.discountsaroundme.activities.ReportBugActivity;
 import com.tl.discountsaroundme.activities.ShoppingCartActivity;
 import com.tl.discountsaroundme.discounts.AddCategoryToLayout;
 import com.tl.discountsaroundme.discounts.FetchCategories;
@@ -169,6 +170,10 @@ public class DiscountsTab extends Fragment {
                     case R.id.nav_shopping_cart:
                         Intent shoppingCartActivity = new Intent(getActivity(), ShoppingCartActivity.class);
                         startActivity(shoppingCartActivity);
+                        break;
+                    case R.id.report_bug:
+                        Intent reportBugActivity = new Intent(getActivity(), ReportBugActivity.class);
+                        startActivity(reportBugActivity);
                         break;
                 }
 

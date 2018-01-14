@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_blue"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="200dp"
+        android:background="@drawable/bg_white_wavy_overlay" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="15dp"
+        android:text="Report a bug"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryWhite"
+        android:textSize="26dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Describe the bug that occured:"
+        android:textColor="#cfffffff"
+        android:textSize="20dp" />
+
+    <EditText
+        android:id="@+id/bugDescription"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:layout_gravity="top"
+        android:layout_marginTop="120dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/button_bordered_transparent"
+        android:elevation="6dp"
+        android:ems="14"
+        android:padding="8dp"
+        android:inputType="textMultiLine"
+        android:textColor="@color/colorPrimaryWhite" />
+
+    <Button
+        android:id="@+id/reportBugButton"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_main_style"
+        android:text="Report bug"
+        android:textColor="@color/colorPrimaryWhite" />
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|left"
+        android:padding="14dp"
+        android:src="@drawable/ic_arrow_back_black_24dp"
+        android:tint="@color/colorPrimaryWhite" />
+
+</FrameLayout>

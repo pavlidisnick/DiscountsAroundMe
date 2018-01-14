@@ -7,4 +7,10 @@
         android:icon="@drawable/ic_mic"
         android:title="Voice"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/discount_options"
+        android:enabled="true"
+        android:icon="@drawable/ic_more_vert_black_24dp"
+        android:title="Options"
+        app:showAsAction="always" />
 </menu>

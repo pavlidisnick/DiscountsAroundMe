@@ -1,7 +1,5 @@
 package com.tl.discountsaroundme.firebase_data;
 
-import android.provider.ContactsContract;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -11,6 +9,8 @@ import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.ui_controllers.ItemViewAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class DiscountsManager {
     private ItemViewAdapter adapter;
@@ -111,7 +111,7 @@ public class DiscountsManager {
     /**
      * @param firebaseDatabase FirebaseDatabase instance
      */
-    public void fillListWithDiscounts(final FirebaseDatabase firebaseDatabase, final int discountThreshold, final String userId) {
+    public void fillListWithDiscounts(final FirebaseDatabase firebaseDatabase) {
         DatabaseReference mDBDiscountItems = firebaseDatabase.getReference("/items");
 
         mDBDiscountItems.addValueEventListener(new ValueEventListener() {
@@ -120,7 +120,7 @@ public class DiscountsManager {
                 allItems.clear();
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Item item = child.getValue(Item.class);
-                    if (item != null && item.getDiscount() >= discountThreshold) {
+                    if (item != null) {
                         allItems.add(item);
                     }
                 }
@@ -142,16 +142,18 @@ public class DiscountsManager {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 showingItems.clear();
+                allItems.clear();
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Item item = child.getValue(Item.class);
-                    if (item != null && item.getDiscount() >= discountThreshold) {
-                        showingItems.add(item);
+                    if (item != null) {
+                        allItems.add(item);
                         isItemInCart(firebaseDatabase, item, userId);
+
+                        if (item.getDiscount() >= discountThreshold)
+                            showingItems.add(item);
                     }
                 }
                 adapter.notifyDataSetChanged();
-                allItems.clear();
-                allItems.addAll(showingItems);
             }
 
             @Override
@@ -177,8 +179,41 @@ public class DiscountsManager {
         });
     }
 
+    public void sortItemsAlphabetically() {
+        Collections.sort(showingItems, new Comparator<Item>() {
+            public int compare(Item item1, Item item2) {
+                return item1.getName().compareTo(item2.getName());
+            }
+        });
+        adapter.notifyDataSetChanged();
+    }
 
+    public void sortItemsByDiscount() {
+        Collections.sort(showingItems, new Comparator<Item>() {
+            public int compare(Item item1, Item item2) {
+                return (int) (item2.getDiscount() - item1.getDiscount());
+            }
+        });
+        adapter.notifyDataSetChanged();
+    }
 
+    public void sortItemsByPriceAsc() {
+        Collections.sort(showingItems, new Comparator<Item>() {
+            public int compare(Item item1, Item item2) {
+                return (int) (item1.getPrice() - item2.getPrice());
+            }
+        });
+        adapter.notifyDataSetChanged();
+    }
+
+    public void sortItemsByPriceDesc() {
+        Collections.sort(showingItems, new Comparator<Item>() {
+            public int compare(Item item1, Item item2) {
+                return (int) (item2.getPrice() - item1.getPrice());
+            }
+        });
+        adapter.notifyDataSetChanged();
+    }
 
     void showTopDiscounts(ArrayList<Item> itemList) {
         allItems = itemList;
@@ -186,5 +221,10 @@ public class DiscountsManager {
 
     public ArrayList<Item> getShowingItems() {
         return showingItems;
+    }
+
+    public void changeDiscountThreshold(int threshold) {
+        getTopDiscounts(threshold);
+        adapter.notifyDataSetChanged();
     }
 }

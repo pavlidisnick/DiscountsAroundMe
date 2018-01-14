@@ -2,27 +2,35 @@ package com.tl.discountsaroundme.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.entities.Item;
@@ -38,12 +46,9 @@ public class ItemsReviewOptionActivity extends AppCompatActivity implements View
     private static final int SELECTED_PICTURE = 100;
     private static final int CAMERA_REQUEST = 1888;
     private static final String TAG = "aa";
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("/shops");
-    DatabaseReference databaseItem = FirebaseDatabase.getInstance().getReference("items");
-
-
     private static final int EXPORT_DATE = 9999;
+
+    DatabaseReference databaseItem = FirebaseDatabase.getInstance().getReference("items");
 
     ImageView imageView;
 
@@ -53,11 +58,12 @@ public class ItemsReviewOptionActivity extends AppCompatActivity implements View
     Uri imageUri;
     UploadTask uploadTask;
 
-    String name, deScription, category, link, shopName;
+    String name, deScription, category, link, shopName,priceBeforeChange,discountBeforeChange;
+
     double price, discount;
     Date expirationDate;
     Item item = new Item();
-
+    int MaxUploadTime = 40000; //set Max time for uploading to 40 seconds
 
 
     @Override
@@ -77,7 +83,7 @@ public class ItemsReviewOptionActivity extends AppCompatActivity implements View
        gallery = findViewById(R.id.editItemGallery);
 
 
-       getShopName();
+
         Intent intent = getIntent();
         item = (Item) intent.getSerializableExtra("item");
        setItemsBeforeEdit();
@@ -96,7 +102,7 @@ public class ItemsReviewOptionActivity extends AppCompatActivity implements View
             }
         });
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openGallery();
@@ -114,9 +120,25 @@ public class ItemsReviewOptionActivity extends AppCompatActivity implements View
     }
 
     private void setItemsBeforeEdit() {
-        String id = databaseItem.push().getKey();
+        databaseItem.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                name = (String) dataSnapshot.child(item.getId()).child("name").getValue();
+                deScription = (String) dataSnapshot.child(item.getId()).child("description").getValue();
+                link = (String) dataSnapshot.child(item.getId()).child("picture").getValue();
+                category = (String) dataSnapshot.child(item.getId()).child("type").getValue();
+                discountBeforeChange = String.valueOf( dataSnapshot.child(item.getId()).child("discount").getValue());
+                priceBeforeChange = String.valueOf(dataSnapshot.child(item.getId()).child("price").getValue());
+                Log.i(TAG," LOOK : " +name+deScription+link+category+discountBeforeChange+priceBeforeChange);
 
-        Log.i(TAG,"LOOKKKKK" +item.getId());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
           editName.setText(item.getName());
           expirationDate = item.getExpirationDate();
           editPrice.setText(String.valueOf(item.getPrice()));
@@ -124,7 +146,6 @@ public class ItemsReviewOptionActivity extends AppCompatActivity implements View
           editDescription.setText(item.getDescription());
           editCategory.setText(item.getType());
         Glide.with(getApplicationContext()).load(item.getPicture()).into(imageView);
-
 
     }
 
@@ -177,36 +198,91 @@ public class ItemsReviewOptionActivity extends AppCompatActivity implements View
         }
     }
 
-    public void getShopName() {
-
-        if (user != null) {
-            final String uid = user.getUid();
-
-            categoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                        String ID = itemSnapshot.child("ownerUID").getValue(String.class);
-                        if (ID != null && ID.matches(uid)) {
-                            shopName = itemSnapshot.child("name").getValue(String.class);
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
 
     @Override
     public void onClick(View view) {
-        if (view.equals(submit) ){
-
+        if (view.equals(submit) && dataChange() ){
+            uploadData();
         }
         else if (view.equals(findViewById(R.id.back_button)))
             this.finish();
+    }
+
+    public void toast(String messageToDisplay) {
+        Toast.makeText(getApplicationContext(), messageToDisplay, Toast.LENGTH_SHORT).show();
+    }
+
+    private void uploadData() {
+        if(!checkYourConnection()){
+            toast("Check your internet connection");
+    }
+    else{
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            FirebaseStorage.getInstance().setMaxUploadRetryTimeMillis(MaxUploadTime);
+            final StorageReference storageRef = storage.getReference();
+
+            final ProgressDialog pd = ProgressDialog.show(this, "", "Uploading...");
+
+            StorageReference imageRef = storageRef.child("images/" + imageUri.getLastPathSegment());
+            uploadTask = imageRef.putFile(imageUri);
+
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    link = downloadUrl != null ? downloadUrl.toString() : null;
+
+                    try {
+                        price = Double.parseDouble(priceBeforeChange);
+                        discount = Double.parseDouble(discountBeforeChange);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    databaseItem.child(item.getId()).child("name").setValue(editName.getText().toString());
+                    databaseItem.child(item.getId()).child("description").setValue(editDescription.getText().toString());
+                    databaseItem.child(item.getId()).child("picture").setValue(link);
+                    databaseItem.child(item.getId()).child("discount").setValue(discount);
+                    databaseItem.child(item.getId()).child("price").setValue(price);
+                    databaseItem.child(item.getId()).child("type").setValue(editCategory.getText().toString());
+                    databaseItem.child(item.getId()).child("expirationDate").setValue(expirationDate);
+
+                    pd.dismiss();
+                    toast("Item added successfully");
+                    finish();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    pd.dismiss();
+                    toast("Error while uploading");
+                }
+            });
+    }
+    }
+
+    private boolean checkYourConnection() {
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm != null ? cm.getActiveNetworkInfo() : null;
+
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    private boolean dataChange() {
+        if(!link.isEmpty()){
+            return true;
+        }
+        else if(!editName.getText().toString().isEmpty() ){
+            return true;
+        }else if(!editDescription.getText().toString().isEmpty() ){
+                return true;
+        }else if(!editCategory.getText().toString().isEmpty() ){
+            return true;
+        }else if(!editPrice.getText().toString().isEmpty() ){
+            return true;
+        }else if(!editDiscount.getText().toString().isEmpty() ){
+            return true;
+        }
+
+        return false;
     }
 }

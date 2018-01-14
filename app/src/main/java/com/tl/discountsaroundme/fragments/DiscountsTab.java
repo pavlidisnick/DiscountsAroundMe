@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.BuildConfig;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
+import com.tl.discountsaroundme.activities.FeedbackActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.activities.MyDiscountsActivity;
 import com.tl.discountsaroundme.activities.ReportBugActivity;
@@ -174,6 +175,10 @@ public class DiscountsTab extends Fragment {
                     case R.id.report_bug:
                         Intent reportBugActivity = new Intent(getActivity(), ReportBugActivity.class);
                         startActivity(reportBugActivity);
+                        break;
+                    case R.id.feedback:
+                        Intent feedbackActivity = new Intent(getActivity(), FeedbackActivity.class);
+                        startActivity(feedbackActivity);
                         break;
                 }
 

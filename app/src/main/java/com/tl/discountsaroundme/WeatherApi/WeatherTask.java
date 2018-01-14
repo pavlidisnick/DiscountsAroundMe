@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tl.discountsaroundme.ShoppingCart;
+import com.tl.discountsaroundme.UserPreferences;
 import com.tl.discountsaroundme.WeatherApi.WeatherAPIModel.OpenWeatherMap;
 import java.lang.reflect.Type;
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -18,7 +19,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class WeatherTask extends AsyncTask<String, Void, String> {
     ProgressDialog pd = new ProgressDialog(getApplicationContext());
-    OpenWeatherMap openWeatherMap = new OpenWeatherMap();
+    public static OpenWeatherMap openWeatherMap = new OpenWeatherMap();
 
     private void toast(String display) {
         Toast.makeText(getApplicationContext(), display, Toast.LENGTH_SHORT).show();
@@ -47,6 +48,7 @@ public class WeatherTask extends AsyncTask<String, Void, String> {
         if (s.contains("Error: not found city")) {
             return;
         }
+        UserPreferences.saveDataString("Forecast",s);
         Gson gson = new Gson();
         Type mType = new TypeToken<OpenWeatherMap>() {
         }.getType();

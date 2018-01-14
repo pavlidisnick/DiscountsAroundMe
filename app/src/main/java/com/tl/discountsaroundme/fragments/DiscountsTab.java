@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.BuildConfig;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.WeatherApi.WeatherActivity;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
@@ -159,7 +160,11 @@ public class DiscountsTab extends Fragment {
                 } else if (id == R.id.nav_shopping_cart) {
                     Intent shoppingCartActivity = new Intent(getActivity(), ShoppingCartActivity.class);
                     startActivity(shoppingCartActivity);
+                } else if (id == R.id.weather){
+                    Intent WeatherActivity = new Intent(getActivity(), com.tl.discountsaroundme.WeatherApi.WeatherActivity.class);
+                    startActivity(WeatherActivity);
                 }
+
 
                 DrawerLayout drawer = mDrawerLayout.findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);

@@ -1,25 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryWhite"
     android:orientation="vertical">
 
+
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="500dp"
         android:background="@drawable/gradient_blue" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="210dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:background="@drawable/bg_white_wavy_overlay" />
 
-    <ImageView
-        android:id="@+id/IVWeather"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:contentDescription="Weather image" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvWeatherActivity"
+            android:layout_width="218dp"
+            android:layout_height="wrap_content"
+            android:text="Today's Weather Forecast"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="20sp"
+            android:textStyle="italic" />
+
+        <ImageView
+            android:id="@+id/IVWeather"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+
+            android:contentDescription="Weather image" />
+
+        <TextView
+            android:id="@+id/tvWeatherCondition"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="weather Condition"
+            android:textAlignment="viewStart"
+            android:textAllCaps="true"
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="20sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/tvTemperature"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="34"
+            android:textAlignment="viewStart"
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvCityName"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="cityname"
+            android:textAlignment="viewStart"
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvForecastTime"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="TIme TIME"
+            android:textAlignment="viewStart"
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvCurrentTime"
+            android:layout_marginTop="20sp"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Current TIME"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="15sp"
+            />
+
+    </LinearLayout>
+
+
 
 </FrameLayout>

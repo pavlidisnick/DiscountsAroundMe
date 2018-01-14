@@ -99,6 +99,7 @@
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity android:name=".WeatherApi.WeatherActivity"></activity>
         <activity android:name=".activities.ReportBugActivity" />
+        <activity android:name=".activities.FeedbackActivity" />
     </application>
 
 </manifest>

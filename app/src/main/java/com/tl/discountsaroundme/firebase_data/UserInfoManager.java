@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -17,6 +16,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.entities.User;
+import com.tl.discountsaroundme.ui_controllers.GlideApp;
+
+import java.util.Objects;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -36,8 +38,9 @@ public class UserInfoManager {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     currentUser = dataSnapshot.getValue(User.class);
-                    Glide.with(getApplicationContext())
+                    GlideApp.with(getApplicationContext())
                             .load(currentUser.getImage())
+                            .circleCrop()
                             .into(imageView);
                 }
             }
@@ -112,7 +115,7 @@ public class UserInfoManager {
     }
 
     private void userConfirmation(String password) {
-        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), password);
+        AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(user.getEmail()), password);
         user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -123,9 +126,5 @@ public class UserInfoManager {
 
     private void toastMessage(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    public void changeUserPicture(String imageString) {
-        dbRef.child("users").child(user.getUid()).child("image").setValue(imageString);
     }
 }

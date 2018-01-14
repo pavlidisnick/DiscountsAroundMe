@@ -117,7 +117,6 @@ public class AddDiscountsActivity extends AppCompatActivity implements View.OnCl
     public void openGallery() {
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, SELECTED_PICTURE);
-
     }
 
     public void openCamera() {

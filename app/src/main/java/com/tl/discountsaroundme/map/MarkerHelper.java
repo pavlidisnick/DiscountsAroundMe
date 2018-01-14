@@ -1,10 +1,9 @@
 package com.tl.discountsaroundme.map;
 
-
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.support.v4.app.Fragment;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -17,30 +16,29 @@ import com.tl.discountsaroundme.entities.Store;
 
 import java.util.ArrayList;
 
-
 public class MarkerHelper {
-    private Fragment fragment;
+    private Activity activity;
     private GoogleMap googleMap;
 
-    public MarkerHelper(Fragment fragment, GoogleMap googleMap) {
-        this.fragment = fragment;
+    public MarkerHelper(Activity activity, GoogleMap googleMap) {
+        this.activity = activity;
         this.googleMap = googleMap;
     }
 
-    private Drawable getDrawableByType(String code) {
-        return fragment.getResources().getDrawable(getDrawableId(code));
+    public Drawable getDrawableByType(String code) {
+        return activity.getResources().getDrawable(getDrawableId(code));
     }
 
     private int getDrawableId(String code) {
         int i = -1;
-        for (String cc : fragment.getResources().getStringArray(R.array.codes)) {
+        for (String cc : activity.getResources().getStringArray(R.array.codes)) {
             i++;
             if (cc.equals(code))
                 break;
         }
         try {
-            String resource = fragment.getResources().getStringArray(R.array.names)[i];
-            return fragment.getResources().getIdentifier(resource, "drawable", fragment.getActivity().getPackageName());
+            String resource = activity.getResources().getStringArray(R.array.names)[i];
+            return activity.getResources().getIdentifier(resource, "drawable", activity.getPackageName());
         } catch (Exception e) {
             return R.drawable.marker_shop;
         }

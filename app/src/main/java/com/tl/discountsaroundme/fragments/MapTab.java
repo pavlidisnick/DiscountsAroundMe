@@ -31,11 +31,11 @@ import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.UserPreferences;
 import com.tl.discountsaroundme.WeatherApi.WeatherApiCommon;
 import com.tl.discountsaroundme.WeatherApi.WeatherTask;
-import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;
 import com.tl.discountsaroundme.map.MarkerHelper;
+import com.tl.discountsaroundme.map.NearbyStoreList;
 import com.tl.discountsaroundme.map.SetSearchBar;
 import com.tl.discountsaroundme.services.GPSTracker;
 
@@ -43,7 +43,7 @@ import java.util.ArrayList;
 
 
 public class MapTab extends Fragment {
-    public static double distance = 1; // in km
+    public static double distance = 1;
     private MapView mMapView;
     private GPSTracker gps;
     private GoogleMap googleMap;
@@ -59,7 +59,7 @@ public class MapTab extends Fragment {
         final StoreManager storeManager = new StoreManager();
 
         final DiscountsManager discountsManager = new DiscountsManager();
-        discountsManager.fillListWithDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue, MainActivity.USER_ID);
+        discountsManager.fillListWithDiscounts(FirebaseDatabase.getInstance());
 
         new UserPreferences();
         nearbyOffersCheck = rootView.findViewById(R.id.nearbyOffers_check);
@@ -85,12 +85,14 @@ public class MapTab extends Fragment {
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
-                markerHelper = new MarkerHelper(MapTab.this, googleMap);
+                markerHelper = new MarkerHelper(getActivity(), googleMap);
                 SetSearchBar setSearchBar = new SetSearchBar(mSearchView, storeManager, markerHelper);
                 mSearchView.setOnQueryChangeListener(setSearchBar);
                 mSearchView.setOnBindSuggestionCallback(setSearchBar);
 
-                gps = new GPSTracker(getActivity(), storeManager, discountsManager, markerHelper);
+                NearbyStoreList nearbyStoreList = new NearbyStoreList(getActivity(), googleMap, storeManager);
+
+                gps = new GPSTracker(getActivity(), storeManager, discountsManager, markerHelper, nearbyStoreList);
 
                 //Get User Preferences on nearby offers checkbox and function accordingly
                 nearbyOffersCheck.setChecked(UserPreferences.getDataBool("NearbyOffersCheck"));

@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.fragments;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -16,43 +17,60 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.BuildConfig;
 import com.tl.discountsaroundme.R;
-import com.tl.discountsaroundme.WeatherApi.WeatherActivity;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
-import com.tl.discountsaroundme.activities.LoginActivity;
+import com.tl.discountsaroundme.activities.FeedbackActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.activities.MyDiscountsActivity;
+import com.tl.discountsaroundme.activities.ReportBugActivity;
 import com.tl.discountsaroundme.activities.ShoppingCartActivity;
 import com.tl.discountsaroundme.discounts.AddCategoryToLayout;
 import com.tl.discountsaroundme.discounts.FetchCategories;
 import com.tl.discountsaroundme.discounts.Search;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.SearchHistory;
+import com.tl.discountsaroundme.ui_controllers.GlideApp;
 import com.tl.discountsaroundme.ui_controllers.ItemSpaceDecoration;
 import com.tl.discountsaroundme.ui_controllers.ItemViewAdapter;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
-public class DiscountsTab extends Fragment {
-    public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
+public class DiscountsTab extends Fragment implements View.OnClickListener {
 
+    public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
     public static int discountValue = 30;
+    DatabaseReference myRef;
+    String uri;
     private DrawerLayout mDrawerLayout;
     private DiscountsManager discountsManager = new DiscountsManager();
     private Search search;
 
+    private FrameLayout displayOptions;
+
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab_discounts, container, false);
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.item_grid);
@@ -90,6 +108,8 @@ public class DiscountsTab extends Fragment {
 
         setDrawer(mSearchView);
 
+        setUpOptions(rootView);
+
         return rootView;
     }
 
@@ -103,9 +123,138 @@ public class DiscountsTab extends Fragment {
         mSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
             @Override
             public void onActionMenuItemSelected(MenuItem item) {
-                startVoiceRecognitionActivity();
+                if (item.getItemId() == R.id.search_voice_btn)
+                    startVoiceRecognitionActivity();
+                else
+                    showMenu();
             }
         });
+    }
+
+    private void setUpOptions(View rootView) {
+        displayOptions = rootView.findViewById(R.id.itemDisplayOptions);
+        ImageView closeView = rootView.findViewById(R.id.close_options);
+        closeView.setOnClickListener(this);
+
+        final CheckBox alphabeticallyCheckBox = rootView.findViewById(R.id.alphabeticallyCheckBox);
+        final CheckBox priceCheckBox = rootView.findViewById(R.id.priceCheckBox);
+        final CheckBox discountCheckBox = rootView.findViewById(R.id.discountCheckBox);
+        final CheckBox ascendingCheckBox = rootView.findViewById(R.id.ascendingCheckBox);
+        final CheckBox descendingCheckBox = rootView.findViewById(R.id.descendingCheckBox);
+
+        ascendingCheckBox.setEnabled(false);
+        descendingCheckBox.setEnabled(false);
+
+        alphabeticallyCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    priceCheckBox.setChecked(false);
+                    discountCheckBox.setChecked(false);
+
+                    ascendingCheckBox.setEnabled(false);
+                    descendingCheckBox.setEnabled(false);
+
+                    discountsManager.sortItemsAlphabetically();
+                }
+            }
+        });
+
+        discountCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    alphabeticallyCheckBox.setChecked(false);
+                    priceCheckBox.setChecked(false);
+
+                    ascendingCheckBox.setEnabled(false);
+                    descendingCheckBox.setEnabled(false);
+
+                    discountsManager.sortItemsByDiscount();
+                }
+            }
+        });
+
+        priceCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    alphabeticallyCheckBox.setChecked(false);
+                    discountCheckBox.setChecked(false);
+
+                    ascendingCheckBox.setEnabled(true);
+                    descendingCheckBox.setEnabled(true);
+
+                    ascendingCheckBox.setChecked(true);
+                    discountsManager.sortItemsByPriceAsc();
+                } else {
+                    ascendingCheckBox.setEnabled(false);
+                    descendingCheckBox.setEnabled(false);
+                }
+            }
+        });
+
+        ascendingCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    descendingCheckBox.setChecked(false);
+                    discountsManager.sortItemsByPriceAsc();
+                }
+            }
+        });
+
+        descendingCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    ascendingCheckBox.setChecked(false);
+                    discountsManager.sortItemsByPriceDesc();
+                }
+            }
+        });
+
+        SeekBar seekBar = rootView.findViewById(R.id.thresholdSeekBar);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                discountValue = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                discountsManager.changeDiscountThreshold(discountValue);
+            }
+        });
+    }
+
+    private void showMenu() {
+        displayOptions.setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.SlideInDown)
+                .duration(400)
+                .playOn(displayOptions);
+    }
+
+    private void hideMenu() {
+        YoYo.with(Techniques.SlideOutUp)
+                .duration(400)
+                .onEnd(new YoYo.AnimatorCallback() {
+                    @Override
+                    public void call(Animator animator) {
+                        displayOptions.setVisibility(View.INVISIBLE);
+                    }
+                })
+                .playOn(displayOptions);
+    }
+
+    @Override
+    public void onClick(View v) {
+        hideMenu();
     }
 
     private void decorate(RecyclerView recyclerView) {
@@ -115,7 +264,7 @@ public class DiscountsTab extends Fragment {
     }
 
     public void setDrawer(FloatingSearchView mSearchView) {
-        mDrawerLayout = getActivity().findViewById(R.id.drawer_layout);
+        mDrawerLayout = Objects.requireNonNull(getActivity()).findViewById(R.id.drawer_layout);
 
         mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
 
@@ -141,30 +290,37 @@ public class DiscountsTab extends Fragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
 
-                if (id == R.id.nav_insert_item) {
-                    Intent addDiscount = new Intent(getContext(), AddDiscountsActivity.class);
-                    startActivity(addDiscount);
-                } else if (id == R.id.nav_my_discounts) {
-                    Intent MyDiscounts = new Intent(getContext(), MyDiscountsActivity.class);
-                    startActivity(MyDiscounts);
-                } else if (id == R.id.nav_logout) {
-                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                    mAuth.signOut();
-
-                    Intent login = new Intent(getContext(), LoginActivity.class);
-                    login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(login);
-                } else if (id == R.id.nav_profile) {
-                    Intent userProfileActivity = new Intent(getActivity(), com.tl.discountsaroundme.activities.UserProfileActivity.class);
-                    startActivity(userProfileActivity);
-                } else if (id == R.id.nav_shopping_cart) {
-                    Intent shoppingCartActivity = new Intent(getActivity(), ShoppingCartActivity.class);
-                    startActivity(shoppingCartActivity);
-                } else if (id == R.id.weather){
-                    Intent WeatherActivity = new Intent(getActivity(), com.tl.discountsaroundme.WeatherApi.WeatherActivity.class);
-                    startActivity(WeatherActivity);
+                switch (id) {
+                    case R.id.nav_insert_item:
+                        Intent addDiscount = new Intent(getContext(), AddDiscountsActivity.class);
+                        startActivity(addDiscount);
+                        break;
+                    case R.id.nav_my_discounts:
+                        Intent MyDiscounts = new Intent(getContext(), MyDiscountsActivity.class);
+                        startActivity(MyDiscounts);
+                        break;
+                    case R.id.nav_logout:
+                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                        mAuth.signOut();
+                        getActivity().finish();
+                        break;
+                    case R.id.nav_profile:
+                        Intent userProfileActivity = new Intent(getActivity(), com.tl.discountsaroundme.activities.UserProfileActivity.class);
+                        startActivity(userProfileActivity);
+                        break;
+                    case R.id.nav_shopping_cart:
+                        Intent shoppingCartActivity = new Intent(getActivity(), ShoppingCartActivity.class);
+                        startActivity(shoppingCartActivity);
+                        break;
+                    case R.id.report_bug:
+                        Intent reportBugActivity = new Intent(getActivity(), ReportBugActivity.class);
+                        startActivity(reportBugActivity);
+                        break;
+                    case R.id.feedback:
+                        Intent feedbackActivity = new Intent(getActivity(), FeedbackActivity.class);
+                        startActivity(feedbackActivity);
+                        break;
                 }
-
 
                 DrawerLayout drawer = mDrawerLayout.findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
@@ -206,10 +362,29 @@ public class DiscountsTab extends Fragment {
 
                     TextView userEmail = mDrawerLayout.findViewById(R.id.drawerEmail);
                     userEmail.setText(email);
+
+                    ImageView imageDrawer = mDrawerLayout.findViewById(R.id.imageViewDrawerUser);
+
+                    myRef = FirebaseDatabase.getInstance().getReference("users");
+
+                    myRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            uri = (String) dataSnapshot.child(user.getUid()).child("image").getValue();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                    GlideApp.with(getContext())
+                            .load(uri)
+                            .circleCrop()
+                            .into(imageDrawer);
                 }
                 super.onDrawerOpened(drawerView);
             }
         });
     }
-
 }

@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,7 +31,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.tl.discountsaroundme.BuildConfig;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
-import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.activities.MyDiscountsActivity;
 import com.tl.discountsaroundme.activities.ShoppingCartActivity;
@@ -41,29 +39,27 @@ import com.tl.discountsaroundme.discounts.FetchCategories;
 import com.tl.discountsaroundme.discounts.Search;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.SearchHistory;
+import com.tl.discountsaroundme.ui_controllers.GlideApp;
 import com.tl.discountsaroundme.ui_controllers.ItemSpaceDecoration;
 import com.tl.discountsaroundme.ui_controllers.ItemViewAdapter;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
 public class DiscountsTab extends Fragment {
 
-    FirebaseDatabase  mFirebaseDatabase;
-    DatabaseReference myRef;
-    String userID;
-
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
-
     public static int discountValue = 30;
+    DatabaseReference myRef;
+    String uri;
     private DrawerLayout mDrawerLayout;
     private DiscountsManager discountsManager = new DiscountsManager();
     private Search search;
-    String uri;
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab_discounts, container, false);
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.item_grid);
@@ -126,7 +122,7 @@ public class DiscountsTab extends Fragment {
     }
 
     public void setDrawer(FloatingSearchView mSearchView) {
-        mDrawerLayout = getActivity().findViewById(R.id.drawer_layout);
+        mDrawerLayout = Objects.requireNonNull(getActivity()).findViewById(R.id.drawer_layout);
 
         mSearchView.attachNavigationDrawerToMenuButton(mDrawerLayout);
 
@@ -152,25 +148,28 @@ public class DiscountsTab extends Fragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
 
-                if (id == R.id.nav_insert_item) {
-                    Intent addDiscount = new Intent(getContext(), AddDiscountsActivity.class);
-                    startActivity(addDiscount);
-                } else if (id == R.id.nav_my_discounts) {
-                    Intent MyDiscounts = new Intent(getContext(), MyDiscountsActivity.class);
-                    startActivity(MyDiscounts);
-                } else if (id == R.id.nav_logout) {
-                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                    mAuth.signOut();
-
-                    Intent login = new Intent(getContext(), LoginActivity.class);
-                    login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(login);
-                } else if (id == R.id.nav_profile) {
-                    Intent userProfileActivity = new Intent(getActivity(), com.tl.discountsaroundme.activities.UserProfileActivity.class);
-                    startActivity(userProfileActivity);
-                } else if (id == R.id.nav_shopping_cart) {
-                    Intent shoppingCartActivity = new Intent(getActivity(), ShoppingCartActivity.class);
-                    startActivity(shoppingCartActivity);
+                switch (id) {
+                    case R.id.nav_insert_item:
+                        Intent addDiscount = new Intent(getContext(), AddDiscountsActivity.class);
+                        startActivity(addDiscount);
+                        break;
+                    case R.id.nav_my_discounts:
+                        Intent MyDiscounts = new Intent(getContext(), MyDiscountsActivity.class);
+                        startActivity(MyDiscounts);
+                        break;
+                    case R.id.nav_logout:
+                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                        mAuth.signOut();
+                        getActivity().finish();
+                        break;
+                    case R.id.nav_profile:
+                        Intent userProfileActivity = new Intent(getActivity(), com.tl.discountsaroundme.activities.UserProfileActivity.class);
+                        startActivity(userProfileActivity);
+                        break;
+                    case R.id.nav_shopping_cart:
+                        Intent shoppingCartActivity = new Intent(getActivity(), ShoppingCartActivity.class);
+                        startActivity(shoppingCartActivity);
+                        break;
                 }
 
                 DrawerLayout drawer = mDrawerLayout.findViewById(R.id.drawer_layout);
@@ -214,20 +213,14 @@ public class DiscountsTab extends Fragment {
                     TextView userEmail = mDrawerLayout.findViewById(R.id.drawerEmail);
                     userEmail.setText(email);
 
-                    //TODO: change setImageURI and set image Profile
                     ImageView imageDrawer = mDrawerLayout.findViewById(R.id.imageViewDrawerUser);
 
-
-
-                    mFirebaseDatabase = FirebaseDatabase.getInstance();
-                    myRef = mFirebaseDatabase.getReference("users");
-
-                    userID = user.getUid();
+                    myRef = FirebaseDatabase.getInstance().getReference("users");
 
                     myRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            uri = (String) dataSnapshot.child(userID).child("image").getValue();
+                            uri = (String) dataSnapshot.child(user.getUid()).child("image").getValue();
                         }
 
                         @Override
@@ -235,13 +228,10 @@ public class DiscountsTab extends Fragment {
 
                         }
                     });
-                    Glide.with(getContext()).load(uri).into(imageDrawer);
-
-//                    Uri uriImage = Uri.parse(uri);
-//                    imageDrawer.setImageURI(null);
-//                   imageDrawer.setImageURI(uriImage);
-                    // Toast.makeText(getContext(),uri,Toast.LENGTH_LONG).show();
-
+                    GlideApp.with(getContext())
+                            .load(uri)
+                            .circleCrop()
+                            .into(imageDrawer);
                 }
                 super.onDrawerOpened(drawerView);
             }

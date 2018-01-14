@@ -36,6 +36,7 @@ import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;
 import com.tl.discountsaroundme.map.MarkerHelper;
+import com.tl.discountsaroundme.map.NearbyStoreList;
 import com.tl.discountsaroundme.map.SetSearchBar;
 import com.tl.discountsaroundme.services.GPSTracker;
 
@@ -85,12 +86,14 @@ public class MapTab extends Fragment {
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
-                markerHelper = new MarkerHelper(MapTab.this, googleMap);
+                markerHelper = new MarkerHelper(getActivity(), googleMap);
                 SetSearchBar setSearchBar = new SetSearchBar(mSearchView, storeManager, markerHelper);
                 mSearchView.setOnQueryChangeListener(setSearchBar);
                 mSearchView.setOnBindSuggestionCallback(setSearchBar);
 
-                gps = new GPSTracker(getActivity(), storeManager, discountsManager, markerHelper);
+                NearbyStoreList nearbyStoreList = new NearbyStoreList(getActivity(), googleMap, storeManager);
+
+                gps = new GPSTracker(getActivity(), storeManager, discountsManager, markerHelper, nearbyStoreList);
 
                 //Get User Preferences on nearby offers checkbox and function accordingly
                 nearbyOffersCheck.setChecked(UserPreferences.getDataBool("NearbyOffersCheck"));

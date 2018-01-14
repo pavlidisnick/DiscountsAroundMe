@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.entities.Store;
@@ -20,6 +21,7 @@ import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;
 import com.tl.discountsaroundme.fragments.MapTab;
 import com.tl.discountsaroundme.map.MarkerHelper;
+import com.tl.discountsaroundme.map.NearbyStoreList;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
@@ -38,13 +40,15 @@ public class GPSTracker extends Service implements LocationListener {
     private DiscountsManager discountsManager;
     private MarkerHelper markerHelper;
     private boolean isNotificationsEnabled = false;
+    private NearbyStoreList nearbyStoreList;
 
     public GPSTracker(Activity activity, StoreManager storeManager,
-                      DiscountsManager discountsManager, MarkerHelper markerHelper) {
+                      DiscountsManager discountsManager, MarkerHelper markerHelper, NearbyStoreList nearbyStoreList) {
         this.activity = activity;
         this.storeManager = storeManager;
         this.discountsManager = discountsManager;
         this.markerHelper = markerHelper;
+        this.nearbyStoreList = nearbyStoreList;
         getLocation();
     }
 
@@ -79,6 +83,9 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        nearbyStoreList.showNearbyStores(latLng, MapTab.distance);
+
         if (isNotificationsEnabled) {
             try {
                 showNearbyAndNotify();

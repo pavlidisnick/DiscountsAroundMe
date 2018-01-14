@@ -31,7 +31,6 @@ import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.UserPreferences;
 import com.tl.discountsaroundme.WeatherApi.WeatherApiCommon;
 import com.tl.discountsaroundme.WeatherApi.WeatherTask;
-import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.StoreManager;
@@ -44,7 +43,7 @@ import java.util.ArrayList;
 
 
 public class MapTab extends Fragment {
-    public static double distance = 1; // in km
+    public static double distance = 1;
     private MapView mMapView;
     private GPSTracker gps;
     private GoogleMap googleMap;
@@ -60,7 +59,7 @@ public class MapTab extends Fragment {
         final StoreManager storeManager = new StoreManager();
 
         final DiscountsManager discountsManager = new DiscountsManager();
-        discountsManager.fillListWithDiscounts(FirebaseDatabase.getInstance(), DiscountsTab.discountValue, MainActivity.USER_ID);
+        discountsManager.fillListWithDiscounts(FirebaseDatabase.getInstance());
 
         new UserPreferences();
         nearbyOffersCheck = rootView.findViewById(R.id.nearbyOffers_check);

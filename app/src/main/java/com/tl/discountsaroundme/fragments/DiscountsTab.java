@@ -1,5 +1,6 @@
 package com.tl.discountsaroundme.fragments;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -16,11 +17,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -50,7 +57,7 @@ import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
-public class DiscountsTab extends Fragment {
+public class DiscountsTab extends Fragment implements View.OnClickListener {
 
     public static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
     public static int discountValue = 30;
@@ -59,6 +66,8 @@ public class DiscountsTab extends Fragment {
     private DrawerLayout mDrawerLayout;
     private DiscountsManager discountsManager = new DiscountsManager();
     private Search search;
+
+    private FrameLayout displayOptions;
 
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,6 +108,8 @@ public class DiscountsTab extends Fragment {
 
         setDrawer(mSearchView);
 
+        setUpOptions(rootView);
+
         return rootView;
     }
 
@@ -112,9 +123,138 @@ public class DiscountsTab extends Fragment {
         mSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
             @Override
             public void onActionMenuItemSelected(MenuItem item) {
-                startVoiceRecognitionActivity();
+                if (item.getItemId() == R.id.search_voice_btn)
+                    startVoiceRecognitionActivity();
+                else
+                    showMenu();
             }
         });
+    }
+
+    private void setUpOptions(View rootView) {
+        displayOptions = rootView.findViewById(R.id.itemDisplayOptions);
+        ImageView closeView = rootView.findViewById(R.id.close_options);
+        closeView.setOnClickListener(this);
+
+        final CheckBox alphabeticallyCheckBox = rootView.findViewById(R.id.alphabeticallyCheckBox);
+        final CheckBox priceCheckBox = rootView.findViewById(R.id.priceCheckBox);
+        final CheckBox discountCheckBox = rootView.findViewById(R.id.discountCheckBox);
+        final CheckBox ascendingCheckBox = rootView.findViewById(R.id.ascendingCheckBox);
+        final CheckBox descendingCheckBox = rootView.findViewById(R.id.descendingCheckBox);
+
+        ascendingCheckBox.setEnabled(false);
+        descendingCheckBox.setEnabled(false);
+
+        alphabeticallyCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    priceCheckBox.setChecked(false);
+                    discountCheckBox.setChecked(false);
+
+                    ascendingCheckBox.setEnabled(false);
+                    descendingCheckBox.setEnabled(false);
+
+                    discountsManager.sortItemsAlphabetically();
+                }
+            }
+        });
+
+        discountCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    alphabeticallyCheckBox.setChecked(false);
+                    priceCheckBox.setChecked(false);
+
+                    ascendingCheckBox.setEnabled(false);
+                    descendingCheckBox.setEnabled(false);
+
+                    discountsManager.sortItemsByDiscount();
+                }
+            }
+        });
+
+        priceCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    alphabeticallyCheckBox.setChecked(false);
+                    discountCheckBox.setChecked(false);
+
+                    ascendingCheckBox.setEnabled(true);
+                    descendingCheckBox.setEnabled(true);
+
+                    ascendingCheckBox.setChecked(true);
+                    discountsManager.sortItemsByPriceAsc();
+                } else {
+                    ascendingCheckBox.setEnabled(false);
+                    descendingCheckBox.setEnabled(false);
+                }
+            }
+        });
+
+        ascendingCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    descendingCheckBox.setChecked(false);
+                    discountsManager.sortItemsByPriceAsc();
+                }
+            }
+        });
+
+        descendingCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    ascendingCheckBox.setChecked(false);
+                    discountsManager.sortItemsByPriceDesc();
+                }
+            }
+        });
+
+        SeekBar seekBar = rootView.findViewById(R.id.thresholdSeekBar);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                discountValue = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                discountsManager.changeDiscountThreshold(discountValue);
+            }
+        });
+    }
+
+    private void showMenu() {
+        displayOptions.setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.SlideInDown)
+                .duration(400)
+                .playOn(displayOptions);
+    }
+
+    private void hideMenu() {
+        YoYo.with(Techniques.SlideOutUp)
+                .duration(400)
+                .onEnd(new YoYo.AnimatorCallback() {
+                    @Override
+                    public void call(Animator animator) {
+                        displayOptions.setVisibility(View.INVISIBLE);
+                    }
+                })
+                .playOn(displayOptions);
+    }
+
+    @Override
+    public void onClick(View v) {
+        hideMenu();
     }
 
     private void decorate(RecyclerView recyclerView) {

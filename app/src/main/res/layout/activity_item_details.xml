@@ -48,7 +48,7 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center"
                 android:scaleType="fitXY"
-                android:src="@drawable/marker_clothing" />
+                android:src="@drawable/marker_shop" />
 
             <TextView
                 android:id="@+id/store"

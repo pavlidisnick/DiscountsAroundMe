@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.ShoppingCart;
 import com.tl.discountsaroundme.entities.Item;
+import com.tl.discountsaroundme.map.MarkerHelper;
 import com.tl.discountsaroundme.ui_controllers.StatusBar;
 
 public class ItemDetailsActivity extends Activity implements View.OnClickListener {
@@ -42,6 +43,10 @@ public class ItemDetailsActivity extends Activity implements View.OnClickListene
 
         Intent intent = getIntent();
         item = (Item) intent.getSerializableExtra("ID");
+
+        ImageView itemType = findViewById(R.id.storeImage);
+        itemType.setImageDrawable(new MarkerHelper(this, null)
+                .getDrawableByType(item.getType().toUpperCase()));
 
         if (item.isInCart()) {
             blueButtonWithCheck();

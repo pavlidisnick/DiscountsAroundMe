@@ -31,14 +31,14 @@
         android:layout_marginRight="20dp"
         android:text="Help us improve our app by telling us what changes you would like to see:"
         android:textColor="#cfffffff"
-        android:textSize="20dp" />
+        android:textSize="18dp" />
 
     <EditText
         android:id="@+id/feedbackContent"
         android:layout_width="match_parent"
         android:layout_height="260dp"
         android:layout_gravity="top"
-        android:layout_marginTop="140dp"
+        android:layout_marginTop="160dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/button_bordered_transparent"

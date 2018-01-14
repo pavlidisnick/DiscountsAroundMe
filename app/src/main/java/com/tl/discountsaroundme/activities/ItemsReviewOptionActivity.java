@@ -2,8 +2,10 @@ package com.tl.discountsaroundme.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
@@ -206,6 +208,8 @@ public class ItemsReviewOptionActivity extends AppCompatActivity implements View
         }
         else if (view.equals(findViewById(R.id.back_button)))
             this.finish();
+        else
+            toast("Something was wrong try again");
     }
 
     public void toast(String messageToDisplay) {
@@ -217,46 +221,65 @@ public class ItemsReviewOptionActivity extends AppCompatActivity implements View
             toast("Check your internet connection");
     }
     else{
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            FirebaseStorage.getInstance().setMaxUploadRetryTimeMillis(MaxUploadTime);
-            final StorageReference storageRef = storage.getReference();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure??")
+                    .setTitle("Alert Edit");
+// Add the buttons
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    FirebaseStorage.getInstance().setMaxUploadRetryTimeMillis(MaxUploadTime);
+                    final StorageReference storageRef = storage.getReference();
 
-            final ProgressDialog pd = ProgressDialog.show(this, "", "Uploading...");
+                    final ProgressDialog pd = ProgressDialog.show(getApplicationContext(), "", "Uploading...");
 
-            StorageReference imageRef = storageRef.child("images/" + imageUri.getLastPathSegment());
-            uploadTask = imageRef.putFile(imageUri);
+                    StorageReference imageRef = storageRef.child("images/" + imageUri.getLastPathSegment());
+                    uploadTask = imageRef.putFile(imageUri);
 
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    link = downloadUrl != null ? downloadUrl.toString() : null;
+                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            link = downloadUrl != null ? downloadUrl.toString() : null;
 
-                    try {
-                        price = Double.parseDouble(priceBeforeChange);
-                        discount = Double.parseDouble(discountBeforeChange);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    databaseItem.child(item.getId()).child("name").setValue(editName.getText().toString());
-                    databaseItem.child(item.getId()).child("description").setValue(editDescription.getText().toString());
-                    databaseItem.child(item.getId()).child("picture").setValue(link);
-                    databaseItem.child(item.getId()).child("discount").setValue(discount);
-                    databaseItem.child(item.getId()).child("price").setValue(price);
-                    databaseItem.child(item.getId()).child("type").setValue(editCategory.getText().toString());
-                    databaseItem.child(item.getId()).child("expirationDate").setValue(expirationDate);
+                            try {
+                                price = Double.parseDouble(priceBeforeChange);
+                                discount = Double.parseDouble(discountBeforeChange);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            databaseItem.child(item.getId()).child("name").setValue(editName.getText().toString());
+                            databaseItem.child(item.getId()).child("description").setValue(editDescription.getText().toString());
+                            databaseItem.child(item.getId()).child("picture").setValue(link);
+                            databaseItem.child(item.getId()).child("discount").setValue(discount);
+                            databaseItem.child(item.getId()).child("price").setValue(price);
+                            databaseItem.child(item.getId()).child("type").setValue(editCategory.getText().toString());
+                            databaseItem.child(item.getId()).child("expirationDate").setValue(expirationDate);
 
-                    pd.dismiss();
-                    toast("Item added successfully");
-                    finish();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    pd.dismiss();
-                    toast("Error while uploading");
+                            pd.dismiss();
+                            toast("Item added successfully");
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            pd.dismiss();
+                            toast("Error while uploading");
+                        }
+                    });
                 }
             });
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    toast("Upload Dismiss");
+                    finish();
+                }
+            });
+// Create the AlertDialog
+            AlertDialog dialog = builder.create();
+            dialog.setIcon(android.R.drawable.ic_dialog_alert);
+            dialog.show();
+
     }
     }
 
@@ -268,21 +291,10 @@ public class ItemsReviewOptionActivity extends AppCompatActivity implements View
     }
 
     private boolean dataChange() {
-        if(!link.isEmpty()){
+        if(!editDiscount.getText().toString().isEmpty()&&!editPrice.getText().toString().isEmpty()&&!link.isEmpty()&& !editName.getText().toString().isEmpty()&&!editDescription.getText().toString().isEmpty()&&!editCategory.getText().toString().isEmpty()) {
             return true;
         }
-        else if(!editName.getText().toString().isEmpty() ){
-            return true;
-        }else if(!editDescription.getText().toString().isEmpty() ){
-                return true;
-        }else if(!editCategory.getText().toString().isEmpty() ){
-            return true;
-        }else if(!editPrice.getText().toString().isEmpty() ){
-            return true;
-        }else if(!editDiscount.getText().toString().isEmpty() ){
-            return true;
-        }
-
-        return false;
+        else
+            return false;
     }
 }

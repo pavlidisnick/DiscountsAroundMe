@@ -98,6 +98,7 @@
             android:name=".activities.ExpirationDateDialogActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity android:name=".WeatherApi.WeatherActivity"></activity>
+        <activity android:name=".activities.ReportBugActivity" />
     </application>
 
 </manifest>

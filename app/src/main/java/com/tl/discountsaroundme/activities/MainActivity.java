@@ -1,13 +1,7 @@
 package com.tl.discountsaroundme.activities;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -24,7 +18,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.tl.discountsaroundme.R;
-import com.tl.discountsaroundme.WeatherApi.WeatherNotificationPublisher;
 import com.tl.discountsaroundme.fragments.DiscountsTab;
 import com.tl.discountsaroundme.fragments.MapTab;
 import com.tl.discountsaroundme.fragments.UserTab;

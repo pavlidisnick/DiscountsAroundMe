@@ -12,6 +12,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.tl.discountsaroundme.R;
@@ -81,16 +86,34 @@ public class GPSTracker extends Service implements LocationListener {
         return location.getLongitude();
     }
 
+    private void showGpsDialog() {
+        @SuppressLint("InflateParams")
+        LinearLayout linearLayout = (LinearLayout) activity.getLayoutInflater().inflate(R.layout.dialog_open_gps, null);
+        Button enableGps = (Button) linearLayout.getChildAt(2);
+
+        final AlertDialog builder = new AlertDialog.Builder(activity).setView(linearLayout).create();
+        enableGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                builder.dismiss();
+            }
+        });
+        builder.show();
+    }
+
     @Override
     public void onLocationChanged(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         nearbyStoreList.showNearbyStores(latLng, MapTab.distance);
 
         float[] results = new float[1];
-        Location.distanceBetween(latLng.latitude, latLng.longitude, lastLocation.getLatitude(), location.getLongitude(), results);
+        if (lastLocation != null)
+            Location.distanceBetween(latLng.latitude, latLng.longitude, lastLocation.getLatitude(), lastLocation.getLongitude(), results);
 
         if (isNotificationsEnabled && (notifyOnceFlag == 1 || results[0] >= notifyEvery)) {
             notifyOnceFlag = 0;
+            lastLocation = location;
             try {
                 showNearbyAndNotify();
             } catch (Exception e) {
@@ -101,7 +124,9 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
-
+        if (LocationManager.NETWORK_PROVIDER.equals(provider)) {
+            showGpsDialog();
+        }
     }
 
     @Override

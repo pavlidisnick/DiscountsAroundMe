@@ -1,0 +1,54 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_location" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Gps is disabled"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:text="Please enable location, the app may not behave properly without it."
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/dialog_exit_button"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="160dp"
+        android:layout_height="36dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_main_style"
+        android:backgroundTint="@color/purple"
+        android:elevation="12dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:text="Enable gps"
+        android:layout_gravity="center"
+        android:textColor="@color/colorPrimaryWhite"
+        android:textSize="14sp" />
+
+</LinearLayout>

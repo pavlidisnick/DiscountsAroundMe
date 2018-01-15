@@ -1,25 +1,18 @@
 package com.tl.discountsaroundme.WeatherApi;
 
-
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tl.discountsaroundme.UserPreferences;
 import com.tl.discountsaroundme.WeatherApi.WeatherAPIModel.OpenWeatherMap;
+
 import java.lang.reflect.Type;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-
-/**
- * Created by rezu on 8/1/2018.
- */
-
 public class WeatherTask extends AsyncTask<String, Void, String> {
-    ProgressDialog pd = new ProgressDialog(getApplicationContext());
-    public static OpenWeatherMap openWeatherMap = new OpenWeatherMap();
 
     private void toast(String display) {
         Toast.makeText(getApplicationContext(), display, Toast.LENGTH_SHORT).show();
@@ -34,7 +27,7 @@ public class WeatherTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        String stream = null;
+        String stream;
         String urlString = params[0];
 
         WeatherApiHelper http = new WeatherApiHelper();
@@ -49,19 +42,14 @@ public class WeatherTask extends AsyncTask<String, Void, String> {
             return;
         }
         //Save data string under user preferences for offline use
-        UserPreferences.saveDataString("Forecast",s);
+        UserPreferences.saveDataString("Forecast", s);
         Gson gson = new Gson();
         Type mType = new TypeToken<OpenWeatherMap>() {
         }.getType();
-        openWeatherMap = gson.fromJson(s, mType);
-        pd.dismiss();
+        OpenWeatherMap openWeatherMap = gson.fromJson(s, mType);
         toast("We successfully got the forecast!");
         //Calculate Item per day suggestion
         WeatherItemCalc weatherItemCalc = new WeatherItemCalc();
         weatherItemCalc.CalculateForecastSuggestions(openWeatherMap.getList());
-        //Start the Weather Activity
-        Intent weatherActivity  = new Intent(getApplicationContext(), WeatherActivity.class);
-        getApplicationContext().startActivity(weatherActivity);
     }
-
 }

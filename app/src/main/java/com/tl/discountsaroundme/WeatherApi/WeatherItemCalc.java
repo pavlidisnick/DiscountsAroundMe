@@ -136,6 +136,7 @@ public class WeatherItemCalc {
 
     public void CalculateForecastSuggestions(List<DayList> weatherList) {
         suggestionPerDayList = new ArrayList<>();
+
         Item item = new Item(null,null,null,34,34,null,null,null,null);
         for (int i = 0; i <= weatherList.size() - 1; i++) {
             suggestionPerDayList.add(i, new SuggestionPerDay(
@@ -186,7 +187,7 @@ public class WeatherItemCalc {
 
     private Date dateFormatChange(String inputDate) {
         DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        DateFormat outFormat = new SimpleDateFormat("EEE dd.MM.yyyy 'at' HH:mm z");
+        DateFormat outFormat = new SimpleDateFormat("EEE, d MMM yyyy 'at' HH:mm z");
         Date date = null;
         try {
             date = inputFormat.parse(inputDate);
@@ -194,12 +195,14 @@ public class WeatherItemCalc {
             e.printStackTrace();
         }
         String outputDate = outFormat.format(date);
+        Date newdate = null;
         try {
-            date = outFormat.parse(outputDate);
+            newdate = outFormat.parse(outputDate);
+            return newdate;
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return date;
+        return newdate;
     }
 
     private void toast(String display) {

@@ -1,17 +1,16 @@
 package com.tl.discountsaroundme.WeatherApi;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -19,6 +18,8 @@ import com.google.gson.reflect.TypeToken;
 import com.tl.discountsaroundme.R;
 import com.tl.discountsaroundme.UserPreferences;
 import com.tl.discountsaroundme.WeatherApi.WeatherAPIModel.OpenWeatherMap;
+import com.tl.discountsaroundme.WeatherApi.WeatherAPIModel.SuggestionPerDay;
+import com.tl.discountsaroundme.activities.ItemDetailsActivity;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
@@ -33,10 +34,10 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
     Button btNotifybutton;
     CheckBox cbPerDay;
     ListView listView;
-    public OpenWeatherMap openWeatherMapActivity = new OpenWeatherMap();
+    public static OpenWeatherMap openWeatherMapActivity = new OpenWeatherMap();
     public boolean PerDayList = false;
-    ArrayList<String> forecastList = new ArrayList<>();
-    DateFormat CurrentTimeFormated = new SimpleDateFormat("EEE dd.MM.yyyy 'at' HH:mm z");
+    ArrayList<SuggestionPerDay> forecastSuggest = new ArrayList<>();
+    DateFormat timeDisplayFormat = new SimpleDateFormat("EEE dd.MM.yyyy 'at' HH:mm z");
     Date CurrentTime;
 
     @Override
@@ -56,7 +57,7 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
         cbPerDay.setOnCheckedChangeListener(this);
         CurrentTime = Calendar.getInstance().getTime();
         try {
-            CurrentTime = CurrentTimeFormated.parse(CurrentTimeFormated.format(CurrentTime));
+            CurrentTime = timeDisplayFormat.parse(timeDisplayFormat.format(CurrentTime));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -68,10 +69,7 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
             WeatherItemCalc weatherItemCalc = new WeatherItemCalc();
             weatherItemCalc.CalculateForecastSuggestions(openWeatherMapActivity.getList());
         }
-
-            setTodayForecast();
-
-
+        setTodayForecast();
         listView = findViewById(R.id.lvListview);
         SuggestionList();
         listView.setOnItemClickListener(this);
@@ -85,11 +83,10 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         PerDayList = isChecked;
-        forecastList.clear();
+        forecastSuggest.clear();
         SuggestionList();
     }
 
@@ -105,8 +102,7 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
                 //If the list is to the end, add the last date to the list
                 if (i == WeatherItemCalc.suggestionPerDayList.size() - 1) {
                     nextdate = i;
-                    forecastList.add(WeatherItemCalc.suggestionPerDayList.get(i).getItemSuggestion() + " " + WeatherItemCalc.suggestionPerDayList.get(i).getWeatherCondition()
-                            + " " + WeatherItemCalc.suggestionPerDayList.get(i).getDateTime().toString());
+                    forecastSuggest.add(WeatherItemCalc.suggestionPerDayList.get(i));
                 }
                 // 0 is equal dates 1 is a date  to come and -1 is a date  past
                 int dateComparison = 0;
@@ -123,16 +119,16 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
                 } else if (dateComparison <= 0) {
                     //a Date Past
                 } else {
-                    forecastList.add(WeatherItemCalc.suggestionPerDayList.get(i).getItemSuggestion() + " " + WeatherItemCalc.suggestionPerDayList.get(i).getWeatherCondition()
-                            + " " + WeatherItemCalc.suggestionPerDayList.get(i).getDateTime().toString());
+                    forecastSuggest.add(WeatherItemCalc.suggestionPerDayList.get(i));
                 }
             }//If the CB is not checked just add all the dates to the list
             else {
-                forecastList.add(WeatherItemCalc.suggestionPerDayList.get(i).getItemSuggestion() + " " + WeatherItemCalc.suggestionPerDayList.get(i).getWeatherCondition()
-                        + " " + WeatherItemCalc.suggestionPerDayList.get(i).getDateTime().toString());
+
+                forecastSuggest.add(WeatherItemCalc.suggestionPerDayList.get(i));
+
             }
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, forecastList);
+        WeatherListViewAdapter adapter = new WeatherListViewAdapter(this,forecastSuggest);
         listView.setAdapter(adapter);
     }
 
@@ -144,13 +140,9 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getApplicationContext(),
-                "Click ListItem Number " + position, Toast.LENGTH_LONG)
-                .show();
-        Toast.makeText(getApplicationContext(),
-                WeatherItemCalc.suggestionPerDayList.get(position).getItemCalculated().getName() + position + WeatherItemCalc.suggestionPerDayList.get(position).getDateTime(), Toast.LENGTH_LONG)
-                .show();
-        //aawjeahweah
+        Intent itemDetailsActivity = new Intent(getApplicationContext(), ItemDetailsActivity.class);
+        itemDetailsActivity.putExtra("ID",WeatherItemCalc.suggestionPerDayList.get(position).getItemCalculated() );
+        getApplicationContext().startActivity(itemDetailsActivity);
     }
 
     public int getTodayForecast(Date currentTime) throws ParseException {
@@ -167,7 +159,7 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
         return todaysForecast;
     }
 
-    public void setTodayForecast()  {
+    public void setTodayForecast() {
         if (!(openWeatherMapActivity == null)) {
             ImageView IvWeather = findViewById(R.id.IVWeather);
             int todaysForecast = 0;
@@ -180,11 +172,8 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
             tvCityName.setText(openWeatherMapActivity.getCity().getName());
             tvWeatherCond.setText(openWeatherMapActivity.getList().get(todaysForecast).getWeather().get(0).getDescription());
             tvTemperature.setText(Double.toString(openWeatherMapActivity.getList().get(todaysForecast).getMain().getTemp()) + " °C");
-            tvForecastTime.setText("Forecast: " + WeatherItemCalc.suggestionPerDayList.get(todaysForecast).getDateTime());
-            tvCurrentTime.setText(CurrentTimeFormated.format(CurrentTime));
+            tvForecastTime.setText("Forecast: " + timeDisplayFormat.format(WeatherItemCalc.suggestionPerDayList.get(todaysForecast).getDateTime()));
+            tvCurrentTime.setText(timeDisplayFormat.format(CurrentTime));
         }
-
     }
-
-
 }

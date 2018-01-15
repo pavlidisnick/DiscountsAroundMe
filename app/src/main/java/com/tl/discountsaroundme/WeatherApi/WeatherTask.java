@@ -13,9 +13,6 @@ import java.lang.reflect.Type;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
-/**
- * Created by rezu on 8/1/2018.
- */
 
 public class WeatherTask extends AsyncTask<String, Void, String> {
     ProgressDialog pd = new ProgressDialog(getApplicationContext());

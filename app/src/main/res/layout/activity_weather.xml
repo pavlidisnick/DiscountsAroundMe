@@ -111,7 +111,7 @@
 
                 <ListView
                     android:id="@+id/lvListview"
-                    android:layout_width="350dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="8dp"
                     android:layout_marginLeft="8dp"

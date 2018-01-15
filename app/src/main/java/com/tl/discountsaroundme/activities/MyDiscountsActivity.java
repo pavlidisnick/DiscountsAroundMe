@@ -214,7 +214,7 @@ public class MyDiscountsActivity extends AppCompatActivity implements View.OnCli
         }
         else if (position == 2){
             for (Item item : selectedItems){
-                Intent intent = new Intent(getApplicationContext(),ItemsReviewOptionActivity.class);
+                Intent intent = new Intent(getApplicationContext(),ItemsEditActivity.class);
                 intent.putExtra("item",item);
                 startActivity(intent);
             }

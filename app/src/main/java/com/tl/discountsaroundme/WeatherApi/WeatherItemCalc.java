@@ -91,42 +91,42 @@ public class WeatherItemCalc {
         return ConditionGroup;
     }
 
-    public String ItemCalculator(int conditionCode) {
+    public String ItemCalculator(int conditionCode , int i) {
         switch (conditionCodeToGroup(conditionCode)) {
             case "Thunderstorm":
-                ShowItemByWeather(Rain);
+                ShowItemByWeather(Rain,i);
                 ItemSuggestion ="rain";
                 break;
             case "Drizzle":
-                 ShowItemByWeather(Rain);
+                 ShowItemByWeather(Rain,i);
                 ItemSuggestion ="rain";
                 break;
             case "Rain":
-                 ShowItemByWeather(Rain);
+                 ShowItemByWeather(Rain,i);
                 ItemSuggestion ="Rain";
                 break;
             case "Snow":
-                 ShowItemByWeather(Snow);
+                 ShowItemByWeather(Snow,i);
                 ItemSuggestion ="snow";
                 break;
             case "Atmosphere":
-               ShowItemByWeather(Clear);
+               ShowItemByWeather(Clear,i);
                 ItemSuggestion ="clear";
                 break;
             case "Clear":
-                ShowItemByWeather(Clear);
+                ShowItemByWeather(Clear,i);
                 ItemSuggestion ="clear";
                 break;
             case "Clouds":
-                ShowItemByWeather(Clear);
+                ShowItemByWeather(Clear,i);
                 ItemSuggestion ="clear";
                 break;
             case "Extreme":
-                 ShowItemByWeather(Clear);
+                 ShowItemByWeather(Clear,i);
                 ItemSuggestion ="clear";
                 break;
             case "Additional":
-                ShowItemByWeather(Clear);
+                ShowItemByWeather(Clear,i);
                 ItemSuggestion ="clear";
                 break;
         }
@@ -139,7 +139,7 @@ public class WeatherItemCalc {
         Item item = new Item(null,null,null,34,34,null,null,null,null);
         for (int i = 0; i <= weatherList.size() - 1; i++) {
             suggestionPerDayList.add(i, new SuggestionPerDay(
-                    ItemCalculator(weatherList.get(i).getWeather().get(0).getId()),
+                    ItemCalculator(weatherList.get(i).getWeather().get(0).getId(),i),
                     dateFormatChange(weatherList.get(i).getDt_txt()),
                     conditionCodeToGroup(weatherList.get(i).getWeather().get(0).getId()),
                     weatherList.get(i).getDt(),
@@ -149,14 +149,13 @@ public class WeatherItemCalc {
         }
     }
 
-    public void ShowItemByWeather(final String[] weather) {
+    public void ShowItemByWeather(final String[] weather , final int i ) {
         String dbPath = "/items";
         DatabaseReference mdb = FirebaseDatabase.getInstance().getReference(dbPath);
         mdb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    int i = 0;
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         Item item = child.getValue(Item.class);
                         for (int j = 0; j<=weather.length- 1; j++) {
@@ -164,12 +163,12 @@ public class WeatherItemCalc {
                                 WeatherBasedNotifier.itemFound = item;
                                 ItemSuggestion = item.getName();
                                 suggestionPerDayList.get(i).ItemCalculated = item;
-                                i++;
-                                break;
                             } else {
 
                             }
+
                         }
+
                     }
                     WeatherBasedNotifier.scheduleNotification(WeatherBasedNotifier.getNotification(1, "Three Hour Interval Notification!"), 10800000);
                     WeatherBasedNotifier.RepeatingNotification();

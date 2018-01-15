@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,8 @@ import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.WeatherApi.WeatherIntentReciever;
+import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.entities.Store;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
@@ -31,6 +34,7 @@ import com.tl.discountsaroundme.map.NearbyStoreList;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.tl.discountsaroundme.fragments.MapTab.isNotificationsEnabled;
 import static com.tl.discountsaroundme.fragments.MapTab.notifyEvery;
 
@@ -150,25 +154,51 @@ public class GPSTracker extends Service implements LocationListener {
 
         markerHelper.addMarkersFromList(stores);
 
-        int identifier = 0;
+        int identifier = 2;
         for (Store store : stores) {
             Item item = discountsManager.getTopItemByStore(store.getName());
             String contentText = item.getName() + " " + item.getDiscount() + "% off";
-
-            Notification notification = new Notification.Builder(activity.getApplicationContext())
-                    .setSmallIcon(R.mipmap.mini_icon)
-                    .setColor(activity.getResources().getColor(R.color.colorAccent))
-                    .setContentTitle(store.getName())
-                    .setContentText(contentText)
-                    .build();
-            NotificationManager notificationManager = (NotificationManager) activity.getSystemService(NOTIFICATION_SERVICE);
-            // hide the notification after its selected
-            notification.flags |= Notification.FLAG_AUTO_CANCEL;
-            notification.defaults |= Notification.DEFAULT_SOUND;
-            if (notificationManager != null) {
-                notificationManager.notify(identifier, notification);
-            }
-            identifier++;
+                 ShopNotify(store.getName(),contentText,item, identifier);
+                 identifier++;
         }
+    }
+    public void ShopNotify (String Title, String Text, Item item, int identifier) {
+        Notification.Builder mBuilder =
+                new Notification.Builder(activity.getApplicationContext())
+                        .setSmallIcon(R.mipmap.mini_icon)
+                        .setColor(activity.getResources().getColor(R.color.colorAccent))
+                        .setContentTitle(Title)
+                        .setAutoCancel(true)
+                        .setStyle(new Notification.BigTextStyle()
+                        .bigText(item.getDescription()))
+                        .setContentText(Text);
+
+        mBuilder.getNotification().defaults |= Notification.DEFAULT_SOUND;
+
+        Intent buttonIntent = new Intent(activity.getApplicationContext(), WeatherIntentReciever.class);
+        buttonIntent.setAction("action");
+        buttonIntent.putExtra("item",item);
+        PendingIntent piButton = PendingIntent.getService(activity.getApplicationContext(),0,buttonIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        mBuilder.addAction(R.drawable.ic_shopping_cart,"Add to cart!",piButton);
+
+        Intent resultIntent = new Intent(activity.getApplicationContext(),LoginActivity.class);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                       activity.getApplicationContext(),
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mBuilder.setContentIntent(resultPendingIntent);
+
+
+        NotificationManager mNotifyMgr =
+                (NotificationManager) activity.getSystemService(NOTIFICATION_SERVICE);
+        if (mNotifyMgr != null) {
+            mNotifyMgr.notify(identifier, mBuilder.build());
+        }
+
     }
 }

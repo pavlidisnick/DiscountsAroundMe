@@ -125,28 +125,6 @@
                     android:gravity="left|center"
                     android:orientation="vertical">
 
-                    <Button
-                        android:id="@+id/btNotify"
-                        android:layout_width="150dp"
-                        android:layout_height="25dp"
-                        android:layout_weight="1"
-                        android:text="Button" />
-
-                    <TextView
-                        android:id="@+id/textView8"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="TextView"
-                        tools:text="asdasdasdasdasd" />
-
-                    <ToggleButton
-                        android:id="@+id/toggleButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="ToggleButton" />
-
                     <CheckBox
                         android:id="@+id/cbPerday"
                         android:layout_width="match_parent"

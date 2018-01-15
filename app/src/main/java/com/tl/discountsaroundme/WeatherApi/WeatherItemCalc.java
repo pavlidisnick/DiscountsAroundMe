@@ -171,8 +171,8 @@ public class WeatherItemCalc {
                         }
 
                     }
-                    WeatherBasedNotifier.scheduleNotification(WeatherBasedNotifier.getNotification(1, "Three Hour Interval Notification!"), 10800000);
                     WeatherBasedNotifier.RepeatingNotification();
+
                 }
             }
 

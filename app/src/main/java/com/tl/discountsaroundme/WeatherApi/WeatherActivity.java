@@ -29,9 +29,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class WeatherActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, AdapterView.OnItemClickListener {
+public class WeatherActivity extends AppCompatActivity implements  CompoundButton.OnCheckedChangeListener, AdapterView.OnItemClickListener {
     TextView tvWeatherCond, tvTemperature, tvCityName, tvForecastTime, tvCurrentTime;
-    Button btNotifybutton;
     CheckBox cbPerDay;
     ListView listView;
     public static OpenWeatherMap openWeatherMapActivity = new OpenWeatherMap();
@@ -44,10 +43,6 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
-
-        btNotifybutton = findViewById(R.id.btNotify);
-        btNotifybutton.setOnClickListener(this);
-
         tvCityName = findViewById(R.id.tvCityName);
         tvWeatherCond = findViewById(R.id.tvWeatherCondition);
         tvTemperature = findViewById(R.id.tvTemperature);
@@ -75,12 +70,6 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
         listView.setOnItemClickListener(this);
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btNotify) {
-            WeatherBasedNotifier.NotificationTestin();
-        }
-    }
 
 
     @Override

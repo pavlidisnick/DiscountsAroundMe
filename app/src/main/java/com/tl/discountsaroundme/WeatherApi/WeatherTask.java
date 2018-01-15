@@ -56,9 +56,6 @@ public class WeatherTask extends AsyncTask<String, Void, String> {
         //Calculate Item per day suggestion
         WeatherItemCalc weatherItemCalc = new WeatherItemCalc();
         weatherItemCalc.CalculateForecastSuggestions(openWeatherMap.getList());
-        //Start the Weather Activity
-        Intent weatherActivity  = new Intent(getApplicationContext(), WeatherActivity.class);
-        getApplicationContext().startActivity(weatherActivity);
     }
 
 }

@@ -12,6 +12,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.tl.discountsaroundme.R;
@@ -26,6 +31,9 @@ import com.tl.discountsaroundme.map.NearbyStoreList;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.tl.discountsaroundme.fragments.MapTab.isNotificationsEnabled;
+import static com.tl.discountsaroundme.fragments.MapTab.notifyEvery;
+
 
 public class GPSTracker extends Service implements LocationListener {
 
@@ -35,12 +43,14 @@ public class GPSTracker extends Service implements LocationListener {
     private static final long MIN_TIME_BW_UPDATES = 1000 * 2;
     // GPS status
     private Location location;
+    private Location lastLocation;
     private Activity activity;
     private StoreManager storeManager;
     private DiscountsManager discountsManager;
     private MarkerHelper markerHelper;
-    private boolean isNotificationsEnabled = false;
     private NearbyStoreList nearbyStoreList;
+
+    private int notifyOnceFlag = 1;
 
     public GPSTracker(Activity activity, StoreManager storeManager,
                       DiscountsManager discountsManager, MarkerHelper markerHelper, NearbyStoreList nearbyStoreList) {
@@ -53,7 +63,7 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     @SuppressLint("MissingPermission")
-    public  void getLocation() {
+    public void getLocation() {
         try {
             AtomicReference<LocationManager> atomicReference;
             atomicReference = new AtomicReference<>((LocationManager) activity.getSystemService(Context.LOCATION_SERVICE));
@@ -62,23 +72,34 @@ public class GPSTracker extends Service implements LocationListener {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            lastLocation = location;
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void toggleNotifications(boolean notificationStatus) {
-        isNotificationsEnabled = notificationStatus;
-    }
-
-    // Function to get latitude
-    public  double getLatitude() throws NullPointerException {
+    public double getLatitude() throws NullPointerException {
         return location.getLatitude();
     }
 
-    // Function to get longitude
     public double getLongitude() throws NullPointerException {
         return location.getLongitude();
+    }
+
+    private void showGpsDialog() {
+        @SuppressLint("InflateParams")
+        LinearLayout linearLayout = (LinearLayout) activity.getLayoutInflater().inflate(R.layout.dialog_open_gps, null);
+        Button enableGps = (Button) linearLayout.getChildAt(2);
+
+        final AlertDialog builder = new AlertDialog.Builder(activity).setView(linearLayout).create();
+        enableGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                builder.dismiss();
+            }
+        });
+        builder.show();
     }
 
     @Override
@@ -86,7 +107,13 @@ public class GPSTracker extends Service implements LocationListener {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         nearbyStoreList.showNearbyStores(latLng, MapTab.distance);
 
-        if (isNotificationsEnabled) {
+        float[] results = new float[1];
+        if (lastLocation != null)
+            Location.distanceBetween(latLng.latitude, latLng.longitude, lastLocation.getLatitude(), lastLocation.getLongitude(), results);
+
+        if (isNotificationsEnabled && (notifyOnceFlag == 1 || results[0] >= notifyEvery)) {
+            notifyOnceFlag = 0;
+            lastLocation = location;
             try {
                 showNearbyAndNotify();
             } catch (Exception e) {
@@ -97,7 +124,9 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
-
+        if (LocationManager.NETWORK_PROVIDER.equals(provider)) {
+            showGpsDialog();
+        }
     }
 
     @Override
@@ -117,14 +146,14 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     public void showNearbyAndNotify() {
-        ArrayList<Store> stores = storeManager.getNearbyStores(getLatitude(), getLongitude(), MapTab.distance * 1000);
+        ArrayList<Store> stores = storeManager.getNearbyStores(getLatitude(), getLongitude(), MapTab.distance);
 
         markerHelper.addMarkersFromList(stores);
 
         int identifier = 0;
         for (Store store : stores) {
             Item item = discountsManager.getTopItemByStore(store.getName());
-            String contentText = item.getName() + " " + item.getDiscount() + "%";
+            String contentText = item.getName() + " " + item.getDiscount() + "% off";
 
             Notification notification = new Notification.Builder(activity.getApplicationContext())
                     .setSmallIcon(R.mipmap.mini_icon)
@@ -136,12 +165,10 @@ public class GPSTracker extends Service implements LocationListener {
             // hide the notification after its selected
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
             notification.defaults |= Notification.DEFAULT_SOUND;
-            notification.defaults |= Notification.DEFAULT_VIBRATE;
             if (notificationManager != null) {
                 notificationManager.notify(identifier, notification);
             }
             identifier++;
         }
     }
-
 }

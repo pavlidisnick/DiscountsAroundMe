@@ -14,7 +14,11 @@ import com.tl.discountsaroundme.entities.Item;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 
 import java.lang.reflect.Array;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -23,7 +27,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * Created by rezu on 8/1/2018.
  */
 
-public class WeatherBasedItemSuggestion {
+public class WeatherItemCalc {
     private Integer conditionCode;
     private String CategorySuggestion;
     private String ItemSuggestion;
@@ -59,7 +63,7 @@ public class WeatherBasedItemSuggestion {
     }
 
 
-    public WeatherBasedItemSuggestion() {
+    public WeatherItemCalc() {
 
     }
 
@@ -91,30 +95,39 @@ public class WeatherBasedItemSuggestion {
         switch (conditionCodeToGroup(conditionCode)) {
             case "Thunderstorm":
                 ShowItemByWeather(Rain);
+                ItemSuggestion ="rain";
                 break;
             case "Drizzle":
                  ShowItemByWeather(Rain);
+                ItemSuggestion ="rain";
                 break;
             case "Rain":
                  ShowItemByWeather(Rain);
+                ItemSuggestion ="Rain";
                 break;
             case "Snow":
                  ShowItemByWeather(Snow);
+                ItemSuggestion ="snow";
                 break;
             case "Atmosphere":
                ShowItemByWeather(Clear);
+                ItemSuggestion ="clear";
                 break;
             case "Clear":
                 ShowItemByWeather(Clear);
+                ItemSuggestion ="clear";
                 break;
             case "Clouds":
                 ShowItemByWeather(Clear);
+                ItemSuggestion ="clear";
                 break;
             case "Extreme":
                  ShowItemByWeather(Clear);
+                ItemSuggestion ="clear";
                 break;
             case "Additional":
                 ShowItemByWeather(Clear);
+                ItemSuggestion ="clear";
                 break;
         }
         return ItemSuggestion;
@@ -123,14 +136,16 @@ public class WeatherBasedItemSuggestion {
 
     public void CalculateForecastSuggestions(List<DayList> weatherList) {
         suggestionPerDayList = new ArrayList<>();
+        Item item = new Item(null,null,null,34,34,null,null,null,null);
         for (int i = 0; i <= weatherList.size() - 1; i++) {
             suggestionPerDayList.add(i, new SuggestionPerDay(
                     ItemCalculator(weatherList.get(i).getWeather().get(0).getId()),
-                    ItemCalculator(weatherList.get(i).getWeather().get(0).getId()),
-                    weatherList.get(i).getDt_txt(),
+                    dateFormatChange(weatherList.get(i).getDt_txt()),
                     conditionCodeToGroup(weatherList.get(i).getWeather().get(0).getId()),
-                    weatherList.get(i).getDt())
+                    weatherList.get(i).getDt(),
+                    item)
             );
+
         }
     }
 
@@ -138,17 +153,21 @@ public class WeatherBasedItemSuggestion {
         String dbPath = "/items";
         DatabaseReference mdb = FirebaseDatabase.getInstance().getReference(dbPath);
         mdb.addListenerForSingleValueEvent(new ValueEventListener() {
-
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    int i = 0;
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         Item item = child.getValue(Item.class);
                         for (int j = 0; j<=weather.length- 1; j++) {
                             if (item.getName().toLowerCase().contains(weather[j])) {
                                 WeatherBasedNotifier.itemFound = item;
+                                ItemSuggestion = item.getName();
+                                suggestionPerDayList.get(i).ItemCalculated = item;
+                                i++;
                                 break;
                             } else {
+
                             }
                         }
                     }
@@ -159,11 +178,30 @@ public class WeatherBasedItemSuggestion {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(getApplicationContext(),
+                        "Canceled  ", Toast.LENGTH_LONG)
+                        .show();
             }
         });
     }
 
+    private Date dateFormatChange(String inputDate) {
+        DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat outFormat = new SimpleDateFormat("EEE dd.MM.yyyy 'at' HH:mm z");
+        Date date = null;
+        try {
+            date = inputFormat.parse(inputDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String outputDate = outFormat.format(date);
+        try {
+            date = outFormat.parse(outputDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
 
     private void toast(String display) {
         Toast.makeText(getApplicationContext(), display, Toast.LENGTH_SHORT).show();

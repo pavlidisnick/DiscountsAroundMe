@@ -2,6 +2,7 @@ package com.tl.discountsaroundme.fragments;
 
 import android.animation.Animator;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,8 +37,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.internal.bind.MapTypeAdapterFactory;
 import com.tl.discountsaroundme.BuildConfig;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.UserPreferences;
+import com.tl.discountsaroundme.WeatherApi.WeatherActivity;
+import com.tl.discountsaroundme.WeatherApi.WeatherApiCommon;
+import com.tl.discountsaroundme.WeatherApi.WeatherTask;
 import com.tl.discountsaroundme.activities.AddDiscountsActivity;
 import com.tl.discountsaroundme.activities.FeedbackActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
@@ -48,6 +55,7 @@ import com.tl.discountsaroundme.discounts.FetchCategories;
 import com.tl.discountsaroundme.discounts.Search;
 import com.tl.discountsaroundme.firebase_data.DiscountsManager;
 import com.tl.discountsaroundme.firebase_data.SearchHistory;
+import com.tl.discountsaroundme.services.GPSTracker;
 import com.tl.discountsaroundme.ui_controllers.GlideApp;
 import com.tl.discountsaroundme.ui_controllers.ItemSpaceDecoration;
 import com.tl.discountsaroundme.ui_controllers.ItemViewAdapter;
@@ -56,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class DiscountsTab extends Fragment implements View.OnClickListener {
 
@@ -279,8 +288,37 @@ public class DiscountsTab extends Fragment implements View.OnClickListener {
             target2.setVisible(false);
         }
 
-        String versionName = "v" + BuildConfig.VERSION_NAME;
         Menu menu = nav.getMenu();
+        MenuItem target = menu.findItem(R.id.weather);
+        new UserPreferences();
+        target.setVisible(UserPreferences.getDataBool("WeatherCheck"));
+        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View view, float v) {
+                NavigationView nav = mDrawerLayout.findViewById(R.id.nav_view);
+                Menu menu = nav.getMenu();
+                MenuItem target = menu.findItem(R.id.weather);
+                new UserPreferences();
+                target.setVisible(UserPreferences.getDataBool("WeatherCheck"));
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View view) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View view) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int i) {
+
+            }
+        });
+
+        String versionName = "v" + BuildConfig.VERSION_NAME;
         MenuItem versionMenuItem = menu.findItem(R.id.version);
         versionMenuItem.setTitle(versionName);
 
@@ -319,6 +357,10 @@ public class DiscountsTab extends Fragment implements View.OnClickListener {
                     case R.id.feedback:
                         Intent feedbackActivity = new Intent(getActivity(), FeedbackActivity.class);
                         startActivity(feedbackActivity);
+                        break;
+                    case R.id.weather:
+                        Intent weatherActivity  = new Intent(getActivity(), WeatherActivity.class);
+                        startActivity(weatherActivity);
                         break;
                 }
 
@@ -387,4 +429,5 @@ public class DiscountsTab extends Fragment implements View.OnClickListener {
             }
         });
     }
+
 }

@@ -48,7 +48,7 @@ public class MapTab extends Fragment {
     private GPSTracker gps;
     private GoogleMap googleMap;
     private MarkerHelper markerHelper;
-
+    public  static CheckBox cbWeather;
     private CheckBox nearbyOffersCheck;
     private FrameLayout popupMenu;
 
@@ -64,7 +64,7 @@ public class MapTab extends Fragment {
         new UserPreferences();
         nearbyOffersCheck = rootView.findViewById(R.id.nearbyOffers_check);
 
-        CheckBox cbWeather = rootView.findViewById(R.id.cbWeather);
+        cbWeather = rootView.findViewById(R.id.cbWeather);
         if (cbWeather.isChecked()) {
             new WeatherTask().execute(WeatherApiCommon.apiRequest(String.valueOf(gps.getLatitude()), String.valueOf(gps.getLongitude())));
         }

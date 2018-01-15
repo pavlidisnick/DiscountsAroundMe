@@ -1,19 +1,24 @@
 package com.tl.discountsaroundme.WeatherApi;
 
+import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import com.tl.discountsaroundme.activities.MainActivity;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by rezu on 8/1/2018.
  */
 
-public class WeatherNotificationPublisher extends BroadcastReceiver {
+public class WeatherNotificationPublisher extends BroadcastReceiver  {
 
     public static String NOTIFICATION_ID = "notification-id";
     public static String NOTIFICATION = "notification";
@@ -28,4 +33,6 @@ public class WeatherNotificationPublisher extends BroadcastReceiver {
         int id = intent.getIntExtra(NOTIFICATION_ID, 0);
         notificationManager.notify(id, notification);
     }
+
+
 }

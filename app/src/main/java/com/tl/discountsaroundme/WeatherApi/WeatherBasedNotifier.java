@@ -7,16 +7,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
-import android.support.v4.app.NotificationCompat;
-import android.widget.ImageView;
-import android.widget.RemoteViews;
 
-import com.bumptech.glide.Glide;
 import com.tl.discountsaroundme.R;
+import com.tl.discountsaroundme.activities.LoginActivity;
 import com.tl.discountsaroundme.activities.MainActivity;
 import com.tl.discountsaroundme.entities.Item;
-import com.tl.discountsaroundme.firebase_data.DiscountsManager;
-import com.tl.discountsaroundme.firebase_data.StoreManager;
 
 import java.util.Calendar;
 
@@ -75,8 +70,8 @@ public class WeatherBasedNotifier {
         StringBuilder sb = new StringBuilder("For these weather conditions we suggest\n");
         sb.append(String.format("%s \nNow %s\u20ac %.0f %%off! \nat %s",itemFound.getName(),itemFound.getFinalPrice(),itemFound.getDiscount(),itemFound.getStore()));
         Notification.Builder builder = new Notification.Builder(getApplicationContext());
-        builder.setContentTitle(Title + " " + WeatherBasedItemSuggestion.suggestionPerDayList.get(ThreeHourInterval).getWeatherCondition());
-        builder.setContentText("Check this out! "+WeatherBasedItemSuggestion.suggestionPerDayList.get(ThreeHourInterval).getItemSuggestion());
+        builder.setContentTitle(Title + " " + WeatherItemCalc.suggestionPerDayList.get(ThreeHourInterval).getWeatherCondition());
+        builder.setContentText("Check this out! "+ WeatherItemCalc.suggestionPerDayList.get(ThreeHourInterval).getItemSuggestion());
         builder.setSmallIcon(R.drawable.ic_sun_day_weather_symbol);
         builder.setColor(getApplicationContext().getResources().getColor(R.color.colorAccent));
         builder.setStyle(new Notification.BigTextStyle()
@@ -86,6 +81,37 @@ public class WeatherBasedNotifier {
 
         builder.addAction(R.mipmap.mini_icon,"Save to Cart!",actionPendingIntent);
         return builder.build();
+    }
+    public static void NotificationTestin(){
+        Notification.Builder mBuilder =
+                new Notification.Builder(getApplicationContext())
+                .setSmallIcon(R.mipmap.mini_icon)
+                .setContentTitle("this is a title")
+                .setAutoCancel(true)
+                .setContentText("contnent TExt");
+
+        Intent buttonIntent = new Intent(getApplicationContext(), WeatherIntentReciever.class);
+        buttonIntent.setAction("action");
+        buttonIntent.putExtra("item",itemFound);
+        PendingIntent piButton = PendingIntent.getService(getApplicationContext(),0,buttonIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        mBuilder.addAction(R.drawable.ic_sun_day_weather_symbol,"CART",piButton);
+
+        Intent resultIntent = new Intent(getApplicationContext(),LoginActivity.class);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        getApplicationContext(),
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        int mNotificationID = 002;
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotifyMgr.notify(mNotificationID,mBuilder.build());
     }
 
 }

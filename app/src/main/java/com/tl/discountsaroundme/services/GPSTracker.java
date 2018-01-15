@@ -42,6 +42,11 @@ public class GPSTracker extends Service implements LocationListener {
     private boolean isNotificationsEnabled = false;
     private NearbyStoreList nearbyStoreList;
 
+    public GPSTracker (Activity activity){
+        this.activity = activity;
+        getLocation();
+
+    }
     public GPSTracker(Activity activity, StoreManager storeManager,
                       DiscountsManager discountsManager, MarkerHelper markerHelper, NearbyStoreList nearbyStoreList) {
         this.activity = activity;

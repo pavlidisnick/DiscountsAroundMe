@@ -1,6 +1,10 @@
 package com.tl.discountsaroundme;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.tl.discountsaroundme.activities.MainActivity;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -16,8 +20,8 @@ public class UserPreferences {
     public static SharedPreferences userPref;
     public static SharedPreferences.Editor editor;
 
-    public UserPreferences() {
-        userPref = getApplicationContext().getSharedPreferences("UserPreferences", 0);
+    public UserPreferences( ) {
+        userPref = getApplicationContext().getSharedPreferences("UserPreferences", Context.MODE_PRIVATE);
         editor = userPref.edit();
     }
 

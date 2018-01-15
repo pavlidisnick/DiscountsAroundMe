@@ -1,6 +1,7 @@
 package com.tl.discountsaroundme.ui_controllers;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -16,7 +17,7 @@ public class CheckBox extends FrameLayout implements View.OnClickListener, Check
     private ImageView background;
     private ImageView circle;
     private boolean isChecked = true;
-    private OnCheckedChangeListener onCheckedListener;
+    private MyOnCheckListener onCheckedListener;
 
     public CheckBox(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -57,6 +58,7 @@ public class CheckBox extends FrameLayout implements View.OnClickListener, Check
             background.setImageResource(R.drawable.checkbox);
             isChecked = true;
         }
+        toggle();
     }
 
     private void animateCircleLeft() {
@@ -96,11 +98,21 @@ public class CheckBox extends FrameLayout implements View.OnClickListener, Check
         setChecked(!isChecked());
     }
 
-    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        return super.onSaveInstanceState();
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        super.onRestoreInstanceState(state);
+    }
+
+    public void setOnCheckedChangeListener(MyOnCheckListener listener) {
         this.onCheckedListener = listener;
     }
 
-    public interface OnCheckedChangeListener {
+    public interface MyOnCheckListener {
         void onChange(CheckBox view, boolean checked);
     }
 }

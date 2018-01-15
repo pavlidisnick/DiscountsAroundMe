@@ -2,6 +2,7 @@ package com.tl.discountsaroundme.fragments;
 
 import android.animation.Animator;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -40,20 +41,23 @@ import com.tl.discountsaroundme.map.SetSearchBar;
 import com.tl.discountsaroundme.services.GPSTracker;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class MapTab extends Fragment {
     public static double distance = 1;
+    public static double notifyEvery = 30;
+    public static boolean isNotificationsEnabled = true;
+
     private MapView mMapView;
     private GPSTracker gps;
     private GoogleMap googleMap;
     private MarkerHelper markerHelper;
 
-    private CheckBox nearbyOffersCheck;
     private FrameLayout popupMenu;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.tab_map, container, false);
 
         final StoreManager storeManager = new StoreManager();
@@ -62,7 +66,6 @@ public class MapTab extends Fragment {
         discountsManager.fillListWithDiscounts(FirebaseDatabase.getInstance());
 
         new UserPreferences();
-        nearbyOffersCheck = rootView.findViewById(R.id.nearbyOffers_check);
 
         CheckBox cbWeather = rootView.findViewById(R.id.cbWeather);
         if (cbWeather.isChecked()) {
@@ -75,7 +78,7 @@ public class MapTab extends Fragment {
         final FloatingSearchView mSearchView = rootView.findViewById(R.id.map_floating_search);
 
         try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
+            MapsInitializer.initialize(Objects.requireNonNull(getActivity()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,20 +97,15 @@ public class MapTab extends Fragment {
 
                 gps = new GPSTracker(getActivity(), storeManager, discountsManager, markerHelper, nearbyStoreList);
 
-                //Get User Preferences on nearby offers checkbox and function accordingly
-                nearbyOffersCheck.setChecked(UserPreferences.getDataBool("NearbyOffersCheck"));
-                gps.toggleNotifications(UserPreferences.getDataBool("NearbyOffersCheck"));
-
                 try {
                     googleMap.setMyLocationEnabled(true);
                     googleMap.getUiSettings().setMyLocationButtonEnabled(false);
-                    googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.blue_style));
+                    googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getActivity(), R.raw.blue_style));
                 } catch (SecurityException e) {
                     e.printStackTrace();
                 }
             }
         });
-
 
         Button shopsButton = rootView.findViewById(R.id.shopsButton);
         Button nearbyButton = rootView.findViewById(R.id.nearbyButton);
@@ -167,15 +165,6 @@ public class MapTab extends Fragment {
             }
         });
 
-        CheckBox nearbyOffersCheck = rootView.findViewById(R.id.nearbyOffers_check);
-        nearbyOffersCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //Save User prefs on nearby offers cb
-                UserPreferences.saveDataBool("NearbyOffersCheck", isChecked);
-                gps.toggleNotifications(isChecked);
-            }
-        });
         //Get User Preferences on Weather checked.
         cbWeather.setChecked(UserPreferences.getDataBool("WeatherCheck"));
         cbWeather.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

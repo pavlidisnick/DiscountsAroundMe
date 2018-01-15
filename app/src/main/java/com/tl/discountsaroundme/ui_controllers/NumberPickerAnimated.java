@@ -19,21 +19,16 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.tl.discountsaroundme.R;
-import com.tl.discountsaroundme.fragments.MapTab;
 
 /**
  * NumberPickerAnimated
  * Set a seekBar listener to this object and it will show the progress with animations
  */
 public class NumberPickerAnimated extends FrameLayout implements SeekBar.OnSeekBarChangeListener {
-
     LinearLayout linearLayout;
-
-    // THE SHOWING TEXT VIEW
     TextView textView;
-
     View viewColorAnimate;
-
+    private MyOnSeekChangeListener onSeekChangeListener;
     private TextView textViewLeft;
     private TextView textViewRight;
 
@@ -173,19 +168,24 @@ public class NumberPickerAnimated extends FrameLayout implements SeekBar.OnSeekB
         }
 
         number = progress;
-        MapTab.distance = progress;
+
+        onSeekChangeListener.onProgressChanged(seekBar, progress, fromUser);
     }
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
         leftTextAnimationStart();
         rightTextAnimationStart();
+
+        onSeekChangeListener.onStartTrackingTouch(seekBar);
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         leftTextAnimationEnd();
         rightTextAnimationEnd();
+
+        onSeekChangeListener.onStopTrackingTouch(seekBar);
     }
 
     private int getPixelsFromDp(int dp) {
@@ -220,5 +220,21 @@ public class NumberPickerAnimated extends FrameLayout implements SeekBar.OnSeekB
     private void rightGradientChange() {
         if (blue < 255)
             blue += 5;
+    }
+
+    public void setOnSeekChangeListener(MyOnSeekChangeListener listener) {
+        this.onSeekChangeListener = listener;
+    }
+
+    public void setSeekBar(SeekBar seekBar) {
+        seekBar.setOnSeekBarChangeListener(this);
+    }
+
+    public interface MyOnSeekChangeListener {
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser);
+
+        public void onStartTrackingTouch(SeekBar seekBar);
+
+        public void onStopTrackingTouch(SeekBar seekBar);
     }
 }

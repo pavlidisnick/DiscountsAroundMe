@@ -173,7 +173,5 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
         Toast.makeText(getApplicationContext(),
                 WeatherItemCalc.suggestionPerDayList.get(position).getItemCalculated().getName() + position +WeatherItemCalc.suggestionPerDayList.get(position).getDateTime() , Toast.LENGTH_LONG)
                 .show();
-
-
     }
 }

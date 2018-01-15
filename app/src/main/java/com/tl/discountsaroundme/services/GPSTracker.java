@@ -51,7 +51,7 @@ public class GPSTracker extends Service implements LocationListener {
     private NearbyStoreList nearbyStoreList;
 
     private int notifyOnceFlag = 1;
-
+  
     public GPSTracker(Activity activity, StoreManager storeManager,
                       DiscountsManager discountsManager, MarkerHelper markerHelper, NearbyStoreList nearbyStoreList) {
         this.activity = activity;

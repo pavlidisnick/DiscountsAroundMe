@@ -1,26 +1,36 @@
 package com.tl.discountsaroundme.WeatherApi.WeatherAPIModel;
 
+import com.tl.discountsaroundme.entities.Item;
+
+import java.util.Date;
+
 /**
  * Created by rezu on 8/1/2018.
  */
 
 public class SuggestionPerDay {
-    String ItemSuggestion;
-    String CategorySuggestion;
-    String DateTime;
+    public String ItemSuggestion;
+    public   Item ItemCalculated;
+    Date DateTime;
     String WeatherCondition;
     int    dt;
 
-    public SuggestionPerDay(String itemSuggestion, String categorySuggestion, String dateTime, String weatherCondition, int dt) {
+    public SuggestionPerDay(String itemSuggestion, Date dateTime, String weatherCondition, int dt,Item itemCalculated) {
         ItemSuggestion = itemSuggestion;
-        CategorySuggestion = categorySuggestion;
         DateTime = dateTime;
         WeatherCondition = weatherCondition;
         this.dt = dt;
+        ItemCalculated= itemCalculated;
     }
 
 
+    public  Item getItemCalculated() {
+        return ItemCalculated;
+    }
 
+    public  void setItemCalculated(Item itemCalculated) {
+        ItemCalculated = itemCalculated;
+    }
 
     public String getItemSuggestion() {
         return ItemSuggestion;
@@ -30,19 +40,13 @@ public class SuggestionPerDay {
         ItemSuggestion = itemSuggestion;
     }
 
-    public String getCategorySuggestion() {
-        return CategorySuggestion;
-    }
 
-    public void setCategorySuggestion(String categorySuggestion) {
-        CategorySuggestion = categorySuggestion;
-    }
 
-    public String getDateTime() {
+    public Date getDateTime() {
         return DateTime;
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(Date dateTime) {
         DateTime = dateTime;
     }
 

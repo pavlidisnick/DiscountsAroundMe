@@ -63,6 +63,8 @@
             </intent-filter>
         </service>
         <service android:name=".services.GPSTracker" />
+        <service android:name=".WeatherApi.WeatherNotificationIntentService" />
+        <service android:name=".WeatherApi.WeatherIntentReciever" />
 
         <activity android:name=".services.Notifications.NotificationReceiverActivity" />
 

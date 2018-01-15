@@ -2,11 +2,12 @@ package com.tl.discountsaroundme.WeatherApi;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.tl.discountsaroundme.ShoppingCart;
+import com.tl.discountsaroundme.UserPreferences;
 import com.tl.discountsaroundme.WeatherApi.WeatherAPIModel.OpenWeatherMap;
 import java.lang.reflect.Type;
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -18,7 +19,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class WeatherTask extends AsyncTask<String, Void, String> {
     ProgressDialog pd = new ProgressDialog(getApplicationContext());
-    OpenWeatherMap openWeatherMap = new OpenWeatherMap();
+    public static OpenWeatherMap openWeatherMap = new OpenWeatherMap();
 
     private void toast(String display) {
         Toast.makeText(getApplicationContext(), display, Toast.LENGTH_SHORT).show();
@@ -47,14 +48,20 @@ public class WeatherTask extends AsyncTask<String, Void, String> {
         if (s.contains("Error: not found city")) {
             return;
         }
+        //Save data string under user preferences for offline use
+        UserPreferences.saveDataString("Forecast",s);
         Gson gson = new Gson();
         Type mType = new TypeToken<OpenWeatherMap>() {
         }.getType();
         openWeatherMap = gson.fromJson(s, mType);
         pd.dismiss();
         toast("We successfully got the forecast!");
-        WeatherBasedItemSuggestion weatherBasedItemSuggestion = new WeatherBasedItemSuggestion();
-        weatherBasedItemSuggestion.CalculateForecastSuggestions(openWeatherMap.getList());
+        //Calculate Item per day suggestion
+        WeatherItemCalc weatherItemCalc = new WeatherItemCalc();
+        weatherItemCalc.CalculateForecastSuggestions(openWeatherMap.getList());
+        //Start the Weather Activity
+        Intent weatherActivity  = new Intent(getApplicationContext(), WeatherActivity.class);
+        getApplicationContext().startActivity(weatherActivity);
     }
 
 }

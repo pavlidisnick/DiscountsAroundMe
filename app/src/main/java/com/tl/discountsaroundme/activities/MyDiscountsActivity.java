@@ -142,6 +142,8 @@ public class MyDiscountsActivity extends AppCompatActivity implements View.OnCli
         menuObjects.add(delete);
         menuObjects.add(edit);
 
+
+
         MenuParams menuParams = new MenuParams();
         menuParams.setActionBarSize(120);
         menuParams.setMenuObjects(menuObjects);
@@ -208,6 +210,13 @@ public class MyDiscountsActivity extends AppCompatActivity implements View.OnCli
         if (position == 1) {
             for (Item item : selectedItems) {
                 deleteDiscount(item);
+            }
+        }
+        else if (position == 2){
+            for (Item item : selectedItems){
+                Intent intent = new Intent(getApplicationContext(),ItemsReviewOptionActivity.class);
+                intent.putExtra("item",item);
+                startActivity(intent);
             }
         }
     }

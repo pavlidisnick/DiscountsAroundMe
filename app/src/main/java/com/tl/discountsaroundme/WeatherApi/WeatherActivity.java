@@ -36,6 +36,8 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
     public OpenWeatherMap openWeatherMapActivity = new OpenWeatherMap();
     public boolean PerDayList = false;
     ArrayList<String> forecastList = new ArrayList<>();
+    DateFormat CurrentTimeFormated = new SimpleDateFormat("EEE dd.MM.yyyy 'at' HH:mm z");
+    Date CurrentTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +52,14 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
         tvTemperature = findViewById(R.id.tvTemperature);
         tvForecastTime = findViewById(R.id.tvForecastTime);
         tvCurrentTime = findViewById(R.id.tvCurrentTime);
-        Date CurrentTime = Calendar.getInstance().getTime();
-        DateFormat CurrentTimeFormated = new SimpleDateFormat("EEE dd.MM.yyyy 'at' HH:mm z");
         cbPerDay = findViewById(R.id.cbPerday);
         cbPerDay.setOnCheckedChangeListener(this);
-
+        CurrentTime = Calendar.getInstance().getTime();
+        try {
+            CurrentTime = CurrentTimeFormated.parse(CurrentTimeFormated.format(CurrentTime));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (!UserPreferences.getDataString("Forecast").equals("Null")) {
             Gson gson = new Gson();
             Type mType = new TypeToken<OpenWeatherMap>() {
@@ -62,25 +67,14 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
             openWeatherMapActivity = gson.fromJson(UserPreferences.getDataString("Forecast"), mType);
             WeatherItemCalc weatherItemCalc = new WeatherItemCalc();
             weatherItemCalc.CalculateForecastSuggestions(openWeatherMapActivity.getList());
-        } else {
-
         }
 
-        if (!(openWeatherMapActivity == null)) {
-            ImageView IvWeather = findViewById(R.id.IVWeather);
-            Glide.with(getApplicationContext()).load(WeatherApiCommon.getImage(openWeatherMapActivity.getList().get(0).getWeather().get(0).getIcon())).into(IvWeather);
-            tvCityName.setText(openWeatherMapActivity.getCity().getName());
-            tvWeatherCond.setText(openWeatherMapActivity.getList().get(0).getWeather().get(0).getDescription());
-            tvTemperature.setText(Double.toString(openWeatherMapActivity.getList().get(0).getMain().getTemp()) + " °C");
-            tvForecastTime.setText("Forecast: " + dateFormatChange(openWeatherMapActivity.getList().get(0).getDt_txt()));
-            tvCurrentTime.setText(CurrentTimeFormated.format(CurrentTime));
-        }
+            setTodayForecast();
+
+
         listView = findViewById(R.id.lvListview);
         SuggestionList();
         listView.setOnItemClickListener(this);
-
-
-
     }
 
     @Override
@@ -90,23 +84,7 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private Date dateFormatChange(String inputDate) {
-        DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        DateFormat outFormat = new SimpleDateFormat("EEE dd.MM.yyyy 'at' HH:mm z");
-        Date date = null;
-        try {
-            date = inputFormat.parse(inputDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        String outputDate = outFormat.format(date);
-        try {
-            date = outFormat.parse(outputDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
-    }
+
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -119,7 +97,6 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
      * Populates the Listview With Daily/3hour weather forecasts
      */
     public void SuggestionList() {
-
         for (int i = 0; i <= WeatherItemCalc.suggestionPerDayList.size() - 1; i++) {
             //If Perday cb is checked then sort the list By day
             if (PerDayList) {
@@ -171,8 +148,43 @@ public class WeatherActivity extends AppCompatActivity implements View.OnClickLi
                 "Click ListItem Number " + position, Toast.LENGTH_LONG)
                 .show();
         Toast.makeText(getApplicationContext(),
-                WeatherItemCalc.suggestionPerDayList.get(position).getItemCalculated().getName() + position +WeatherItemCalc.suggestionPerDayList.get(position).getDateTime() , Toast.LENGTH_LONG)
+                WeatherItemCalc.suggestionPerDayList.get(position).getItemCalculated().getName() + position + WeatherItemCalc.suggestionPerDayList.get(position).getDateTime(), Toast.LENGTH_LONG)
                 .show();
         //aawjeahweah
     }
+
+    public int getTodayForecast(Date currentTime) throws ParseException {
+        Date currentTimeFormated = currentTime;
+        int todaysForecast = 0;
+        for (int i = 0; i <= WeatherItemCalc.suggestionPerDayList.size() - 1; i++) {
+            Date listDateFormated = WeatherItemCalc.suggestionPerDayList.get(i).getDateTime();
+            int dateComparison = currentTimeFormated.compareTo(listDateFormated);
+            if (dateComparison < 0) {
+                todaysForecast = i;
+                break;
+            }
+        }
+        return todaysForecast;
+    }
+
+    public void setTodayForecast()  {
+        if (!(openWeatherMapActivity == null)) {
+            ImageView IvWeather = findViewById(R.id.IVWeather);
+            int todaysForecast = 0;
+            try {
+                todaysForecast = getTodayForecast(CurrentTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Glide.with(getApplicationContext()).load(WeatherApiCommon.getImage(openWeatherMapActivity.getList().get(todaysForecast).getWeather().get(0).getIcon())).into(IvWeather);
+            tvCityName.setText(openWeatherMapActivity.getCity().getName());
+            tvWeatherCond.setText(openWeatherMapActivity.getList().get(todaysForecast).getWeather().get(0).getDescription());
+            tvTemperature.setText(Double.toString(openWeatherMapActivity.getList().get(todaysForecast).getMain().getTemp()) + " °C");
+            tvForecastTime.setText("Forecast: " + WeatherItemCalc.suggestionPerDayList.get(todaysForecast).getDateTime());
+            tvCurrentTime.setText(CurrentTimeFormated.format(CurrentTime));
+        }
+
+    }
+
+
 }

@@ -86,17 +86,6 @@
                 android:textColor="@color/colorPrimaryWhite" />
 
             <CheckBox
-                android:id="@+id/nearbyOffers_check"
-                style="@style/Widget.AppCompat.CompoundButton.CheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:buttonTint="@color/colorPrice"
-                android:checked="true"
-                android:text="Notify me for offers"
-                android:textColor="@color/colorPrimaryWhite" />
-
-            <CheckBox
                 android:id="@+id/cbWeather"
                 style="@style/Widget.AppCompat.CompoundButton.CheckBox"
                 android:layout_width="185dp"
